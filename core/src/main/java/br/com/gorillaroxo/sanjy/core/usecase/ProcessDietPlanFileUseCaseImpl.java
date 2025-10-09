@@ -1,0 +1,33 @@
+package br.com.gorillaroxo.sanjy.core.usecase;
+
+import br.com.gorillaroxo.sanjy.core.domain.plan.DietPlanDomain;
+import br.com.gorillaroxo.sanjy.core.ports.driven.DietPlanConverterAgentGateway;
+import br.com.gorillaroxo.sanjy.core.ports.driven.DietPlanGateway;
+import br.com.gorillaroxo.sanjy.core.ports.driven.DietPlanVectorStoreGateway;
+import br.com.gorillaroxo.sanjy.core.ports.driver.ProcessDietPlanFileUseCase;
+import br.com.gorillaroxo.sanjy.core.service.DietPlanService;
+import br.com.gorillaroxo.sanjy.core.service.ExtractTextFromFileService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class ProcessDietPlanFileUseCaseImpl implements ProcessDietPlanFileUseCase {
+
+    private final ExtractTextFromFileService extractTextFromFileService;
+    private final DietPlanVectorStoreGateway dietPlanVectorStoreGateway;
+    private final DietPlanConverterAgentGateway dietPlanConverterAgentGateway;
+    private final DietPlanService dietPlanService;
+
+    public void execute(final MultipartFile file) {
+        final String fileTxt = extractTextFromFileService.execute(file);
+        final DietPlanDomain dietPlan = dietPlanConverterAgentGateway.convert(fileTxt);
+        final DietPlanDomain savedDietPlan = dietPlanService.insert(dietPlan);
+        dietPlanVectorStoreGateway.upsertPlan(fileTxt, savedDietPlan.getId());
+        log.info("File content: {}", fileTxt);
+    }
+
+}
