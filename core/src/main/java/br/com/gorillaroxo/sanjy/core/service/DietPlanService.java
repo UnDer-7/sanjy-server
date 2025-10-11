@@ -1,6 +1,6 @@
 package br.com.gorillaroxo.sanjy.core.service;
 
-import br.com.gorillaroxo.sanjy.core.domain.plan.DietPlanDomain;
+import br.com.gorillaroxo.sanjy.core.domain.DietPlanDomain;
 import br.com.gorillaroxo.sanjy.core.ports.driven.DietPlanGateway;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +16,7 @@ public class DietPlanService {
     private final DietPlanGateway dietPlanGateway;
 
     public DietPlanDomain insert(final DietPlanDomain newDietPlan) {
+        // Todo: validar dados
         Objects.requireNonNull(newDietPlan);
 
         dietPlanGateway.findActive()

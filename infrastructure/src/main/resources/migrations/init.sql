@@ -1,7 +1,7 @@
 -- =============================================
 -- COMPLETE DDL SCRIPT - DIET CONTROL DATABASE
 -- Compatible with Docker PostgreSQL
--- Version 2.0 - Multi Diet Plan Support
+-- Version 3.0 - Flat meal_record structure
 -- =============================================
 
 -- Drop and create database
@@ -76,44 +76,28 @@ COMMENT ON COLUMN standard_options.description IS 'Complete description of foods
 -- Table 4: meal_record
 CREATE TABLE meal_record (
                              id SERIAL,
-                             record_date DATE NOT NULL,
                              consumed_at TIMESTAMP NOT NULL,
                              meal_type_id INTEGER NOT NULL,
                              is_free_meal BOOLEAN NOT NULL DEFAULT false,
                              standard_option_id INTEGER,
                              free_meal_description TEXT,
+                             quantity DECIMAL(10,2) NOT NULL DEFAULT 1.0,
+                             unit VARCHAR(50) NOT NULL DEFAULT 'serving',
                              notes TEXT,
                              created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-COMMENT ON TABLE meal_record IS 'Historical record of all meals consumed';
+COMMENT ON TABLE meal_record IS 'Historical record of all food items consumed - one row per item';
 COMMENT ON COLUMN meal_record.id IS 'Auto-incremented primary key';
-COMMENT ON COLUMN meal_record.record_date IS 'Date when the meal was consumed';
-COMMENT ON COLUMN meal_record.consumed_at IS 'Exact date and time when the meal was consumed';
-COMMENT ON COLUMN meal_record.meal_type_id IS 'Foreign key indicating the meal type (breakfast, lunch, snack or dinner)';
+COMMENT ON COLUMN meal_record.consumed_at IS 'Exact date and time when the item was consumed';
+COMMENT ON COLUMN meal_record.meal_type_id IS 'Foreign key indicating the meal type (breakfast, lunch, snack or dinner, ...)';
 COMMENT ON COLUMN meal_record.is_free_meal IS 'Boolean flag: TRUE = free meal (off-plan) | FALSE = standard meal (following plan)';
 COMMENT ON COLUMN meal_record.standard_option_id IS 'Foreign key to the chosen plan option (NULL when is_free_meal = TRUE)';
-COMMENT ON COLUMN meal_record.free_meal_description IS 'Text description of the free meal (NULL when is_free_meal = FALSE)';
-COMMENT ON COLUMN meal_record.notes IS 'Optional field for additional observations about the meal';
-COMMENT ON COLUMN meal_record.created_at IS 'System timestamp of when the record was inserted (different from consumption time)';
-
--- Table 5: extra_items
-CREATE TABLE extra_items (
-                             id SERIAL,
-                             meal_record_id INTEGER NOT NULL,
-                             item_name VARCHAR(200) NOT NULL,
-                             quantity DECIMAL(5,2) NOT NULL DEFAULT 1.0,
-                             unit VARCHAR(50) NOT NULL DEFAULT 'unit',
-                             consumed_at TIMESTAMP
-);
-
-COMMENT ON TABLE extra_items IS 'Additional food items consumed beyond the main meal (standard or free)';
-COMMENT ON COLUMN extra_items.id IS 'Auto-incremented primary key';
-COMMENT ON COLUMN extra_items.meal_record_id IS 'Foreign key linking the extra item to a specific meal record';
-COMMENT ON COLUMN extra_items.item_name IS 'Name or description of the extra item consumed (e.g.: pizza, chocolate, soda)';
-COMMENT ON COLUMN extra_items.quantity IS 'Numeric quantity of the item consumed (e.g.: 2, 3.5, 250)';
-COMMENT ON COLUMN extra_items.unit IS 'Unit of measurement for the quantity (e.g.: pieces, units, grams, ml, packages)';
-COMMENT ON COLUMN extra_items.consumed_at IS 'Optional: specific time when this extra item was consumed (if different from main meal)';
+COMMENT ON COLUMN meal_record.free_meal_description IS 'Text description of the free meal item (NULL when is_free_meal = FALSE)';
+COMMENT ON COLUMN meal_record.quantity IS 'Quantity of the item consumed (default: 1.0)';
+COMMENT ON COLUMN meal_record.unit IS 'Unit of measurement (serving, g, ml, units, etc)';
+COMMENT ON COLUMN meal_record.notes IS 'Optional field for additional observations';
+COMMENT ON COLUMN meal_record.created_at IS 'System timestamp when the record was inserted';
 
 -- =============================================
 -- ADD PRIMARY KEY CONSTRAINTS
@@ -142,12 +126,6 @@ ALTER TABLE meal_record
 
 COMMENT ON CONSTRAINT pk_meal_record ON meal_record IS
     'Primary key constraint - ensures each meal record has a unique identifier';
-
-ALTER TABLE extra_items
-    ADD CONSTRAINT pk_extra_items PRIMARY KEY (id);
-
-COMMENT ON CONSTRAINT pk_extra_items ON extra_items IS
-    'Primary key constraint - ensures each extra item has a unique identifier';
 
 -- =============================================
 -- ADD FOREIGN KEY CONSTRAINTS
@@ -189,15 +167,6 @@ ALTER TABLE meal_record
 COMMENT ON CONSTRAINT fk_record_standard_option ON meal_record IS
     'Foreign key to standard_options - if a standard option is deleted, the reference becomes NULL but the meal record is preserved (SET NULL)';
 
-ALTER TABLE extra_items
-    ADD CONSTRAINT fk_extras_meal_record
-        FOREIGN KEY (meal_record_id)
-            REFERENCES meal_record(id)
-            ON DELETE CASCADE;
-
-COMMENT ON CONSTRAINT fk_extras_meal_record ON extra_items IS
-    'Foreign key to meal_record - when a meal record is deleted, all its extra items are also deleted (CASCADE)';
-
 -- =============================================
 -- ADD UNIQUE CONSTRAINTS
 -- =============================================
@@ -227,22 +196,22 @@ COMMENT ON CONSTRAINT uk_one_active_plan ON diet_plan IS
 -- ADD CHECK CONSTRAINTS
 -- =============================================
 
-ALTER TABLE extra_items
-    ADD CONSTRAINT ck_positive_quantity
-        CHECK (quantity > 0);
-
-COMMENT ON CONSTRAINT ck_positive_quantity ON extra_items IS
-    'Check constraint - ensures quantity of extra items is always greater than zero';
-
 ALTER TABLE meal_record
-    ADD CONSTRAINT ck_meal_validation
+    ADD CONSTRAINT ck_free_meal_logic
         CHECK (
             (is_free_meal = true AND standard_option_id IS NULL AND free_meal_description IS NOT NULL) OR
             (is_free_meal = false AND standard_option_id IS NOT NULL AND free_meal_description IS NULL)
             );
 
-COMMENT ON CONSTRAINT ck_meal_validation ON meal_record IS
+COMMENT ON CONSTRAINT ck_free_meal_logic ON meal_record IS
     'Check constraint - ensures data integrity: free meals must have description and no standard option, while planned meals must have standard option and no free description';
+
+ALTER TABLE meal_record
+    ADD CONSTRAINT ck_positive_quantity
+        CHECK (quantity > 0);
+
+COMMENT ON CONSTRAINT ck_positive_quantity ON meal_record IS
+    'Check constraint - ensures quantity is always greater than zero';
 
 -- =============================================
 -- CREATE INDEXES
@@ -251,22 +220,20 @@ COMMENT ON CONSTRAINT ck_meal_validation ON meal_record IS
 CREATE INDEX idx_plan_active ON diet_plan(is_active) WHERE is_active = true;
 CREATE INDEX idx_plan_dates ON diet_plan(start_date, end_date);
 CREATE INDEX idx_meal_type_plan ON meal_type(diet_plan_id);
-CREATE INDEX idx_record_date ON meal_record(record_date DESC);
+CREATE INDEX idx_options_meal_type ON standard_options(meal_type_id);
 CREATE INDEX idx_record_consumed_at ON meal_record(consumed_at DESC);
 CREATE INDEX idx_record_meal_type ON meal_record(meal_type_id);
 CREATE INDEX idx_record_free_meal ON meal_record(is_free_meal);
-CREATE INDEX idx_extras_meal_record ON extra_items(meal_record_id);
-CREATE INDEX idx_options_meal_type ON standard_options(meal_type_id);
+CREATE INDEX idx_record_date ON meal_record(DATE(consumed_at) DESC);
 
 COMMENT ON INDEX idx_plan_active IS 'Partial index to quickly find the active diet plan';
 COMMENT ON INDEX idx_plan_dates IS 'Composite index to optimize queries by plan date range';
 COMMENT ON INDEX idx_meal_type_plan IS 'Index to optimize finding meal types for a specific plan';
-COMMENT ON INDEX idx_record_date IS 'Index to optimize queries by date in descending order (most recent first)';
+COMMENT ON INDEX idx_options_meal_type IS 'Index to optimize searching options by meal type';
 COMMENT ON INDEX idx_record_consumed_at IS 'Index to optimize queries by consumption timestamp in descending order';
 COMMENT ON INDEX idx_record_meal_type IS 'Index to optimize joins and filters by meal type';
 COMMENT ON INDEX idx_record_free_meal IS 'Index to optimize filtering free meals vs standard meals';
-COMMENT ON INDEX idx_extras_meal_record IS 'Index to optimize joins with extra_items table';
-COMMENT ON INDEX idx_options_meal_type IS 'Index to optimize searching options by meal type';
+COMMENT ON INDEX idx_record_date IS 'Index to optimize queries by date';
 
 -- =============================================
 -- CREATE VIEWS
@@ -275,41 +242,34 @@ COMMENT ON INDEX idx_options_meal_type IS 'Index to optimize searching options b
 -- View to see daily consumption with all details including diet plan
 CREATE OR REPLACE VIEW daily_consumption AS
 SELECT
-    mr.record_date,
+    DATE(mr.consumed_at) AS record_date,
     TO_CHAR(mr.consumed_at, 'HH24:MI') AS time,
     dp.name AS diet_plan,
     mt.name AS meal_type,
     CASE
         WHEN mr.is_free_meal = false THEN CONCAT('Option ', so.option_number, ': ', so.description)
-        ELSE CONCAT('Free: ', mr.free_meal_description)
-        END AS meal,
-    mr.notes,
-    STRING_AGG(
-            CONCAT(ei.quantity, ' ', ei.unit, ' of ', ei.item_name,
-                   CASE WHEN ei.consumed_at IS NOT NULL
-                            THEN ' at ' || TO_CHAR(ei.consumed_at, 'HH24:MI')
-                        ELSE '' END),
-            ', ' ORDER BY ei.consumed_at
-    ) AS extras
+        ELSE mr.free_meal_description
+        END AS meal_description,
+    mr.quantity,
+    mr.unit,
+    mr.is_free_meal,
+    mr.notes
 FROM meal_record mr
          JOIN meal_type mt ON mr.meal_type_id = mt.id
          JOIN diet_plan dp ON mt.diet_plan_id = dp.id
          LEFT JOIN standard_options so ON mr.standard_option_id = so.id
-         LEFT JOIN extra_items ei ON mr.id = ei.meal_record_id
-GROUP BY mr.id, mr.record_date, mr.consumed_at, dp.name, mt.name, mr.is_free_meal,
-         so.option_number, so.description, mr.free_meal_description, mr.notes
-ORDER BY mr.record_date DESC, mr.consumed_at;
+ORDER BY mr.consumed_at DESC;
 
-COMMENT ON VIEW daily_consumption IS 'Complete view of all meals and extras consumed daily with diet plan information';
+COMMENT ON VIEW daily_consumption IS 'Complete view of all food items consumed with diet plan information - one row per item';
 
 -- View for meal statistics by diet plan
 CREATE OR REPLACE VIEW meal_statistics AS
 SELECT
     dp.name AS diet_plan,
     mt.name AS meal_type,
-    COUNT(*) AS total_count,
-    COUNT(CASE WHEN mr.is_free_meal = true THEN 1 END) AS free_meals,
-    COUNT(CASE WHEN mr.is_free_meal = false THEN 1 END) AS standard_meals,
+    COUNT(*) AS total_items,
+    COUNT(CASE WHEN mr.is_free_meal = true THEN 1 END) AS free_items,
+    COUNT(CASE WHEN mr.is_free_meal = false THEN 1 END) AS standard_items,
     ROUND(100.0 * COUNT(CASE WHEN mr.is_free_meal = true THEN 1 END) / COUNT(*), 2) AS free_percentage,
     TO_CHAR(AVG(mr.consumed_at::time), 'HH24:MI') AS avg_time
 FROM meal_record mr
@@ -318,7 +278,7 @@ FROM meal_record mr
 GROUP BY dp.name, dp.id, mt.name, mt.id
 ORDER BY dp.id, mt.id;
 
-COMMENT ON VIEW meal_statistics IS 'Statistics about meal patterns and compliance by diet plan';
+COMMENT ON VIEW meal_statistics IS 'Statistics about meal patterns and compliance by diet plan - counts individual items';
 
 -- View for active diet plan details
 CREATE OR REPLACE VIEW active_diet_plan AS
@@ -341,3 +301,29 @@ GROUP BY dp.id, dp.name, dp.start_date, dp.daily_calories,
          dp.daily_protein_g, dp.daily_carbs_g, dp.daily_fat_g, dp.goal;
 
 COMMENT ON VIEW active_diet_plan IS 'Details of the currently active diet plan with summary statistics';
+
+-- View to group items consumed at the same time
+CREATE OR REPLACE VIEW meal_sessions AS
+SELECT
+    DATE(mr.consumed_at) AS record_date,
+    mr.consumed_at,
+    dp.name AS diet_plan,
+    mt.name AS meal_type,
+    STRING_AGG(
+            CASE
+                WHEN mr.is_free_meal = false THEN CONCAT(mr.quantity, ' ', mr.unit, ' - Option ', so.option_number)
+                ELSE CONCAT(mr.quantity, ' ', mr.unit, ' - ', mr.free_meal_description)
+                END,
+            ' | '
+            ORDER BY mr.id
+    ) AS items,
+    COUNT(*) AS item_count,
+    COUNT(CASE WHEN mr.is_free_meal = true THEN 1 END) AS free_items_count
+FROM meal_record mr
+         JOIN meal_type mt ON mr.meal_type_id = mt.id
+         JOIN diet_plan dp ON mt.diet_plan_id = dp.id
+         LEFT JOIN standard_options so ON mr.standard_option_id = so.id
+GROUP BY DATE(mr.consumed_at), mr.consumed_at, dp.name, mt.name
+ORDER BY mr.consumed_at DESC;
+
+COMMENT ON VIEW meal_sessions IS 'Groups all items consumed at the same timestamp, useful to see complete meals';

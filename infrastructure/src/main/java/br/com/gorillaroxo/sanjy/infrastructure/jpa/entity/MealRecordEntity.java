@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,10 +20,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -38,9 +42,6 @@ public class MealRecordEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "record_date", nullable = false)
-    private LocalDate recordDate;
-
     @Column(name = "consumed_at", nullable = false)
     private LocalDateTime consumedAt;
 
@@ -49,6 +50,7 @@ public class MealRecordEntity {
     private MealTypeEntity mealType;
 
     @Column(name = "is_free_meal", nullable = false)
+    @Builder.Default
     private Boolean isFreeMeal = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -58,14 +60,20 @@ public class MealRecordEntity {
     @Column(name = "free_meal_description", columnDefinition = "TEXT")
     private String freeMealDescription;
 
+    @Column(name = "quantity", columnDefinition = "DECIMAL(10,2)", nullable = false)
+    private BigDecimal quantity;
+
+    @Column(name = "unit", columnDefinition = "VARCHAR(50)", length = 50, nullable = false)
+    private String unit;
+
     @Column(columnDefinition = "TEXT")
     private String notes;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "mealRecord", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ExtraItemEntity> extraItems = new ArrayList<>();
-
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 }

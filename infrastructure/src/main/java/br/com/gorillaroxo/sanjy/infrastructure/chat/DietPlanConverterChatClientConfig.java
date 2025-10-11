@@ -1,4 +1,4 @@
-package br.com.gorillaroxo.sanjy.infrastructure.config.chat;
+package br.com.gorillaroxo.sanjy.infrastructure.chat;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
 package br.com.gorillaroxo.sanjy.infrastructure.adapter.gateway.repository;
 
-import br.com.gorillaroxo.sanjy.core.domain.plan.DietPlanDomain;
+import br.com.gorillaroxo.sanjy.core.domain.DietPlanDomain;
 import br.com.gorillaroxo.sanjy.core.ports.driven.DietPlanGateway;
 import br.com.gorillaroxo.sanjy.infrastructure.jpa.entity.DietPlanEntity;
 import br.com.gorillaroxo.sanjy.infrastructure.jpa.repository.DietPlanRepository;
@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 @Slf4j
@@ -24,10 +25,15 @@ public class DietPlanRepositoryGateway implements DietPlanGateway {
         final DietPlanEntity entity = dietPlanMapper.toEntity(dietPlanDomain);
 
         // set relations
-        entity.getMealTypes().forEach(mealType -> {
+        final var mealTypeList = new HashSet<>(entity.getMealTypes());
+        mealTypeList.forEach(mealType -> {
             mealType.setDietPlan(entity);
-            mealType.getStandardOptions().forEach(opt -> opt.setMealType(mealType));
+            final var standardOptionList = new HashSet<>(mealType.getStandardOptions());
+            standardOptionList.forEach(standardOption -> standardOption.setMealType(mealType));
+            mealType.setStandardOptions(standardOptionList);
         });
+
+        entity.setMealTypes(mealTypeList);
 
         final DietPlanEntity savedDietPlan = dietPlanRepository.save(entity);
         return dietPlanMapper.toDomain(savedDietPlan);

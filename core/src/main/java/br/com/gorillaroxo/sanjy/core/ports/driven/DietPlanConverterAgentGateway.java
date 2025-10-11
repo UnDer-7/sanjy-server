@@ -1,6 +1,6 @@
 package br.com.gorillaroxo.sanjy.core.ports.driven;
 
-import br.com.gorillaroxo.sanjy.core.domain.plan.DietPlanDomain;
+import br.com.gorillaroxo.sanjy.core.domain.DietPlanDomain;
 
 public interface DietPlanConverterAgentGateway {
 

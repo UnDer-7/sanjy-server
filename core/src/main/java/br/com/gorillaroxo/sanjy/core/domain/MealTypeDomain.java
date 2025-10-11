@@ -1,12 +1,16 @@
-package br.com.gorillaroxo.sanjy.core.domain.plan;
+package br.com.gorillaroxo.sanjy.core.domain;
+
+import lombok.Builder;
 
 import java.time.LocalTime;
 import java.util.Set;
 
-public record MealType(
+@Builder
+public record MealTypeDomain(
     Long id,
     String name,
     LocalTime scheduledTime,
+    Long dietPlanId,
     Set<StandardOptionDomain> standardOptions
 ) {
 

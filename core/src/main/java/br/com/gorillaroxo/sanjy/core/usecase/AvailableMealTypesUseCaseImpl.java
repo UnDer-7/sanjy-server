@@ -1,0 +1,28 @@
+package br.com.gorillaroxo.sanjy.core.usecase;
+
+import br.com.gorillaroxo.sanjy.core.domain.DietPlanDomain;
+import br.com.gorillaroxo.sanjy.core.domain.MealTypeDomain;
+import br.com.gorillaroxo.sanjy.core.ports.driven.DietPlanGateway;
+import br.com.gorillaroxo.sanjy.core.ports.driver.AvailableMealTypesUseCase;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.Comparator;
+import java.util.List;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class AvailableMealTypesUseCaseImpl implements AvailableMealTypesUseCase {
+
+    private final DietPlanGateway dietPlanGateway;
+
+    @Override
+    public DietPlanDomain execute() {
+        return dietPlanGateway.findActive()
+            // todo: jogar exception
+            .orElseThrow();
+    }
+
+}

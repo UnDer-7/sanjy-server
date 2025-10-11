@@ -1,6 +1,6 @@
 package br.com.gorillaroxo.sanjy.infrastructure.adapter.gateway.agent;
 
-import br.com.gorillaroxo.sanjy.core.domain.plan.DietPlanDomain;
+import br.com.gorillaroxo.sanjy.core.domain.DietPlanDomain;
 import br.com.gorillaroxo.sanjy.core.ports.driven.DietPlanConverterAgentGateway;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

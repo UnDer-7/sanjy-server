@@ -1,8 +1,7 @@
 package br.com.gorillaroxo.sanjy.core.usecase;
 
-import br.com.gorillaroxo.sanjy.core.domain.plan.DietPlanDomain;
+import br.com.gorillaroxo.sanjy.core.domain.DietPlanDomain;
 import br.com.gorillaroxo.sanjy.core.ports.driven.DietPlanConverterAgentGateway;
-import br.com.gorillaroxo.sanjy.core.ports.driven.DietPlanGateway;
 import br.com.gorillaroxo.sanjy.core.ports.driven.DietPlanVectorStoreGateway;
 import br.com.gorillaroxo.sanjy.core.ports.driver.ProcessDietPlanFileUseCase;
 import br.com.gorillaroxo.sanjy.core.service.DietPlanService;
@@ -22,6 +21,7 @@ public class ProcessDietPlanFileUseCaseImpl implements ProcessDietPlanFileUseCas
     private final DietPlanConverterAgentGateway dietPlanConverterAgentGateway;
     private final DietPlanService dietPlanService;
 
+    // todo: Receber outro Objeto para nao ter o Spring Web no core
     public void execute(final MultipartFile file) {
         final String fileTxt = extractTextFromFileService.execute(file);
         final DietPlanDomain dietPlan = dietPlanConverterAgentGateway.convert(fileTxt);

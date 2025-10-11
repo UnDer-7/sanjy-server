@@ -16,6 +16,6 @@ public interface DietPlanRestService {
         summary = "Upload diet plan PDF file"
     )
     @PostMapping("/v1/diet-plan")
-    void uploadPdf(@RequestParam("file") MultipartFile file);
+    void newDietPlan(@RequestParam("file") MultipartFile file);
 
 }
