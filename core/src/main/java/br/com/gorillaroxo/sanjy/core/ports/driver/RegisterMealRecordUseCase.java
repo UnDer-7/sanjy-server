@@ -4,6 +4,6 @@ import br.com.gorillaroxo.sanjy.core.domain.MealRecordDomain;
 
 public interface RegisterMealRecordUseCase {
 
-    void execute(final MealRecordDomain mealRecord);
+    MealRecordDomain execute(final MealRecordDomain mealRecord);
 
 }

@@ -2,6 +2,7 @@ package br.com.gorillaroxo.sanjy.entrypoint.rest;
 
 import br.com.gorillaroxo.sanjy.entrypoint.dto.request.CreateMealRecordRequestDTO;
 import br.com.gorillaroxo.sanjy.entrypoint.dto.respose.DietPlanCompleteResponseDTO;
+import br.com.gorillaroxo.sanjy.entrypoint.dto.respose.MealRecordResponseDTO;
 import br.com.gorillaroxo.sanjy.entrypoint.dto.respose.MealTypeResponseDTO;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -19,7 +20,7 @@ import java.util.List;
 public interface MealRecordRestService {
 
 
-    void newMealRecord(@RequestBody @Valid @NotNull CreateMealRecordRequestDTO request);
+    MealRecordResponseDTO newMealRecord(@RequestBody @Valid @NotNull CreateMealRecordRequestDTO request);
 
 
     DietPlanCompleteResponseDTO activeDietPlan();

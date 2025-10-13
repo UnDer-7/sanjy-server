@@ -15,7 +15,7 @@ class RegisterMealRecordUseCaseImpl implements RegisterMealRecordUseCase {
     private final MealRecordService mealRecordService;
 
     @Override
-    public void execute(final MealRecordDomain mealRecord) {
-        mealRecordService.insert(mealRecord);
+    public MealRecordDomain execute(final MealRecordDomain mealRecord) {
+        return mealRecordService.insert(mealRecord);
     }
 }

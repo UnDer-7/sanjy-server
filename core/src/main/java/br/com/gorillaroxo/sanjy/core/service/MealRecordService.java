@@ -15,10 +15,10 @@ public class MealRecordService {
 
     private final MealRecordGateway mealRecordGateway;
 
-    public void insert(final MealRecordDomain mealRecordDomain) {
+    public MealRecordDomain insert(final MealRecordDomain mealRecordDomain) {
         mealRecordDomain.setConsumedAt(LocalDateTime.now());
         // todo: validar dados
 
-        mealRecordGateway.insert(mealRecordDomain);
+        return mealRecordGateway.insert(mealRecordDomain);
     }
 }
