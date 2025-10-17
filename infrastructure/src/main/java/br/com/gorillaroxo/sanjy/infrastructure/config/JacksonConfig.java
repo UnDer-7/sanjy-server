@@ -1,7 +1,5 @@
 package br.com.gorillaroxo.sanjy.infrastructure.config;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
@@ -20,22 +18,26 @@ import java.time.format.DateTimeFormatter;
 @Configuration
 @RequiredArgsConstructor
 public class JacksonConfig {
-    private static final String dateFormat = "yyyy-MM-dd";
-    private static final String timeFormat = "HH:mm:ss";
-    private static final String dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
+    private static final String TIME_FORMAT = "HH:mm:ss";
+    private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
         return builder -> {
-            builder.simpleDateFormat(dateTimeFormat);
-            builder.serializers(new LocalDateSerializer(DateTimeFormatter.ofPattern(dateFormat)));
-            builder.deserializers(new LocalDateDeserializer(DateTimeFormatter.ofPattern(dateFormat)));
+            builder.simpleDateFormat(DATE_TIME_FORMAT);
+            final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+            builder.serializers(new LocalDateSerializer(dateFormatter));
+            builder.deserializers(new LocalDateDeserializer(dateFormatter));
 
-            builder.serializers(new LocalTimeSerializer(DateTimeFormatter.ofPattern(timeFormat)));
-            builder.deserializers(new LocalTimeDeserializer(DateTimeFormatter.ofPattern(timeFormat)));
+            final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
+            builder.serializers(new LocalTimeSerializer(timeFormatter));
+            builder.deserializers(new LocalTimeDeserializer(timeFormatter));
 
-            builder.serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateTimeFormat)));
-            builder.deserializers(new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(dateTimeFormat)));
+            final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+            builder.serializers(new LocalDateTimeSerializer(dateTimeFormatter));
+            builder.deserializers(new LocalDateTimeDeserializer(dateTimeFormatter));
 
         };
     }

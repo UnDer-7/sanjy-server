@@ -38,6 +38,7 @@ public class DietPlanController implements DietPlanRestService, SanjyAgentTool {
 
     @Override
     @PostMapping("/v1/diet-plan")
+    @Tool(name = "newDietPlan", description = "Creates a new diet plan for the user")
     public DietPlanCompleteResponseDTO newDietPlan(final CreateDietPlanRequestDTO request) {
         final DietPlanDomain dietPlan = dietPlanMapper.toDomain(request);
         return dietPlanMapper.toDTO(createDietPlanUseCase.execute(dietPlan));

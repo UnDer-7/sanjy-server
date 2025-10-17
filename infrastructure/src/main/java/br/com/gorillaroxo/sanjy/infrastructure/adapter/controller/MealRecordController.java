@@ -43,6 +43,7 @@ public class MealRecordController implements MealRecordRestService, SanjyAgentTo
 
     @Override
     @GetMapping("/v1/meal-record/today")
+    @Tool(name = "getTodayMealRecords", description = "Retrieves all meal records for today")
     public List<MealRecordResponseDTO> getTodayMealRecords() {
         log.info("Retrieving all the diet plans for today...");
         final List<MealRecordDomain> mealRecords = getTodayMealRecordsUseCase.execute();

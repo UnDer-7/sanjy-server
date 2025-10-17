@@ -18,7 +18,9 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class McpConfig {
 
-    private final @Lazy Set<SanjyAgentTool> tools;
+    private final Set<SanjyAgentTool> tools;
+    private final DietPlanController dietPlanController;
+//    private final MealRecordController mealRecordController;
 
 //    @Bean
 //    public ToolCallbackProvider weatherTools(final Set<SanjyAgentTool> tools) {
@@ -28,10 +30,12 @@ public class McpConfig {
 //    }
 
     @Bean
-    public ToolCallbackProvider weatherTools() {
+    public ToolCallbackProvider weatherTools(MealRecordController mealRecordController) {
         return MethodToolCallbackProvider.builder()
-            .toolObjects(tools.toArray(SanjyAgentTool[]::new))
-//            .toolObjects(tools)
+//            .toolObjects(tools.toArray(SanjyAgentTool[]::new))
+//            .toolObjects(dietPlanController, mealRecordController)
+            .toolObjects(dietPlanController)
+//            .toolObjects(mealRecordController)
             .build();
     }
 }

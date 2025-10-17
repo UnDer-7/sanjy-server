@@ -15,9 +15,9 @@ spring:
         sse-message-endpoint: /mcp/messages
         capabilities:
           tool: true
-          resource: true
-          prompt: true
-          completion: true
+          resource: false
+          prompt: false
+          completion: false
     openai:
       api-key: ${SANJY_OPENAI_API_KEY}
       organization-id: ${SANJY_OPENAI_ORGANIZATION_ID}
