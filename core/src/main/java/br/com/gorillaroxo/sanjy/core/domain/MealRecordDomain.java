@@ -1,32 +1,24 @@
 package br.com.gorillaroxo.sanjy.core.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Getter
 @Builder
-@ToString
-@AllArgsConstructor
-public class MealRecordDomain {
+public record MealRecordDomain(
+    Long id,
 
-    private Long id;
+    LocalDateTime consumedAt,
 
-    @Setter
-    private LocalDateTime consumedAt;
-
-    private MealTypeDomain mealType;
-    private Boolean isFreeMeal;
-    private StandardOptionDomain standardOption;
-    private String freeMealDescription;
-    private BigDecimal quantity;
-    private String unit;
-    private String notes;
-    private LocalDateTime createdAt;
+    MealTypeDomain mealType,
+    Boolean isFreeMeal,
+    StandardOptionDomain standardOption,
+    String freeMealDescription,
+    BigDecimal quantity,
+    String unit,
+    String notes,
+    LocalDateTime createdAt
+) {
 
 }

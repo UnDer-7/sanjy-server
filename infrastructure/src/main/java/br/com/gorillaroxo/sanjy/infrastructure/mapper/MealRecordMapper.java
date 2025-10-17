@@ -9,17 +9,29 @@ import br.com.gorillaroxo.sanjy.infrastructure.jpa.entity.MealRecordEntity;
 import br.com.gorillaroxo.sanjy.infrastructure.utils.ConstantsInfrastructure;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.ReportingPolicy;
 
+import java.util.List;
 import java.util.Optional;
 
 @Mapper(
     componentModel = ConstantsInfrastructure.MAPSTRUCT_COMPONENT_MODEL,
-    uses = {MealTypeMapper.class, StandardOptionMapper.class}
+    uses = {MealTypeMapper.class, StandardOptionMapper.class},
+    unmappedTargetPolicy = ReportingPolicy.ERROR
 )
 public interface MealRecordMapper {
 
     // DTOs
+    MealRecordResponseDTO toDTO(MealRecordDomain domain);
+    List<MealRecordResponseDTO> toDTO(List<MealRecordDomain> domain);
+
+    // Domains
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "mealType", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "standardOption", ignore = true)
     MealRecordDomain toDomain(CreateMealRecordRequestDTO dto);
 
     @AfterMapping
@@ -34,10 +46,9 @@ public interface MealRecordMapper {
             .ifPresent(target::standardOption);
     }
 
-    MealRecordResponseDTO toDTO(MealRecordDomain domain);
+    MealRecordDomain toDomain(MealRecordEntity entity);
+    List<MealRecordDomain> toDomain(List<MealRecordEntity> entities);
 
     // Entities
     MealRecordEntity toEntity(MealRecordDomain domain);
-
-    MealRecordDomain toDomain(MealRecordEntity entity);
 }

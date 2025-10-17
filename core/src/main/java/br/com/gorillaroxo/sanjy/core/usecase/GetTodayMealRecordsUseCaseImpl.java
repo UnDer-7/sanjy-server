@@ -1,0 +1,32 @@
+package br.com.gorillaroxo.sanjy.core.usecase;
+
+import br.com.gorillaroxo.sanjy.core.domain.DietPlanDomain;
+import br.com.gorillaroxo.sanjy.core.domain.MealRecordDomain;
+import br.com.gorillaroxo.sanjy.core.ports.driver.GetTodayMealRecordsUseCase;
+import br.com.gorillaroxo.sanjy.core.service.MealRecordService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class GetTodayMealRecordsUseCaseImpl implements GetTodayMealRecordsUseCase {
+
+    private final MealRecordService mealRecordService;
+
+    @Override
+    public List<MealRecordDomain> execute() {
+        final LocalDate currentLocalDate = LocalDate.now();
+        final LocalDateTime startOfDay = LocalDateTime.of(currentLocalDate, LocalTime.MIN);
+        final LocalDateTime endOfDay = LocalDateTime.of(currentLocalDate, LocalTime.MAX);
+
+        return mealRecordService.searchByConsumedAt(startOfDay, endOfDay);
+    }
+
+}

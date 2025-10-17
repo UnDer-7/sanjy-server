@@ -17,6 +17,7 @@ public class DietPlanService {
 
     public DietPlanDomain insert(final DietPlanDomain newDietPlan) {
         // Todo: validar dados
+        // todo: validar ordem dos standardOptions, se na tipo: option 2 e 5
         Objects.requireNonNull(newDietPlan);
 
         dietPlanGateway.findActive()

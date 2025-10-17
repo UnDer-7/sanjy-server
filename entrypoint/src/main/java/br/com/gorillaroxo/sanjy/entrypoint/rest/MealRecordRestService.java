@@ -22,6 +22,6 @@ public interface MealRecordRestService {
 
     MealRecordResponseDTO newMealRecord(@RequestBody @Valid @NotNull CreateMealRecordRequestDTO request);
 
+    List<MealRecordResponseDTO> getTodayMealRecords();
 
-    DietPlanCompleteResponseDTO activeDietPlan();
 }

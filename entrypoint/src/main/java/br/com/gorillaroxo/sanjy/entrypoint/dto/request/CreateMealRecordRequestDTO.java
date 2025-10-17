@@ -2,9 +2,11 @@ package br.com.gorillaroxo.sanjy.entrypoint.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.Builder;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Builder
@@ -17,6 +19,16 @@ public record CreateMealRecordRequestDTO(
         requiredMode = Schema.RequiredMode.REQUIRED
     )
     @NotNull Long mealTypeId,
+
+    @Schema(
+        description = "Date and time when the item was consumed. This field should only be set when registering a meal that was eaten in the past and forgotten to be logged at the time. " +
+                      "Must be a past or present date/time (cannot be in the future). If not provided, defaults to current time.",
+        example = "2025-10-13T08:30:00",
+        nullable = true,
+        requiredMode = Schema.RequiredMode.NOT_REQUIRED
+    )
+    @PastOrPresent
+    LocalDateTime consumedAt,
 
     @Schema(
         description = "Indicates if this is a free meal (off-plan) or a standard meal (following the diet plan). " +
@@ -44,8 +56,8 @@ public record CreateMealRecordRequestDTO(
 
     @Schema(
         description = "Quantity of the item consumed. Defaults to 1.0 if not provided",
-        example = "1.5",
-        defaultValue = "1.0",
+        example = "1",
+        defaultValue = "1",
         requiredMode = Schema.RequiredMode.NOT_REQUIRED
     )
     BigDecimal quantity,
@@ -70,5 +82,6 @@ public record CreateMealRecordRequestDTO(
     public CreateMealRecordRequestDTO {
         quantity = Objects.requireNonNullElse(quantity, BigDecimal.ONE);
         unit = Objects.requireNonNullElse(unit, "serving");
+        consumedAt = Objects.requireNonNullElse(consumedAt, LocalDateTime.now());
     }
 }

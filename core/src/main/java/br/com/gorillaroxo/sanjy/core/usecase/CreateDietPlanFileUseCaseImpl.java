@@ -3,7 +3,7 @@ package br.com.gorillaroxo.sanjy.core.usecase;
 import br.com.gorillaroxo.sanjy.core.domain.DietPlanDomain;
 import br.com.gorillaroxo.sanjy.core.ports.driven.DietPlanConverterAgentGateway;
 import br.com.gorillaroxo.sanjy.core.ports.driven.DietPlanVectorStoreGateway;
-import br.com.gorillaroxo.sanjy.core.ports.driver.ProcessDietPlanFileUseCase;
+import br.com.gorillaroxo.sanjy.core.ports.driver.CreateDietPlanFileUseCase;
 import br.com.gorillaroxo.sanjy.core.service.DietPlanService;
 import br.com.gorillaroxo.sanjy.core.service.ExtractTextFromFileService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ProcessDietPlanFileUseCaseImpl implements ProcessDietPlanFileUseCase {
+public class CreateDietPlanFileUseCaseImpl implements CreateDietPlanFileUseCase {
 
     private final ExtractTextFromFileService extractTextFromFileService;
     private final DietPlanVectorStoreGateway dietPlanVectorStoreGateway;
@@ -22,12 +22,10 @@ public class ProcessDietPlanFileUseCaseImpl implements ProcessDietPlanFileUseCas
     private final DietPlanService dietPlanService;
 
     // todo: Receber outro Objeto para nao ter o Spring Web no core
-    public void execute(final MultipartFile file) {
+    public DietPlanDomain execute(final MultipartFile file) {
         final String fileTxt = extractTextFromFileService.execute(file);
         final DietPlanDomain dietPlan = dietPlanConverterAgentGateway.convert(fileTxt);
-        final DietPlanDomain savedDietPlan = dietPlanService.insert(dietPlan);
-        dietPlanVectorStoreGateway.upsertPlan(fileTxt, savedDietPlan.getId());
-        log.info("File content: {}", fileTxt);
+        return dietPlanService.insert(dietPlan);
     }
 
 }
