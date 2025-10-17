@@ -11,11 +11,11 @@
 	</parent>
 
     <groupId>br.com.gorillaroxo</groupId>
-	<artifactId>sanJy</artifactId>
+	<artifactId>sanJy-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>sanJy</name>
-	<description>sanJy</description>
+    <name>sanJy-server</name>
+	<description>sanJy-server</description>
 
     <url/>
 	<licenses>

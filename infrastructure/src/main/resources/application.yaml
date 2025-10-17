@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: sanJy
+    name: sanJy-server
 
   ai:
     mcp:
@@ -36,8 +36,13 @@ spring:
     url: jdbc:postgresql://localhost:5432/diet_control
     username: admin_usr
     password: admin_pass
+
   main:
     banner-mode: off
+
+  threads:
+    virtual:
+      enabled: true
 
 springdoc:
   api-docs:

@@ -4,7 +4,7 @@
 
     <parent>
         <groupId>br.com.gorillaroxo</groupId>
-        <artifactId>sanJy</artifactId>
+        <artifactId>sanJy-server</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
