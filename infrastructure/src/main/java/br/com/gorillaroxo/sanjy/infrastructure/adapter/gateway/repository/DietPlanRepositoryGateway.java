@@ -8,6 +8,7 @@ import br.com.gorillaroxo.sanjy.infrastructure.mapper.DietPlanMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -40,6 +41,7 @@ public class DietPlanRepositoryGateway implements DietPlanGateway {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<DietPlanDomain> findActive() {
         return dietPlanRepository.findByIsActiveTrue()
             .map(dietPlanMapper::toDomain);

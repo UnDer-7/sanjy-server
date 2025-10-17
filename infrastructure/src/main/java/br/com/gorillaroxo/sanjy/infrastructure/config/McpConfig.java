@@ -32,10 +32,7 @@ public class McpConfig {
     @Bean
     public ToolCallbackProvider weatherTools(MealRecordController mealRecordController) {
         return MethodToolCallbackProvider.builder()
-//            .toolObjects(tools.toArray(SanjyAgentTool[]::new))
-//            .toolObjects(dietPlanController, mealRecordController)
-            .toolObjects(dietPlanController)
-//            .toolObjects(mealRecordController)
+            .toolObjects(tools.toArray(SanjyAgentTool[]::new))
             .build();
     }
 }
