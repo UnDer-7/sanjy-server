@@ -1,0 +1,28 @@
+meta {
+  name: searchMealRecords
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{SERVER_URL}}/v1/meal-record?pageNumber=1&size=1&consumedAtAfter=2025-10-19T14:00:00&consumedAtBefore=2025-10-19T17:00:00
+  body: json
+  auth: inherit
+}
+
+params:query {
+  pageNumber: 1
+  size: 1
+  consumedAtAfter: 2025-10-19T14:00:00
+  consumedAtBefore: 2025-10-19T17:00:00
+  ~isFreeMeal: 
+}
+
+headers {
+  Content-Type: application/json
+}
+
+settings {
+  encodeUrl: false
+  timeout: 0
+}

@@ -1,0 +1,20 @@
+meta {
+  name: getTodayMealRecords
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{SERVER_URL}}/v1/meal-record/today
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+settings {
+  encodeUrl: false
+  timeout: 0
+}

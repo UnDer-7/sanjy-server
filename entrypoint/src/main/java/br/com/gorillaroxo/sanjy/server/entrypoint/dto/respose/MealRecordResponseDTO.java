@@ -13,8 +13,7 @@ public record MealRecordResponseDTO(
     @Schema(
         description = "Unique identifier of the meal record",
         example = "123",
-        requiredMode = Schema.RequiredMode.REQUIRED
-    )
+        requiredMode = Schema.RequiredMode.REQUIRED)
     Long id,
 
     @Schema(

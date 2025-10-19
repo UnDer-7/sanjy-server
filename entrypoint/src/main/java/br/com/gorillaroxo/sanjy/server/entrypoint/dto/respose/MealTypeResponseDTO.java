@@ -1,5 +1,6 @@
 package br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 import java.time.LocalTime;
@@ -8,11 +9,35 @@ import java.util.List;
 import java.util.Objects;
 
 @Builder
+@Schema(description = "Response DTO representing a meal type with its scheduled time and standard food options")
 public record MealTypeResponseDTO(
+    @Schema(
+        description = "Unique identifier of the meal type",
+        example = "123",
+        requiredMode = Schema.RequiredMode.REQUIRED)
     Long id,
+
+    @Schema(description = "Meal type name",
+        example = "Breakfast",
+        requiredMode = Schema.RequiredMode.REQUIRED,
+        maxLength = 50)
     String name,
+
+    @Schema(description = "Scheduled time for this meal",
+        example = "06:20:00",
+        type = "string",
+        pattern = "^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$",
+        nullable = true,
+        requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     LocalTime scheduledTime,
+
+    @Schema(description = "Identifier of the diet plan this meal type belongs to",
+        example = "456",
+        requiredMode = Schema.RequiredMode.REQUIRED)
     Long dietPlanId,
+
+    @Schema(description = "Set of standard food options for this meal type",
+        requiredMode = Schema.RequiredMode.REQUIRED)
     List<StandardOptionResponseDTO> standardOptions
 ) {
 

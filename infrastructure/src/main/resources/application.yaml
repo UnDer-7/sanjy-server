@@ -5,6 +5,13 @@ spring:
   application:
     name: sanJy-server
 
+  jpa:
+    properties:
+      hibernate:
+        # SQL Logging
+#        show_sql: true
+#        format_sql: true
+#        highlight_sql: true
   ai:
     mcp:
       server:
@@ -53,11 +60,17 @@ springdoc:
   swagger-ui:
     path: /
 
+
 logging:
   level:
     org:
+      hibernate:
+        # Log SQL
+#        orm.jdbc.bind: TRACE
+
       springframework:
         ai:
           chat:
             client:
+              # Log AI Chat
 #              advisor: DEBUG

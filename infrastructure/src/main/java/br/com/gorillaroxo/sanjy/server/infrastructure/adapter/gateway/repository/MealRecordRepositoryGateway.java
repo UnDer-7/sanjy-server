@@ -1,12 +1,17 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.gateway.repository;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.MealRecordDomain;
+import br.com.gorillaroxo.sanjy.server.core.domain.PageResultDomain;
+import br.com.gorillaroxo.sanjy.server.core.domain.SearchMealRecordParamDomain;
 import br.com.gorillaroxo.sanjy.server.core.ports.driven.MealRecordGateway;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealRecordEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.repository.MealRecordRepository;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.MealRecordMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,4 +38,34 @@ public class MealRecordRepositoryGateway implements MealRecordGateway {
         return mealRecordMapper.toDomain(mealRecords);
     }
 
+    @Override
+    public PageResultDomain<MealRecordDomain> search(final SearchMealRecordParamDomain searchParam) {
+        final var propConsumedAt = "consumedAt";
+        final var pageRequest = PageRequest.of(searchParam.getPageNumber(), searchParam.getPageSize(), Sort.by(propConsumedAt).ascending());
+
+        final Specification<MealRecordEntity> specification = (entity, cq, cb) -> {
+            var predicates = cb.and(
+                cb.greaterThanOrEqualTo(entity.get(propConsumedAt), searchParam.getConsumedAtAfter()),
+                cb.lessThanOrEqualTo(entity.get(propConsumedAt), searchParam.getConsumedAtBefore())
+            );
+            
+            if (searchParam.getIsFreeMeal() != null) {
+                predicates = cb.and(predicates, cb.equal(entity.get("isFreeMeal"), searchParam.getIsFreeMeal()));
+            }
+            
+            return predicates;
+        };
+
+        final var page = mealRecordRepository.findAll(specification, pageRequest);
+        final var mealRecordDomains = mealRecordMapper.toDomain(page.getContent());
+
+        return new PageResultDomain<>(
+            (long) page.getTotalPages(),
+            (long) page.getNumber(),
+            (long) page.getSize(),
+            page.getTotalElements(),
+            mealRecordDomains
+        );
+
+    }
 }

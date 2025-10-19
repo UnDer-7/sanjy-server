@@ -15,6 +15,7 @@ import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Mapper(
     componentModel = ConstantsInfrastructure.MAPSTRUCT_COMPONENT_MODEL,
@@ -48,6 +49,10 @@ public interface MealRecordMapper {
 
     MealRecordDomain toDomain(MealRecordEntity entity);
     List<MealRecordDomain> toDomain(List<MealRecordEntity> entities);
+
+    MealRecordDomain toDomain(MealRecordResponseDTO dto);
+    List<MealRecordDomain> toDomainListFromMealRecordResponseDTO(List<MealRecordResponseDTO> dto);
+    Set<MealRecordDomain> toDomainSetFromMealRecordResponseDTO(Set<MealRecordResponseDTO> dto);
 
     // Entities
     MealRecordEntity toEntity(MealRecordDomain domain);

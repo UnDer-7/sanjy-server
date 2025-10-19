@@ -58,6 +58,7 @@ public record CreateMealRecordRequestDTO(
         description = "Quantity of the item consumed. Defaults to 1.0 if not provided",
         example = "1",
         defaultValue = "1",
+        nullable = true,
         requiredMode = Schema.RequiredMode.NOT_REQUIRED
     )
     BigDecimal quantity,
@@ -66,6 +67,7 @@ public record CreateMealRecordRequestDTO(
         description = "Unit of measurement for the quantity (serving, g, ml, units, etc...). Defaults to 'serving' if not provided",
         example = "serving",
         defaultValue = "serving",
+        nullable = true,
         requiredMode = Schema.RequiredMode.NOT_REQUIRED
     )
     String unit,

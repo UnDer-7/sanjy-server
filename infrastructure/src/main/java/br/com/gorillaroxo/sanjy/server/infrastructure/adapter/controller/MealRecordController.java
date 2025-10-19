@@ -1,13 +1,20 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.MealRecordDomain;
+import br.com.gorillaroxo.sanjy.server.core.domain.PageResultDomain;
+import br.com.gorillaroxo.sanjy.server.core.domain.SearchMealRecordParamDomain;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.GetTodayMealRecordsUseCase;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.RegisterMealRecordUseCase;
+import br.com.gorillaroxo.sanjy.server.core.ports.driver.SearchMealRecordUseCase;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDTO;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.PageRequestDTO;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.SearchMealRecordParamRequestDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponseDTO;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.rest.MealRecordRestService;
 import br.com.gorillaroxo.sanjy.server.infrastructure.chat.tool.SanjyAgentTool;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.MealRecordMapper;
+import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.PageMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
@@ -28,7 +35,9 @@ public class MealRecordController implements MealRecordRestService, SanjyAgentTo
 
     private final RegisterMealRecordUseCase registerMealRecordUseCase;
     private final GetTodayMealRecordsUseCase getTodayMealRecordsUseCase;
+    private final SearchMealRecordUseCase searchMealRecordUseCase;
     private final MealRecordMapper mealRecordMapper;
+    private final PageMapper pageMapper;
 
     @Override
     @PostMapping("/v1/meal-record")
@@ -48,6 +57,16 @@ public class MealRecordController implements MealRecordRestService, SanjyAgentTo
         log.info("Retrieving all the diet plans for today...");
         final List<MealRecordDomain> mealRecords = getTodayMealRecordsUseCase.execute();
         return mealRecordMapper.toDTO(mealRecords);
+    }
+
+    @Override
+    @GetMapping("/v1/meal-record")
+    @Tool(name = "searchMealRecords", description = "Searches meal records")
+    public PageResponseDTO<MealRecordResponseDTO> searchMealRecords(final SearchMealRecordParamRequestDTO pageRequest) {
+        log.info("Searching meal records...");
+        final SearchMealRecordParamDomain pageRequestDomain = pageMapper.toDomain(pageRequest);
+        final PageResultDomain<MealRecordDomain> pageResult = searchMealRecordUseCase.execute(pageRequestDomain);
+        return pageMapper.toDTO(pageResult);
     }
 
 }

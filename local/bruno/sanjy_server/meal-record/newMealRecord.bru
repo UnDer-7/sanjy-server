@@ -1,0 +1,36 @@
+meta {
+  name: newMealRecord
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{SERVER_URL}}/v1/meal-record
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "mealTypeId": 26,
+    
+    // 2025-10-13T08:30:00
+  //   "consumedAt": "2025-10-19 10:34:55",
+    
+    "isFreeMeal": false,
+    "standardOptionId": 79,
+  //   "freeMealDescription": "pacote de biscoito",
+    "quantity": null,
+    "unit": null,
+    "notes": null
+  }
+}
+
+settings {
+  encodeUrl: false
+  timeout: 0
+}

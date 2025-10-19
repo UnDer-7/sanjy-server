@@ -11,9 +11,11 @@ import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.DietPlanMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -38,6 +40,7 @@ public class DietPlanController implements DietPlanRestService, SanjyAgentTool {
 
     @Override
     @PostMapping("/v1/diet-plan")
+    @ResponseStatus(HttpStatus.CREATED)
     @Tool(name = "newDietPlan", description = "Creates a new diet plan for the user")
     public DietPlanCompleteResponseDTO newDietPlan(final CreateDietPlanRequestDTO request) {
         final DietPlanDomain dietPlan = dietPlanMapper.toDomain(request);
