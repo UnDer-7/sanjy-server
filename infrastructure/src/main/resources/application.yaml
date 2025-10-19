@@ -26,9 +26,9 @@ spring:
           prompt: false
           completion: false
     openai:
-      api-key: ${SANJY_OPENAI_API_KEY}
-      organization-id: ${SANJY_OPENAI_ORGANIZATION_ID}
-      project-id: ${SANJY_OPENAI_PROJECT_ID}
+      api-key: ${SANJY_SERVER_OPENAI_API_KEY}
+      organization-id: ${SANJY_SERVER_OPENAI_ORGANIZATION_ID}
+      project-id: ${SANJY_SERVER_OPENAI_PROJECT_ID}
     vectorstore:
       pgvector:
         dimensions: 1536
