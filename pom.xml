@@ -41,7 +41,7 @@
         <mapstruct.version>1.6.2</mapstruct.version>
         <projectlombok.version>1.18.34</projectlombok.version>
 
-        <spring-ai.version>1.0.2</spring-ai.version>
+        <spring-ai.version>1.0.3</spring-ai.version>
 	</properties>
 
     <modules>

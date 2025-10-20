@@ -7,12 +7,11 @@ import br.com.gorillaroxo.sanjy.server.core.ports.driver.GetTodayMealRecordsUseC
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.RegisterMealRecordUseCase;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.SearchMealRecordUseCase;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDTO;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.PageRequestDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.SearchMealRecordParamRequestDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponseDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.rest.MealRecordRestService;
-import br.com.gorillaroxo.sanjy.server.infrastructure.chat.tool.SanjyAgentTool;
+import br.com.gorillaroxo.sanjy.server.infrastructure.config.McpToolMarker;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.MealRecordMapper;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.PageMapper;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-public class MealRecordController implements MealRecordRestService, SanjyAgentTool {
+public class MealRecordController implements MealRecordRestService, McpToolMarker {
 
     private final RegisterMealRecordUseCase registerMealRecordUseCase;
     private final GetTodayMealRecordsUseCase getTodayMealRecordsUseCase;

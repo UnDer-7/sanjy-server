@@ -6,7 +6,7 @@ import br.com.gorillaroxo.sanjy.server.core.ports.driver.CreateDietPlanUseCase;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequestDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.DietPlanCompleteResponseDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.rest.DietPlanRestService;
-import br.com.gorillaroxo.sanjy.server.infrastructure.chat.tool.SanjyAgentTool;
+import br.com.gorillaroxo.sanjy.server.infrastructure.config.McpToolMarker;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.DietPlanMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequiredArgsConstructor
-public class DietPlanController implements DietPlanRestService, SanjyAgentTool {
+public class DietPlanController implements DietPlanRestService, McpToolMarker {
 
     private final CreateDietPlanUseCase createDietPlanUseCase;
     private final AvailableMealTypesUseCase availableMealTypesUseCase;

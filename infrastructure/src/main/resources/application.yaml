@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: ${SANJY_SERVER_PORT}
 
 spring:
   application:
@@ -25,19 +25,6 @@ spring:
           resource: false
           prompt: false
           completion: false
-    openai:
-      api-key: ${SANJY_SERVER_OPENAI_API_KEY}
-      organization-id: ${SANJY_SERVER_OPENAI_ORGANIZATION_ID}
-      project-id: ${SANJY_SERVER_OPENAI_PROJECT_ID}
-    vectorstore:
-      pgvector:
-        dimensions: 1536
-        initialize-schema: true
-    chat:
-      memory:
-        repository:
-          jdbc:
-            initialize-schema: always
 
   datasource:
     url: jdbc:postgresql://localhost:5432/diet_control
@@ -60,17 +47,9 @@ springdoc:
   swagger-ui:
     path: /
 
-
 logging:
   level:
     org:
       hibernate:
         # Log SQL
 #        orm.jdbc.bind: TRACE
-
-      springframework:
-        ai:
-          chat:
-            client:
-              # Log AI Chat
-#              advisor: DEBUG

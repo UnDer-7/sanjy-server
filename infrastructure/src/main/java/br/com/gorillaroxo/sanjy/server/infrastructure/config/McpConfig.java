@@ -2,7 +2,6 @@ package br.com.gorillaroxo.sanjy.server.infrastructure.config;
 
 import br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller.DietPlanController;
 import br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller.MealRecordController;
-import br.com.gorillaroxo.sanjy.server.infrastructure.chat.tool.SanjyAgentTool;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.ToolCallbackProvider;
@@ -17,21 +16,12 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class McpConfig {
 
-    private final Set<SanjyAgentTool> tools;
-    private final DietPlanController dietPlanController;
-//    private final MealRecordController mealRecordController;
-
-//    @Bean
-//    public ToolCallbackProvider weatherTools(final Set<SanjyAgentTool> tools) {
-//        return MethodToolCallbackProvider.builder()
-//            .toolObjects(tools.toArray(SanjyAgentTool[]::new))
-//            .build();
-//    }
+    private final Set<McpToolMarker> tools;
 
     @Bean
-    public ToolCallbackProvider weatherTools(MealRecordController mealRecordController) {
+    public ToolCallbackProvider weatherTools() {
         return MethodToolCallbackProvider.builder()
-            .toolObjects(tools.toArray(SanjyAgentTool[]::new))
+            .toolObjects(tools.toArray(McpToolMarker[]::new))
             .build();
     }
 }
