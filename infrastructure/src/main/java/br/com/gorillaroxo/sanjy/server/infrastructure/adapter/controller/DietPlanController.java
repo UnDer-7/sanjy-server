@@ -1,7 +1,7 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.DietPlanDomain;
-import br.com.gorillaroxo.sanjy.server.core.ports.driver.AvailableMealTypesUseCase;
+import br.com.gorillaroxo.sanjy.server.core.ports.driver.GetActiveDietPlanUseCase;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.CreateDietPlanUseCase;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequestDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.DietPlanCompleteResponseDTO;
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DietPlanController implements DietPlanRestService, McpToolMarker {
 
     private final CreateDietPlanUseCase createDietPlanUseCase;
-    private final AvailableMealTypesUseCase availableMealTypesUseCase;
+    private final GetActiveDietPlanUseCase getActiveDietPlanUseCase;
     private final DietPlanMapper dietPlanMapper;
 
     @Override
@@ -33,7 +33,7 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
     @Tool(name = "activeDietPlan", description = "Retrieves the active diet plan for the user")
     public DietPlanCompleteResponseDTO activeDietPlan() {
         log.info("Retrieving active diet plan for the user...");
-        final DietPlanDomain dietPlan = availableMealTypesUseCase.execute();
+        final DietPlanDomain dietPlan = getActiveDietPlanUseCase.execute();
 
         return dietPlanMapper.toDTO(dietPlan);
     }

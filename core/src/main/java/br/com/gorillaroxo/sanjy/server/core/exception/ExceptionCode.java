@@ -7,8 +7,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ExceptionCode {
     UNEXPECTED_ERROR("001", "An unexpected error occurred"),
-    INVALID_VALUES("002", "Invalid values");
+    INVALID_VALUES("002", "Invalid values"),
+    DIET_PLAN_NOT_FOUND("003", "Diet plan was not found");
 
-    public final String code;
-    public final String message;
+    private final String code;
+    private final String message;
 }

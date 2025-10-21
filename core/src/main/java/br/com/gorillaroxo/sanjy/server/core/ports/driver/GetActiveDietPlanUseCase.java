@@ -2,7 +2,7 @@ package br.com.gorillaroxo.sanjy.server.core.ports.driver;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.DietPlanDomain;
 
-public interface AvailableMealTypesUseCase {
+public interface GetActiveDietPlanUseCase {
 
     DietPlanDomain execute();
 }

@@ -1,6 +1,12 @@
 server:
   port: ${SANJY_SERVER_PORT}
 
+sanjy-server:
+  logging:
+    level: ${SANJY_SERVER_LOGGING_LEVEL}
+    file-path: ${SANJY_SERVER_LOGGING_FILE_PATH:}
+    appender: ${SANJY_SERVER_LOGGING_APPENDER}
+
 spring:
   application:
     name: sanJy-server
