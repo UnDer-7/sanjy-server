@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
 
@@ -26,10 +27,10 @@ public class DietPlanRepositoryGateway implements DietPlanGateway {
         final DietPlanEntity entity = dietPlanMapper.toEntity(dietPlanDomain);
 
         // set relations
-        final var mealTypeList = new HashSet<>(entity.getMealTypes());
+        final var mealTypeList = new ArrayList<>(entity.getMealTypes());
         mealTypeList.forEach(mealType -> {
             mealType.setDietPlan(entity);
-            final var standardOptionList = new HashSet<>(mealType.getStandardOptions());
+            final var standardOptionList = new ArrayList<>(mealType.getStandardOptions());
             standardOptionList.forEach(standardOption -> standardOption.setMealType(mealType));
             mealType.setStandardOptions(standardOptionList);
         });
@@ -43,7 +44,7 @@ public class DietPlanRepositoryGateway implements DietPlanGateway {
     @Override
     @Transactional(readOnly = true)
     public Optional<DietPlanDomain> findActive() {
-        return dietPlanRepository.findByIsActiveTrue()
+        return dietPlanRepository.findActiveDietPlanWithOrderedRelations()
             .map(dietPlanMapper::toDomain);
     }
 

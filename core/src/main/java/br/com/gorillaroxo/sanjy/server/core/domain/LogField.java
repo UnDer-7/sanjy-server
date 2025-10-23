@@ -16,7 +16,12 @@ public enum LogField {
     HTTP_STATUS_CODE,
     CUSTOM_EXCEPTION_STACK_TRACE,
     EXCEPTION_CAUSE,
-    EXCEPTION_CAUSE_MSG;
+    EXCEPTION_CAUSE_MSG,
+    STANDARD_OPTIONS_OPTION_NUMBER,
+    MEAL_TYPE_NAME,
+    MEAL_TYPE_ID,
+    STANDARD_OPTIONS_LIST,
+    STANDARD_OPTIONS_SIZE;
 
     public String label() {
         return this.name().toLowerCase();

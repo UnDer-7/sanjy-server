@@ -23,7 +23,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -59,7 +61,7 @@ public class MealTypeEntity {
 
     @Builder.Default
     @OneToMany(mappedBy = "mealType", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<StandardOptionEntity> standardOptions = new HashSet<>();
+    private List<StandardOptionEntity> standardOptions = new ArrayList<>();
 
 //    @Builder.Default
 //    @OneToMany(mappedBy = "mealType")

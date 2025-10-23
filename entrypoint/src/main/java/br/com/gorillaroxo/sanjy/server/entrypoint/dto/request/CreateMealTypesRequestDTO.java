@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Set;
 
 @Schema(description = "Request DTO for creating a meal type within a diet plan")
@@ -29,9 +30,9 @@ public record CreateMealTypesRequestDTO(
     @Valid
     @NotNull
     @NotEmpty
-    @Schema(description = "Set of standard food options for this meal type",
+    @Schema(description = "List of standard food options for this meal type",
         requiredMode = Schema.RequiredMode.REQUIRED)
-    Set<CreateStandardOptionRequestDTO> standardOptions
+    List<CreateStandardOptionRequestDTO> standardOptions
 ) {
 
 }

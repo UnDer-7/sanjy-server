@@ -52,7 +52,6 @@ public interface MealRecordMapper {
 
     MealRecordDomain toDomain(MealRecordResponseDTO dto);
     List<MealRecordDomain> toDomainListFromMealRecordResponseDTO(List<MealRecordResponseDTO> dto);
-    Set<MealRecordDomain> toDomainSetFromMealRecordResponseDTO(Set<MealRecordResponseDTO> dto);
 
     // Entities
     MealRecordEntity toEntity(MealRecordDomain domain);

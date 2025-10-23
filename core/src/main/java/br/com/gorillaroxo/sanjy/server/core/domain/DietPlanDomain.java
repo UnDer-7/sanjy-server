@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class DietPlanDomain {
     private Integer dailyFatInG;
     private String goal;
     private String nutritionistNotes;
-    private Set<MealTypeDomain> mealTypes;
+    private List<MealTypeDomain> mealTypes;
     private LocalDateTime createdAt;
 
     public void deactivate() {

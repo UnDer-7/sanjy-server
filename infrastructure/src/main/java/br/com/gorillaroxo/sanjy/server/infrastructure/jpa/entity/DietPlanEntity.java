@@ -18,7 +18,9 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -71,7 +73,7 @@ public class DietPlanEntity {
 
     @Builder.Default
     @OneToMany(mappedBy = "dietPlan", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<MealTypeEntity> mealTypes = new HashSet<>();
+    private List<MealTypeEntity> mealTypes = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {

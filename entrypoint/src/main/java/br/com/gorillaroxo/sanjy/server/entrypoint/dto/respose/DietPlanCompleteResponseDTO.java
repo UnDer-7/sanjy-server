@@ -5,6 +5,7 @@ import lombok.Builder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -69,9 +70,9 @@ public record DietPlanCompleteResponseDTO(
         requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     String nutritionistNotes,
 
-    @Schema(description = "Set of meal types associated with this diet plan",
+    @Schema(description = "List of meal types associated with this diet plan",
         requiredMode = Schema.RequiredMode.REQUIRED)
-    Set<MealTypeResponseDTO> mealTypes,
+    List<MealTypeResponseDTO> mealTypes,
 
     @Schema(description = "Indicates whether this diet plan is currently active",
         example = "true",
