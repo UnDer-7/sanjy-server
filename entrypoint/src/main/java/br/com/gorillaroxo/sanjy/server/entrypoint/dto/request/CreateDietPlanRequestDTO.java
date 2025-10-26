@@ -8,7 +8,9 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Schema(description = "Request DTO for creating a diet plan by the nutritionist")
@@ -79,4 +81,7 @@ public record CreateDietPlanRequestDTO(
     List<CreateMealTypesRequestDTO> mealTypes
 ) {
 
+    public CreateDietPlanRequestDTO {
+        mealTypes = Objects.requireNonNullElseGet(mealTypes, ArrayList::new);
+    }
 }

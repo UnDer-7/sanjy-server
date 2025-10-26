@@ -4,7 +4,6 @@ import lombok.Builder;
 
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Set;
 
 @Builder
 public record MealTypeDomain(
@@ -12,6 +11,7 @@ public record MealTypeDomain(
     String name,
     LocalTime scheduledTime,
     Long dietPlanId,
+    String observation,
     List<StandardOptionDomain> standardOptions
 ) {
 

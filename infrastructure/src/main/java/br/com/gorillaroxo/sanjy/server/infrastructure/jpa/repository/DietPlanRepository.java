@@ -14,9 +14,8 @@ public interface DietPlanRepository extends CrudRepository<DietPlanEntity, Long>
         SELECT DISTINCT dp
         FROM DietPlanEntity dp
         LEFT JOIN FETCH dp.mealTypes mt
-        LEFT JOIN FETCH mt.standardOptions so
+        LEFT JOIN FETCH mt.standardOptions
         WHERE dp.isActive = true
-        ORDER BY mt.scheduledTime ASC NULLS LAST, so.optionNumber ASC
         """)
-    Optional<DietPlanEntity> findActiveDietPlanWithOrderedRelations();
+    Optional<DietPlanEntity> findActiveDietPlan();
 }

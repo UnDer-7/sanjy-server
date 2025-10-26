@@ -1,31 +1,29 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity;
 
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.UniqueConstraint;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
@@ -59,9 +57,13 @@ public class MealTypeEntity {
     @Column(name = "scheduled_time")
     private LocalTime scheduledTime;
 
+    @Column(name = "observation", columnDefinition = "TEXT")
+    private String observation;
+
     @Builder.Default
+    @OrderBy("optionNumber ASC")
     @OneToMany(mappedBy = "mealType", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StandardOptionEntity> standardOptions = new ArrayList<>();
+    private Set<StandardOptionEntity> standardOptions = new LinkedHashSet<>();
 
 //    @Builder.Default
 //    @OneToMany(mappedBy = "mealType")

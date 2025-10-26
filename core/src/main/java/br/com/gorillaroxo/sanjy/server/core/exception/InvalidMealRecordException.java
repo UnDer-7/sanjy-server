@@ -4,24 +4,24 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 
 @Slf4j
-public class AssertException extends BusinessException {
+public class InvalidMealRecordException extends BusinessException {
 
-    private static final ExceptionCode CODE = ExceptionCode.ASSER_FAIL;
-    private static final HttpStatus STATUS = HttpStatus.UNPROCESSABLE_ENTITY;
+    private static final ExceptionCode CODE = ExceptionCode.INVALID_MEAL_RECORD;
+    private static final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
 
-    public AssertException(final String customMessage, final Throwable originalCause) {
+    public InvalidMealRecordException(final String customMessage, final Throwable originalCause) {
         super(CODE, STATUS, customMessage, originalCause);
     }
 
-    public AssertException() {
+    public InvalidMealRecordException() {
         super(CODE, STATUS);
     }
 
-    public AssertException(final Throwable originalCause) {
+    public InvalidMealRecordException(final Throwable originalCause) {
         super(CODE, STATUS, originalCause);
     }
 
-    public AssertException(final String customMessage) {
+    public InvalidMealRecordException(final String customMessage) {
         super(CODE, STATUS, customMessage);
     }
 

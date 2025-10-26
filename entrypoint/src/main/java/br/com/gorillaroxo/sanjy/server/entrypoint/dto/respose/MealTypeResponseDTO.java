@@ -31,6 +31,12 @@ public record MealTypeResponseDTO(
         requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     LocalTime scheduledTime,
 
+    @Schema(description = "Additional observations about the meal type, such as target macronutrients (protein, carbs, fat in grams) and total calories (kcal)",
+        example = "30 g proteína | 20 g carbo | 5 g gordura | 250 kcal",
+        nullable = true,
+        requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    String observation,
+
     @Schema(description = "Identifier of the diet plan this meal type belongs to",
         example = "456",
         requiredMode = Schema.RequiredMode.REQUIRED)

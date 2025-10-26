@@ -4,6 +4,7 @@ import lombok.Builder;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Builder
 public record MealRecordDomain(
@@ -21,4 +22,7 @@ public record MealRecordDomain(
     LocalDateTime createdAt
 ) {
 
+    public Optional<StandardOptionDomain> getStandardOption() {
+        return Optional.ofNullable(standardOption);
+    }
 }

@@ -10,8 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 
 @Slf4j
@@ -27,15 +26,15 @@ public class DietPlanRepositoryGateway implements DietPlanGateway {
         final DietPlanEntity entity = dietPlanMapper.toEntity(dietPlanDomain);
 
         // set relations
-        final var mealTypeList = new ArrayList<>(entity.getMealTypes());
-        mealTypeList.forEach(mealType -> {
+        final var mealTypeSet = new LinkedHashSet<>(entity.getMealTypes());
+        mealTypeSet.forEach(mealType -> {
             mealType.setDietPlan(entity);
-            final var standardOptionList = new ArrayList<>(mealType.getStandardOptions());
-            standardOptionList.forEach(standardOption -> standardOption.setMealType(mealType));
-            mealType.setStandardOptions(standardOptionList);
+            final var standardOptionSet = new LinkedHashSet<>(mealType.getStandardOptions());
+            standardOptionSet.forEach(standardOption -> standardOption.setMealType(mealType));
+            mealType.setStandardOptions(standardOptionSet);
         });
 
-        entity.setMealTypes(mealTypeList);
+        entity.setMealTypes(mealTypeSet);
 
         final DietPlanEntity savedDietPlan = dietPlanRepository.save(entity);
         return dietPlanMapper.toDomain(savedDietPlan);
@@ -44,7 +43,7 @@ public class DietPlanRepositoryGateway implements DietPlanGateway {
     @Override
     @Transactional(readOnly = true)
     public Optional<DietPlanDomain> findActive() {
-        return dietPlanRepository.findActiveDietPlanWithOrderedRelations()
+        return dietPlanRepository.findActiveDietPlan()
             .map(dietPlanMapper::toDomain);
     }
 

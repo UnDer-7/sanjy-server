@@ -35,6 +35,7 @@ public interface MealTypeMapper {
 
     // Entities
     @Mapping(target = "dietPlan", ignore = true)
+    @Mapping(target = "observation", source = "observation")
     MealTypeEntity toEntity(final MealTypeDomain domain);
-    List<MealTypeEntity> toEntity(final List<MealTypeDomain> domain);
+    Set<MealTypeEntity> toEntity(final List<MealTypeDomain> domain);
 }

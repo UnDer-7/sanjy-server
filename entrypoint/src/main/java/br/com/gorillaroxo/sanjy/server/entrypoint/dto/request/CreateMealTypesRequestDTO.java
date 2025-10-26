@@ -7,13 +7,16 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Schema(description = "Request DTO for creating a meal type within a diet plan")
 public record CreateMealTypesRequestDTO(
     @NotBlank
-    @Schema(description = "Meal type name",
+    @Schema(description = "Meal type name. Must be unique within the diet plan's meal types list " +
+            "(case-insensitive comparison, trimmed of leading/trailing whitespace)",
         example = "Breakfast",
         requiredMode = Schema.RequiredMode.REQUIRED,
         maxLength = 50)
@@ -27,6 +30,12 @@ public record CreateMealTypesRequestDTO(
         requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     LocalTime scheduledTime,
 
+    @Schema(description = "Additional observations about the meal type, such as target macronutrients (protein, carbs, fat in grams) and total calories (kcal)",
+        example = "30 g proteína | 20 g carbo | 5 g gordura | 250 kcal",
+        nullable = true,
+        requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    String observation,
+
     @Valid
     @NotNull
     @NotEmpty
@@ -35,4 +44,7 @@ public record CreateMealTypesRequestDTO(
     List<CreateStandardOptionRequestDTO> standardOptions
 ) {
 
+    public CreateMealTypesRequestDTO {
+        standardOptions = Objects.requireNonNullElseGet(standardOptions, ArrayList::new);
+    }
 }

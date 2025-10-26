@@ -57,14 +57,14 @@ public interface MealRecordRestService {
     )
     @Parameter(
         name = "consumedAtAfter",
-        description = "Filter meals consumed after this date/time. If not specified, defaults to the start of current day (00:00:00)",
+        description = "Filter meals consumed after this date/time",
         required = false,
         example = "2024-01-01T00:00:00",
         schema = @Schema(type = "string", format = "date-time", defaultValue = "current day at 00:00:00")
     )
     @Parameter(
         name = "consumedAtBefore",
-        description = "Filter meals consumed before this date/time. If not specified, defaults to the end of current day (23:59:59)",
+        description = "Filter meals consumed before this date/time",
         required = false,
         example = "2024-12-31T23:59:59",
         schema = @Schema(type = "string", format = "date-time", defaultValue = "current day at 23:59:59")

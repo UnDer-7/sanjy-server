@@ -44,15 +44,20 @@ public class MealRecordRepositoryGateway implements MealRecordGateway {
         final var pageRequest = PageRequest.of(searchParam.getPageNumber(), searchParam.getPageSize(), Sort.by(propConsumedAt).ascending());
 
         final Specification<MealRecordEntity> specification = (entity, cq, cb) -> {
-            var predicates = cb.and(
-                cb.greaterThanOrEqualTo(entity.get(propConsumedAt), searchParam.getConsumedAtAfter()),
-                cb.lessThanOrEqualTo(entity.get(propConsumedAt), searchParam.getConsumedAtBefore())
-            );
-            
+            var predicates = cb.conjunction();
+
+            if (searchParam.getConsumedAtAfter() != null) {
+                predicates = cb.and(predicates, cb.greaterThanOrEqualTo(entity.get(propConsumedAt), searchParam.getConsumedAtAfter()));
+            }
+
+            if (searchParam.getConsumedAtBefore() != null) {
+                predicates = cb.and(predicates, cb.lessThanOrEqualTo(entity.get(propConsumedAt), searchParam.getConsumedAtBefore()));
+            }
+
             if (searchParam.getIsFreeMeal() != null) {
                 predicates = cb.and(predicates, cb.equal(entity.get("isFreeMeal"), searchParam.getIsFreeMeal()));
             }
-            
+
             return predicates;
         };
 

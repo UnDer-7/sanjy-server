@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -18,9 +19,8 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
@@ -72,8 +72,9 @@ public class DietPlanEntity {
     private LocalDateTime createdAt;
 
     @Builder.Default
+    @OrderBy("scheduledTime ASC NULLS LAST")
     @OneToMany(mappedBy = "dietPlan", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MealTypeEntity> mealTypes = new ArrayList<>();
+    private Set<MealTypeEntity> mealTypes = new LinkedHashSet<>();
 
     @PrePersist
     protected void onCreate() {

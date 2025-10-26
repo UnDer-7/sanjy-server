@@ -1,6 +1,8 @@
 package br.com.gorillaroxo.sanjy.server.core.domain;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public record PageResultDomain<T>(
     Long totalPages,
@@ -10,4 +12,7 @@ public record PageResultDomain<T>(
     List<T> content
 ) {
 
+    public PageResultDomain {
+        content = Objects.requireNonNullElse(content, new ArrayList<>());
+    }
 }

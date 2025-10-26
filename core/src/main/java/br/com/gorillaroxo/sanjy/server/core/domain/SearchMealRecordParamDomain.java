@@ -24,12 +24,8 @@ public class SearchMealRecordParamDomain extends PageRequestDomain {
 
         super(pageNumber, pageSize);
 
-        final LocalDate currentLocalDate = LocalDate.now();
-        final LocalDateTime startOfDay = LocalDateTime.of(currentLocalDate, LocalTime.MIN);
-        final LocalDateTime endOfDay = LocalDateTime.of(currentLocalDate, LocalTime.MAX);
-
-        this.consumedAtAfter = Objects.requireNonNullElse(consumedAtAfter, startOfDay);
-        this.consumedAtBefore = Objects.requireNonNullElse(consumedAtBefore, endOfDay);
+        this.consumedAtAfter = consumedAtAfter;
+        this.consumedAtBefore = consumedAtBefore;
         this.isFreeMeal = isFreeMeal;
     }
 
