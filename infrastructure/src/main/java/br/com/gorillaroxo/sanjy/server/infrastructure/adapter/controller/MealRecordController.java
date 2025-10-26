@@ -43,7 +43,12 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
     @Override
     @PostMapping("/v1/meal-record")
     @ResponseStatus(HttpStatus.CREATED)
-    @Tool(name = "newMealRecord", description = "Registers a new meal record")
+    @Tool(
+        name = "newMealRecord",
+        description = """
+            Records a meal consumption with timestamp, meal type, and quantity. Can register either a standard meal \
+            (following the diet plan by referencing a standard option) or a free meal (off-plan with custom description).
+            """)
     public MealRecordResponseDTO newMealRecord(final CreateMealRecordRequestDTO request) {
         log.info(
             LogField.Placeholders.ONE.placeholder,
@@ -67,7 +72,12 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
 
     @Override
     @GetMapping("/v1/meal-record/today")
-    @Tool(name = "getTodayMealRecords", description = "Retrieves all meal records for today")
+    @Tool(
+        name = "getTodayMealRecords",
+        description = """
+            Retrieves all meals consumed today, ordered by consumption time. Includes both standard meals (following the diet plan) \
+            and free meals (off-plan). Use this to check daily food intake and diet adherence.
+            """)
     public List<MealRecordResponseDTO> getTodayMealRecords() {
         log.info(
             LogField.Placeholders.ONE.placeholder,
@@ -86,7 +96,12 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
 
     @Override
     @GetMapping("/v1/meal-record")
-    @Tool(name = "searchMealRecords", description = "Searches meal records")
+    @Tool(
+        name = "searchMealRecords",
+        description = """
+            Searches meal records with pagination and optional filters (date range, meal type). Returns paginated results with total count. \
+            Use this to view historical meal data, analyze eating patterns, or generate reports.
+            """)
     public PageResponseDTO<MealRecordResponseDTO> searchMealRecords(final SearchMealRecordParamRequestDTO pageRequest) {
         log.info(
             LogField.Placeholders.ONE.placeholder,

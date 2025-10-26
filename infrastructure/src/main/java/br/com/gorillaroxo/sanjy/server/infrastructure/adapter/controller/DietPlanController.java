@@ -32,7 +32,12 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
 
     @Override
     @GetMapping("/v1/diet-plan/active")
-    @Tool(name = "activeDietPlan", description = "Retrieves the active diet plan for the user")
+    @Tool(
+        name = "activeDietPlan",
+        description = """
+            Retrieves the currently active diet plan with all meal types, standard options, \
+            nutritional targets (calories, protein, carbs, fat), and goals. Only one diet plan can be active at a time.
+            """)
     public DietPlanCompleteResponseDTO activeDietPlan() {
         log.info(
             LogField.Placeholders.ONE.placeholder,
@@ -53,7 +58,12 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
     @Override
     @PostMapping("/v1/diet-plan")
     @ResponseStatus(HttpStatus.CREATED)
-    @Tool(name = "newDietPlan", description = "Creates a new diet plan for the user")
+    @Tool(
+        name = "newDietPlan",
+        description = """
+            Creates a new diet plan with meal types (breakfast, lunch, snack, dinner, etc.), \
+            standard meal options, nutritional targets, and goals. The new plan is automatically set as active and any previously active plan is deactivated.
+            """)
     public DietPlanCompleteResponseDTO newDietPlan(final CreateDietPlanRequestDTO request) {
         log.info(
             LogField.Placeholders.ONE.placeholder,

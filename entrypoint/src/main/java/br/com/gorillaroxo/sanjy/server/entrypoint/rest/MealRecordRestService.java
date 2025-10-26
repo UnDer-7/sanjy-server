@@ -23,23 +23,24 @@ public interface MealRecordRestService {
 
     @Operation(
         summary = "Create a new meal record",
-        description = "Records a food item consumption with timestamp, meal type, and details. " +
-                      "Can register either a standard meal (following the diet plan) or a free meal (off-plan). " +
-                      "Standard meals must reference a standard option, while free meals require a description."
+        description = "Records a meal consumption with timestamp, meal type, and quantity. " +
+                      "Can register either a standard meal (following the diet plan by referencing a standard option) or a free meal (off-plan with custom description). " +
+                      "Standard meals must have standardOptionId, while free meals must have isFreeMeal=true and freeMealDescription."
     )
     MealRecordResponseDTO newMealRecord(@RequestBody @Valid @NotNull CreateMealRecordRequestDTO request);
 
     @Operation(
         summary = "Get today's meal records",
-        description = "Retrieves all meal records consumed today, ordered by consumption time. " +
-                      "Includes both standard meals (following the diet plan) and free meals (off-plan)."
+        description = "Retrieves all meals consumed today, ordered by consumption time. " +
+                      "Includes both standard meals (following the diet plan) and free meals (off-plan). " +
+                      "Use this to check daily food intake and diet adherence."
     )
     List<MealRecordResponseDTO> getTodayMealRecords();
 
     @Operation(
         summary = "Search meal records with filters and pagination",
-        description = "Searches meal records with optional filters for date range and meal type. " +
-                      "Results are paginated and can be filtered by consumption date/time and free meal status."
+        description = "Searches meal records with pagination and optional filters (date range via consumedAtAfter/consumedAtBefore, and meal type via isFreeMeal). " +
+                      "Returns paginated results with total count. Use this to view historical meal data, analyze eating patterns, or generate reports."
     )
     @Parameter(
         name = "pageNumber",

@@ -16,16 +16,15 @@ public interface DietPlanRestService {
 
     @Operation(
         summary = "Get the currently active diet plan",
-        description = "Retrieves the complete details of the currently active diet plan, including all meal types and their standard options. " +
-                      "Only one diet plan can be active at any given time. Returns the plan with nutritional targets, goals, and all configured meals."
+        description = "Retrieves the currently active diet plan with all meal types, standard options, nutritional targets (calories, protein, carbs, fat), and goals. " +
+                      "Only one diet plan can be active at a time. Use this to check the current diet configuration."
     )
     DietPlanCompleteResponseDTO activeDietPlan();
 
     @Operation(
         summary = "Create a new diet plan",
-        description = "Creates a new diet plan with meal types and standard meal options. " +
-                      "The diet plan includes nutritional targets (daily calories, protein, carbs, fat), goals, and meal configurations. " +
-                      "When a new plan is created and set as active, any previously active plan will be automatically deactivated."
+        description = "Creates a new diet plan with meal types (breakfast, lunch, snack, dinner, etc.), standard meal options, nutritional targets (daily calories, protein, carbs, fat), and goals. " +
+                      "The new plan is automatically set as active and any previously active plan is deactivated. Each meal type can have multiple standard options for variety."
     )
     DietPlanCompleteResponseDTO newDietPlan(@RequestBody @Valid @NotNull CreateDietPlanRequestDTO request);
 }
