@@ -2,14 +2,8 @@
 -- COMPLETE DDL SCRIPT - DIET CONTROL DATABASE
 -- Compatible with Docker PostgreSQL
 -- Version 3.0 - Flat meal_record structure
+-- Flyway Migration V1
 -- =============================================
-
--- Drop and create database
-DROP DATABASE IF EXISTS diet_control;
-CREATE DATABASE diet_control WITH ENCODING = 'UTF8';
-
--- Connect to the new database
-\c diet_control;
 
 -- =============================================
 -- CREATE TABLES (without constraints)
