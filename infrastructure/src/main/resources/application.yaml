@@ -11,12 +11,12 @@ sanjy-server:
     version: "@project.version@"
     description: "@project.description@"
     contact:
-      name: ToDo-put-name
-      url: ToDo-put-url
-      email: ToDo-put-email
+      name: ToDo-put-name #ToDo: Put real name
+      url: https://google.com #ToDo: Put real site
+      email: admin@admin.com #ToDo: Put real email
     documentation:
-      url: ToDo-put-url
-      description: ToDo-put-url
+      url: https://google.com #ToDo: Put real site
+      description: ToDo-put-documentation-description #ToDo: Put real doc
 
 spring:
   application:
