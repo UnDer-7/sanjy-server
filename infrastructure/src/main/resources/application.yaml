@@ -6,6 +6,17 @@ sanjy-server:
     level: ${SANJY_SERVER_LOGGING_LEVEL}
     file-path: ${SANJY_SERVER_LOGGING_FILE_PATH:}
     appender: ${SANJY_SERVER_LOGGING_APPENDER}
+  application:
+    name: ${spring.application.name}
+    version: "@project.version@"
+    description: "@project.description@"
+    contact:
+      name: ToDo-put-name
+      url: ToDo-put-url
+      email: ToDo-put-email
+    documentation:
+      url: ToDo-put-url
+      description: ToDo-put-url
 
 spring:
   application:

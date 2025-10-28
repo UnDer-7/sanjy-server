@@ -15,7 +15,7 @@
 	<version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>sanJy-server</name>
-	<description>sanJy-server</description>
+	<description>Backend server application for diet and meal management, enabling nutritionists to create diet plans and users to track meal consumption records</description>
 
     <url/>
 	<licenses>

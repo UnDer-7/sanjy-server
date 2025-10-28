@@ -47,7 +47,11 @@ public enum LogField {
     MEAL_RECORD_SEARCH_TOTAL_PAGES,
     MEAL_RECORD_SEARCH_CURRENT_PAGE,
     MEAL_RECORD_SEARCH_TOTAL_ITEMS,
-    MEAL_RECORD_SEARCH_CONTENT_SIZE;
+    MEAL_RECORD_SEARCH_CONTENT_SIZE,
+    TRANSACTION_ID,
+    HTTP_REQUEST,
+    CORRELATION_ID,
+    CHANNEL;
 
     public String label() {
         return this.name().toLowerCase();
