@@ -51,7 +51,7 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
         }
 
         log.warn(
-            "{}",
+            LogField.Placeholders.TWO.placeholder,
             StructuredArguments.kv(LogField.MSG.label(), "An unexpected exception occurred"),
             StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), exception.getMessage()),
             exception);
