@@ -1,6 +1,7 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.gateway.repository;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.MealRecordDomain;
+import br.com.gorillaroxo.sanjy.server.core.domain.MealRecordStatisticsDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.PageResultDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.SearchMealRecordParamDomain;
 import br.com.gorillaroxo.sanjy.server.core.ports.driven.MealRecordGateway;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -72,5 +74,11 @@ public class MealRecordRepositoryGateway implements MealRecordGateway {
             mealRecordDomains
         );
 
+    }
+
+    @Override
+    public Optional<MealRecordStatisticsDomain> getMealRecordStatisticsByDateRange(final LocalDateTime consumedAtAfter, final LocalDateTime consumedAtBefore) {
+        return mealRecordRepository.getMealRecordStatisticsByDateRange(consumedAtAfter, consumedAtBefore)
+            .map(mealRecordMapper::toDomain);
     }
 }

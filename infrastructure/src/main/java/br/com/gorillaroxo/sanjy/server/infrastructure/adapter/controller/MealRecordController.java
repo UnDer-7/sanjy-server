@@ -2,14 +2,17 @@ package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
 import br.com.gorillaroxo.sanjy.server.core.domain.MealRecordDomain;
+import br.com.gorillaroxo.sanjy.server.core.domain.MealRecordStatisticsDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.PageResultDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.SearchMealRecordParamDomain;
+import br.com.gorillaroxo.sanjy.server.core.ports.driver.GetMealRecordStatisticsUseCase;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.GetTodayMealRecordsUseCase;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.RegisterMealRecordUseCase;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.SearchMealRecordUseCase;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.SearchMealRecordParamRequestDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponseDTO;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisticsResponseDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.rest.MealRecordRestService;
 import br.com.gorillaroxo.sanjy.server.infrastructure.config.McpToolMarker;
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -34,9 +38,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MealRecordController implements MealRecordRestService, McpToolMarker {
 
+    private final SearchMealRecordUseCase searchMealRecordUseCase;
     private final RegisterMealRecordUseCase registerMealRecordUseCase;
     private final GetTodayMealRecordsUseCase getTodayMealRecordsUseCase;
-    private final SearchMealRecordUseCase searchMealRecordUseCase;
+    private final GetMealRecordStatisticsUseCase getMealRecordStatisticsUseCase;
     private final MealRecordMapper mealRecordMapper;
     private final PageMapper pageMapper;
 
@@ -123,4 +128,33 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
         return responseDTO;
     }
 
+    @Override
+    @GetMapping("/v1/meal-record/statistics")
+    @Tool(
+        name = "getMealRecordStatistics",
+        description = """
+            Retrieves aggregated statistics of meal records within a specified date range. Returns the total count of meals consumed, \
+            broken down by free meals (off-plan) and planned meals (following the diet plan). Use this to analyze diet adherence, \
+            track compliance with the meal plan, or generate summary reports for a specific period.
+            """)
+    public MealRecordStatisticsResponseDTO getMealRecordStatisticsByDateRange(final LocalDateTime consumedAtAfter, final LocalDateTime consumedAtBefore) {
+        log.info(
+            LogField.Placeholders.ONE.placeholder,
+            StructuredArguments.kv(LogField.MSG.label(), "Request to get meal record statistics by date range"));
+        log.debug(
+            LogField.Placeholders.THREE.placeholder,
+            StructuredArguments.kv(LogField.MSG.label(), "Request query-param to get meal record statistics by date range"),
+            StructuredArguments.kv(LogField.CONSUMED_AT_AFTER.label(), consumedAtAfter),
+            StructuredArguments.kv(LogField.CONSUMED_AT_BEFORE.label(), consumedAtBefore));
+
+        final MealRecordStatisticsDomain statistics = getMealRecordStatisticsUseCase.execute(consumedAtAfter, consumedAtBefore);
+        final MealRecordStatisticsResponseDTO responseDTO = mealRecordMapper.toDTO(statistics);
+
+        log.debug(
+            LogField.Placeholders.TWO.placeholder,
+            StructuredArguments.kv(LogField.MSG.label(), "Response meal record statistics"),
+            StructuredArguments.kv(LogField.RESPONSE_BODY.label(), "( " + responseDTO + " )"));
+
+        return responseDTO;
+    }
 }

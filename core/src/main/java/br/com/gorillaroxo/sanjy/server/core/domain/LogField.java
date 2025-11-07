@@ -51,7 +51,10 @@ public enum LogField {
     TRANSACTION_ID,
     HTTP_REQUEST,
     CORRELATION_ID,
-    CHANNEL;
+    CHANNEL,
+    FREE_MEAL_QUANTITY,
+    PLANNED_MEAL_QUANTITY,
+    MEAL_QUANTITY;
 
     public String label() {
         return this.name().toLowerCase();

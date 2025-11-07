@@ -1,11 +1,14 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.mapper;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.MealRecordDomain;
+import br.com.gorillaroxo.sanjy.server.core.domain.MealRecordStatisticsDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.MealTypeDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.StandardOptionDomain;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponseDTO;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisticsResponseDTO;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealRecordEntity;
+import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.projection.MealRecordStatisticsProjection;
 import br.com.gorillaroxo.sanjy.server.infrastructure.utils.ConstantsInfrastructure;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -27,6 +30,8 @@ public interface MealRecordMapper {
     // DTOs
     MealRecordResponseDTO toDTO(MealRecordDomain domain);
     List<MealRecordResponseDTO> toDTO(List<MealRecordDomain> domain);
+
+    MealRecordStatisticsResponseDTO toDTO(MealRecordStatisticsDomain domain);
 
     // Domains
     @Mapping(target = "id", ignore = true)
@@ -52,6 +57,8 @@ public interface MealRecordMapper {
 
     MealRecordDomain toDomain(MealRecordResponseDTO dto);
     List<MealRecordDomain> toDomainListFromMealRecordResponseDTO(List<MealRecordResponseDTO> dto);
+
+    MealRecordStatisticsDomain toDomain(MealRecordStatisticsProjection projection);
 
     // Entities
     MealRecordEntity toEntity(MealRecordDomain domain);

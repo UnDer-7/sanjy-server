@@ -1,0 +1,25 @@
+meta {
+  name: getMealRecordStatisticsByDateRange
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{SERVER_URL}}/v1/meal-record/statistics?consumedAtAfter&consumedAtBefore
+  body: json
+  auth: inherit
+}
+
+params:query {
+  consumedAtAfter: 
+  consumedAtBefore: 
+}
+
+headers {
+  Content-Type: application/json
+}
+
+settings {
+  encodeUrl: false
+  timeout: 0
+}

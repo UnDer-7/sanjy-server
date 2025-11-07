@@ -1,6 +1,6 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.config;
 
-import br.com.gorillaroxo.sanjy.server.infrastructure.utils.RequestConstants;
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;

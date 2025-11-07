@@ -6,6 +6,7 @@ import br.com.gorillaroxo.sanjy.server.core.exception.InvalidValuesException;
 import br.com.gorillaroxo.sanjy.server.core.exception.UnexpectedErrorException;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDTO;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.BusinessExceptionMapper;
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.argument.StructuredArguments;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.validation.ConstraintViolationException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
