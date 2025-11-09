@@ -1,0 +1,57 @@
+##################
+# BUILD STEP
+##################
+FROM maven:3.9.11-eclipse-temurin-25-alpine AS build
+
+WORKDIR /app
+
+# Install necessary packages
+RUN apk add --no-cache make
+
+# Copy dependency files and resolve dependencies offline
+COPY core core
+COPY entrypoint entrypoint
+COPY infrastructure infrastructure
+COPY lombok.config .
+COPY Makefile .
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+# Build
+RUN make build/jvm
+
+##################
+# RELEASE STEP
+##################
+FROM maven:3.9.11-eclipse-temurin-25-alpine AS release
+
+WORKDIR /app
+
+# Copy the built jar from the build stage
+COPY --from=build /app/infrastructure/target/*.jar ./app.jar
+
+# ToDo: Colocar healthcheck e observabilidade
+# Copy healthcheck script
+#COPY healthcheck.sh .
+
+# Set up directories
+ARG S_DATA_PATH=/app/data
+RUN mkdir -p ${S_DATA_PATH}/logs/structured \
+    && mkdir -p ${S_DATA_PATH}/logs/unstructured
+
+# Create non-root user (UID 200)
+RUN adduser -D -u 200 sanjy-server
+
+# Set ownership and permissions on /app and all subdirectories
+#RUN chmod +x ./healthcheck.sh \
+#    && chown -R sanjy-server:sanjy-server /app \
+#    && chmod -R u+rwx /app
+
+# Switch to non-root user for running the app
+USER sanjy-server
+
+# Expose the application port
+EXPOSE 8080
+
+# Set the final entrypoint
+ENTRYPOINT ["java", "-Dfile.encoding=UTF-8", "-Dlog4j2.formatMsgNoLookups=true", "-jar", "/app/app.jar"]

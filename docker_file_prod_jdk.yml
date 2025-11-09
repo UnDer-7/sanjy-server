@@ -1,0 +1,43 @@
+name: sanjy-server-prod
+services:
+  sanjy_database_prod:
+    image: postgres:17-alpine
+    container_name: sanJy_database_prod
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      # ADM
+      POSTGRES_USER: admin_usr
+      POSTGRES_PASSWORD: admin_pass
+      POSTGRES_DB: diet_control
+    volumes:
+      - sanJy_database_prod:/var/lib/postgresql/data
+    networks:
+      - sanjy-network
+
+  sanjy_server_jdk:
+    image: Local/sanjy-server-jvm:0.0.1-SNAPSHOT
+    container_name: "sanjy_server_jdk"
+    restart: no
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./.docker_volume/chimera-jvm:/app/data
+    networks:
+      - sanjy-network
+    environment:
+      SANJY_SERVER_PORT: 8080
+      SANJY_SERVER_LOGGING_LEVEL: INFO
+      SANJY_SERVER_LOGGING_APPENDER: CONSOLE-UNSTRUCTURED
+      SANJY_SERVER_LOGGING_FILE_PATH: /app/data/logs
+      SANJY_SERVER_DATABASE_JDBC_URL: jdbc:postgresql://sanJy_database_prod:5432/diet_control
+      SANJY_SERVER_DATABASE_USERNAME: admin_usr
+      SANJY_SERVER_DATABASE_PASSWORD: admin_pass
+
+volumes:
+  sanJy_database_prod:
+
+networks:
+  sanjy-network:
+    external: true

@@ -28,12 +28,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RequestLoggingFilterConfig extends OncePerRequestFilter {
 
-    private static final String[] SWAGGER_PATHS = {
+    private static final String[] IGNORE_PATHS = {
         "/",
         "/**/api-docs",
         "/**/api-docs/**",
         "/swagger-ui/**",
-        "/**/swagger-resources/**"
+        "/**/swagger-resources/**",
+        "/actuator/**"
     };
 
     private final ObjectMapper objectMapper;
@@ -43,7 +44,7 @@ public class RequestLoggingFilterConfig extends OncePerRequestFilter {
     @Override
     public boolean shouldNotFilter(final HttpServletRequest request) {
         final String requestPath = request.getRequestURI();
-        for (String pattern : SWAGGER_PATHS) {
+        for (String pattern : IGNORE_PATHS) {
             if (pathMatcher.match(pattern, requestPath)) {
                 return true;
             }
