@@ -129,6 +129,9 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <mainClass>br.com.gorillaroxo.sanjy.server.infrastructure.SanJyApplication</mainClass>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
