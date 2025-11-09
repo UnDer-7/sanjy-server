@@ -26,8 +26,7 @@ public record CreateMealTypesRequestDTO(
         example = "06:20:00",
         type = "string",
         pattern = "^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$",
-        nullable = true,
-        requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        requiredMode = Schema.RequiredMode.REQUIRED)
     LocalTime scheduledTime,
 
     @Schema(description = "Additional observations about the meal type, such as target macronutrients (protein, carbs, fat in grams) and total calories (kcal)",

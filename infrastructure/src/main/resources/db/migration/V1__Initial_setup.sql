@@ -47,7 +47,7 @@ CREATE TABLE meal_type
     diet_plan_id   INTEGER     NOT NULL,
     name           VARCHAR(50) NOT NULL,
     observation    TEXT,
-    scheduled_time TIME
+    scheduled_time TIME        NOT NULL
 );
 
 COMMENT ON TABLE meal_type IS 'Registry of meal types for each diet plan';

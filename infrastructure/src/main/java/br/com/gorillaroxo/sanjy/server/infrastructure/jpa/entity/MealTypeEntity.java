@@ -54,7 +54,7 @@ public class MealTypeEntity {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(name = "scheduled_time")
+    @Column(name = "scheduled_time", nullable = false)
     private LocalTime scheduledTime;
 
     @Column(name = "observation", columnDefinition = "TEXT")
