@@ -1,6 +1,12 @@
 ##################
 # BUILD STEP
 ##################
+
+
+
+# ToDo: Utilizar img small do java e copiar .mvnw
+
+
 FROM maven:3.9.11-eclipse-temurin-25-alpine AS build
 
 WORKDIR /app

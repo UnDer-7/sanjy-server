@@ -93,6 +93,20 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <configuration>
+                    <imageName>sanjy-server</imageName>
+                    <buildArgs>
+                        <buildArg>-H:+ReportExceptionStackTraces</buildArg>
+                    </buildArgs>
+                    <jvmArgs>
+                        <arg>-XX:MaxRAMPercentage=99.0</arg>
+                    </jvmArgs>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

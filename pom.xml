@@ -162,21 +162,6 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.graalvm.buildtools</groupId>
-                <artifactId>native-maven-plugin</artifactId>
-                <configuration>
-                    <imageName>${project.name}.graalvm</imageName>
-                    <jvmArgs>
-                        <arg>-XX:MaxRAMPercentage=99.0</arg>
-                    </jvmArgs>
-                    <buildArgs>
-                        <buildArg>--static</buildArg>
-                        <buildArg>--libc=musl</buildArg>
-                    </buildArgs>
-                </configuration>
-            </plugin>
-
 <!--            <plugin>-->
 <!--                <groupId>org.hibernate.orm.tooling</groupId>-->
 <!--                <artifactId>hibernate-enhance-maven-plugin</artifactId>-->

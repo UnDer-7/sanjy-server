@@ -9,9 +9,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Build & Development Commands
 
 ### Prerequisites
-- Java 21
+- Java 21 (or GraalVM Java 25 for native image builds)
 - Maven 3.x (or use included Maven wrapper)
 - Docker (for PostgreSQL database)
+- For GraalVM Native Image builds:
+  - GraalVM JDK 25 or later
+  - Native development tools: `build-essential`, `zlib1g-dev`
+  - SDKMAN (optional, for easy GraalVM management)
 
 ### Local Development Setup
 
@@ -34,10 +38,126 @@ docker compose -f local/docker-compose.yml up -d
 
 # Package as JAR
 ./mvnw package
-
-# Build GraalVM native image (requires GraalVM)
-./mvnw -Pnative native:compile
 ```
+
+### Building GraalVM Native Image
+
+#### System Requirements
+
+Before building a native image, ensure you have the required native development tools:
+
+```bash
+# Install required development libraries (Ubuntu/Debian)
+sudo apt-get update
+sudo apt-get install build-essential zlib1g-dev
+
+# For other distributions:
+# RHEL/Fedora: sudo dnf install gcc glibc-devel zlib-devel
+# Alpine: apk add build-base zlib-dev
+```
+
+#### GraalVM Installation
+
+Option 1: Using SDKMAN (Recommended):
+```bash
+# Install SDKMAN if not already installed
+curl -s "https://get.sdkman.io" | bash
+
+# Install GraalVM
+sdk install java 25-graal
+
+# Use GraalVM for current shell
+sdk use java 25-graal
+```
+
+Option 2: Manual download from [GraalVM website](https://www.graalvm.org/downloads/)
+
+#### Building Native Executable
+
+**⚠️ IMPORTANT:** Environment variables from `.env` file are **required** during the build process. The Spring Boot AOT (Ahead-of-Time) processing needs to resolve configuration placeholders at compile time.
+
+```bash
+# Ensure GraalVM is active
+sdk use java 25-graal  # if using SDKMAN
+
+# REQUIRED: Load environment variables before building
+# The build will fail without these variables loaded
+set -a
+source .env
+set +a
+
+# Build native image (multi-module project - build from infrastructure module)
+./mvnw -Pnative -pl infrastructure native:compile
+
+# Or use the provided build script (handles env vars automatically)
+./build-native.sh
+```
+
+The native executable will be created at `infrastructure/target/sanjy-server`.
+
+**Build time:** Expect 2-5 minutes depending on system resources.
+
+**Required environment variables for build:**
+- `SANJY_SERVER_LOGGING_LEVEL` - Used by Logback configuration during AOT
+- `SANJY_SERVER_LOGGING_FILE_PATH` - Required for log file path resolution
+- `SANJY_SERVER_LOGGING_APPENDER` - Determines logging configuration
+- `SANJY_SERVER_PORT` - Server port configuration
+- `SANJY_SERVER_DATABASE_*` - Database connection settings
+
+#### Running the Native Executable
+
+```bash
+# Load environment variables
+set -a && source .env && set +a
+
+# Run the native executable
+./infrastructure/target/sanjy-server
+```
+
+#### Native Image Configuration
+
+The project is configured for GraalVM Native Image with:
+- **Plugin:** `org.graalvm.buildtools:native-maven-plugin` configured in `infrastructure/pom.xml`
+- **Profile:** Spring Boot's `native` profile (automatically configured by spring-boot-starter-parent)
+- **AOT Processing:** Automatic Ahead-of-Time processing via Spring Boot Maven Plugin
+- **Reachability Metadata:** Automatically pulled from GraalVM Reachability Metadata Repository
+- **Main Class:** `br.com.gorillaroxo.sanjy.server.infrastructure.SanJyApplication`
+
+#### Troubleshooting Native Image Builds
+
+Common issues:
+
+1. **Missing environment variables:** `Could not resolve placeholder 'SANJY_SERVER_LOGGING_LEVEL'`
+   - **Cause:** Environment variables not loaded during AOT processing
+   - **Solution:** Load `.env` before building: `set -a && source .env && set +a`
+   - **Why:** Spring Boot's AOT engine processes configuration at compile time and needs actual values
+
+2. **Missing zlib:** `cannot find -lz`
+   - **Cause:** zlib development library not installed
+   - **Solution:** `sudo apt-get install zlib1g-dev build-essential`
+   - **Verify:** `dpkg -l | grep zlib1g-dev`
+
+3. **Out of memory during compilation:**
+   - **Symptoms:** Process killed, "GC overhead limit exceeded"
+   - **Solution:** Increase available RAM or add build arg: `-Dorg.graalvm.buildtools.memory=4G`
+   - **Alternative:** Close memory-intensive applications during build
+
+4. **Wrong Java version:**
+   - **Cause:** Using regular JDK instead of GraalVM
+   - **Solution:** Ensure GraalVM is active: `sdk use java 25-graal && java -version`
+   - **Expected:** Output should show "Oracle GraalVM"
+
+5. **Missing reflection configuration for JPA projections:**
+   - **Symptoms:** `org.hibernate.query.SemanticException: Missing constructor for type 'YourProjection'`
+   - **Cause:** JPA projection classes used in `SELECT new` queries require reflection hints
+   - **Solution:** Add `@RegisterReflectionForBinding` to projection classes:
+     ```java
+     import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
+
+     @RegisterReflectionForBinding
+     public record YourProjection(String field1, Long field2) { }
+     ```
+   - **Why:** GraalVM removes unused code at compile time; reflection metadata must be explicit
 
 ### Environment Configuration
 

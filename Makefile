@@ -74,10 +74,24 @@ seed-db:
 build/jvm:
 	@START=$$(date +%s); \
 	echo 'Building for JVM...'; \
-	mvn clean package -B -Dmaven.test.skip -T1C -DargLine="Xms2g -Xmx2g" --batch-mode -q; \
+	./mvnw clean package -B -Dmaven.test.skip -T1C -DargLine="Xms2g -Xmx2g" --batch-mode -q; \
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "JVM build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
+
+## build/graalvm: Build an executable to be run without JVM
+.PHONY: build/graalvm
+build/graalvm:
+	@START=$$(date +%s); \
+	echo 'Loading environment variables from .env...'; \
+	set -a; \
+	source .env; \
+	set +a; \
+	echo 'Building for GraalVM...'; \
+	./mvnw -Pnative -Dmaven.test.skip -B -pl infrastructure clean native:compile; \
+	END=$$(date +%s); \
+	ELAPSED=$$((END-START)); \
+	echo "GraalVM build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
 
 ## build/jvm/docker: Build a Docker image with jvm
 .PHONY: build/jvm/docker
