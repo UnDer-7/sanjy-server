@@ -2,12 +2,7 @@
 # BUILD STEP
 ##################
 
-
-
-# ToDo: Utilizar img small do java e copiar .mvnw
-
-
-FROM maven:3.9.11-eclipse-temurin-25-alpine AS build
+FROM eclipse-temurin:25.0.1_8-jdk-alpine-3.22 AS build
 
 WORKDIR /app
 
@@ -21,7 +16,8 @@ COPY infrastructure infrastructure
 COPY lombok.config .
 COPY Makefile .
 COPY pom.xml .
-RUN mvn dependency:go-offline
+COPY mvnw .
+COPY .mvn .mvn
 
 # Build
 RUN make build/jvm
@@ -29,7 +25,7 @@ RUN make build/jvm
 ##################
 # RELEASE STEP
 ##################
-FROM maven:3.9.11-eclipse-temurin-25-alpine AS release
+FROM eclipse-temurin:25.0.1_8-jdk-alpine-3.22 AS release
 
 WORKDIR /app
 
@@ -45,16 +41,13 @@ ARG S_DATA_PATH=/app/data
 RUN mkdir -p ${S_DATA_PATH}/logs/structured \
     && mkdir -p ${S_DATA_PATH}/logs/unstructured
 
-# Create non-root user (UID 200)
-RUN adduser -D -u 200 sanjy-server
-
-# Set ownership and permissions on /app and all subdirectories
-#RUN chmod +x ./healthcheck.sh \
-#    && chown -R sanjy-server:sanjy-server /app \
-#    && chmod -R u+rwx /app
+# Create non-root user
+RUN addgroup -g 1000 sanjy && \
+    adduser -u 1000 -G sanjy -s /bin/sh -D sanjy && \
+    chown -R sanjy:sanjy /app
 
 # Switch to non-root user for running the app
-USER sanjy-server
+USER sanjy
 
 # Expose the application port
 EXPOSE 8080

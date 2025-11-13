@@ -1,0 +1,52 @@
+##################
+# BUILD STEP
+##################
+FROM container-registry.oracle.com/graalvm/native-image:25 AS builder
+
+# Install build dependencies
+RUN microdnf install -y findutils && \
+    microdnf clean all
+
+WORKDIR /build
+
+# Copy all project files
+COPY core core
+COPY entrypoint entrypoint
+COPY infrastructure infrastructure
+COPY lombok.config .
+COPY Makefile .
+COPY pom.xml .
+COPY mvnw .
+COPY .mvn .mvn
+COPY .env .env
+
+# Build native image with environment variables loaded
+RUN make build/graalvm
+
+##################
+# RELEASE STEP
+##################
+FROM alpine:3.22.2 AS release
+
+WORKDIR /app
+
+COPY --from=builder /build/infrastructure/target/sanjy-server .
+
+# Install glibc compatibility for GraalVM native image
+RUN apk add --no-cache gcompat
+
+# Set up directories
+ARG S_DATA_PATH=/app/data
+RUN mkdir -p ${S_DATA_PATH}/logs/structured \
+    && mkdir -p ${S_DATA_PATH}/logs/unstructured \
+
+# Create non-root user
+RUN addgroup -g 1000 sanjy && \
+    adduser -u 1000 -G sanjy -s /bin/sh -D sanjy && \
+    chown -R sanjy:sanjy /app
+
+USER sanjy
+
+EXPOSE 8080
+
+ENTRYPOINT ["./sanjy-server"]
