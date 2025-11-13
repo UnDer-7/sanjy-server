@@ -7,8 +7,6 @@ import br.com.gorillaroxo.sanjy.server.core.exception.RepeatedMealTypeNamesExcep
 import br.com.gorillaroxo.sanjy.server.core.exception.StandardOptionsNotInSequence;
 import br.com.gorillaroxo.sanjy.server.core.ports.driven.DietPlanGateway;
 import br.com.gorillaroxo.sanjy.server.core.test.DomainBuilder;
-import org.assertj.core.api.AbstractThrowableAssert;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -16,7 +14,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;

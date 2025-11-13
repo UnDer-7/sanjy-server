@@ -10,7 +10,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
-import java.util.Set;
 
 @Mapper(
     componentModel = ConstantsInfrastructure.MAPSTRUCT_COMPONENT_MODEL,

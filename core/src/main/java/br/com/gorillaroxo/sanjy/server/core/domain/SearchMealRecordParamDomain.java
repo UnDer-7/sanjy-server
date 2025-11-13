@@ -3,10 +3,7 @@ package br.com.gorillaroxo.sanjy.server.core.domain;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Objects;
 
 @Getter
 @ToString

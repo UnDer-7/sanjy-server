@@ -2,7 +2,6 @@ package br.com.gorillaroxo.sanjy.server.core.service;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.DietPlanDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
-import br.com.gorillaroxo.sanjy.server.core.domain.MealTypeDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.StandardOptionDomain;
 import br.com.gorillaroxo.sanjy.server.core.exception.RepeatedMealTypeNamesException;
 import br.com.gorillaroxo.sanjy.server.core.exception.StandardOptionsNotInSequence;

@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Schema(description = "Request DTO for creating a diet plan by the nutritionist")
 public record CreateDietPlanRequestDTO(

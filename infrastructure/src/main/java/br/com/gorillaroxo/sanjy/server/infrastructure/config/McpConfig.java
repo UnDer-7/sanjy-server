@@ -1,7 +1,5 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.config;
 
-import br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller.DietPlanController;
-import br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller.MealRecordController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.ToolCallbackProvider;

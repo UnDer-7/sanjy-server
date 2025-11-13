@@ -6,7 +6,6 @@ import lombok.Builder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Builder
 @Schema(description = "Complete response DTO representing a diet plan with all its details, nutritional targets, and associated meal types")

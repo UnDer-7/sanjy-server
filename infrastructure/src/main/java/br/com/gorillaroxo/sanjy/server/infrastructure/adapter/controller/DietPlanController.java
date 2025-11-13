@@ -2,8 +2,8 @@ package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.DietPlanDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
-import br.com.gorillaroxo.sanjy.server.core.ports.driver.GetActiveDietPlanUseCase;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.CreateDietPlanUseCase;
+import br.com.gorillaroxo.sanjy.server.core.ports.driver.GetActiveDietPlanUseCase;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequestDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.DietPlanCompleteResponseDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.rest.DietPlanRestService;

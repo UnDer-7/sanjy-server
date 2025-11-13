@@ -2,8 +2,8 @@ package br.com.gorillaroxo.sanjy.server.infrastructure.config;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
 import br.com.gorillaroxo.sanjy.server.core.exception.InvalidValuesException;
-import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.BusinessExceptionMapper;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
+import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.BusinessExceptionMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
