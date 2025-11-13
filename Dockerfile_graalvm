@@ -38,7 +38,7 @@ RUN apk add --no-cache gcompat
 # Set up directories
 ARG S_DATA_PATH=/app/data
 RUN mkdir -p ${S_DATA_PATH}/logs/structured \
-    && mkdir -p ${S_DATA_PATH}/logs/unstructured \
+    && mkdir -p ${S_DATA_PATH}/logs/unstructured
 
 # Create non-root user
 RUN addgroup -g 1000 sanjy && \

@@ -2,6 +2,7 @@
 # VARIABLES
 # ==================================================================================== #
 PROJECT_NAME=sanjy-server
+REGISTRY_HOST=under7
 POM_VERSION := $(shell ./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)
 
 
@@ -102,7 +103,7 @@ build/graalvm:
 build/jvm/docker:
 	@START=$$(date +%s); \
 	echo 'Building docker image for JVM...'; \
-	docker build --tag 'Local/$(PROJECT_NAME)-jvm:$(POM_VERSION)' -f Dockerfile_jvm .; \
+	docker build --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-jvm' -f Dockerfile_jvm .; \
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "Docker JVM image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
@@ -112,7 +113,7 @@ build/jvm/docker:
 build/jvm/docker/force:
 	@START=$$(date +%s); \
 	echo 'Building docker image for JVM without caching layers'; \
-	docker build --tag 'Local/$(PROJECT_NAME)-jvm:$(POM_VERSION)' -f Dockerfile_jvm . --progress=plain --no-cache; \
+	docker build --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-jvm' -f Dockerfile_jvm . --progress=plain --no-cache; \
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "Docker JVM force image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
@@ -122,7 +123,7 @@ build/jvm/docker/force:
 build/graalvm/docker:
 	@START=$$(date +%s); \
 	echo 'Building docker image for GraalVM...'; \
-	docker build --tag 'Local/$(PROJECT_NAME)-graalvm:$(POM_VERSION)' -f Dockerfile_graalvm .; \
+	docker build --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-graalvm' -f Dockerfile_graalvm .; \
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "Docker GraalVM image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
@@ -132,7 +133,7 @@ build/graalvm/docker:
 build/graalvm/docker/force:
 	@START=$$(date +%s); \
 	echo 'Building docker image for GraalVM without caching layers'; \
-	docker build --tag 'Local/$(PROJECT_NAME)-graalvm:$(POM_VERSION)' -f Dockerfile_graalvm . --progress=plain --no-cache; \
+	docker build --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-graalvm' -f Dockerfile_graalvm . --progress=plain --no-cache; \
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "Docker GraalVM force image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"

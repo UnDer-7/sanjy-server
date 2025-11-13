@@ -16,14 +16,14 @@ services:
     networks:
       - sanjy-network
 
-  sanjy_server_jdk:
-    image: Local/sanjy-server-jvm:0.0.1-SNAPSHOT
+  sanjy_server:
+    image: under7/sanjy-server:0.0.1-SNAPSHOT-graalvm
     container_name: "sanjy_server_jdk"
     restart: no
     ports:
       - "8080:8080"
     volumes:
-      - ./.docker_volume/chimera-jvm:/app/data
+      - ./.docker_volume/sanjy_server:/app/data
     networks:
       - sanjy-network
     environment:
