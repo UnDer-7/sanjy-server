@@ -14,6 +14,14 @@ import java.util.Optional;
 @Repository
 public interface MealRecordRepository extends CrudRepository<MealRecordEntity, Long>, JpaSpecificationExecutor<MealRecordEntity> {
 
+    @Query("""
+            SELECT mr FROM MealRecordEntity mr
+            LEFT JOIN FETCH mr.mealType mt
+            LEFT JOIN FETCH mt.standardOptions
+            LEFT JOIN FETCH mr.standardOption
+            WHERE mr.consumedAt BETWEEN :consumedAtAfter AND :consumedAtBefore
+            ORDER BY mr.consumedAt
+            """)
     List<MealRecordEntity> findByConsumedAtBetweenOrderByConsumedAt(LocalDateTime consumedAtAfter, LocalDateTime consumedAtBefore);
 
     @Query("""

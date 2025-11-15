@@ -11,7 +11,9 @@ public enum ExceptionCode {
     DIET_PLAN_NOT_FOUND("003", "Diet plan was not found"),
     STANDARD_OPTIONS_NOT_IN_SEQUENCE("004", "Standard options is not in sequence"),
     INVALID_MEAL_RECORD("005", "Meal record has invalid values"),
-    REPEATED_MEAL_TYPE_NAMES("006", "Meal type names has repeated values");
+    REPEATED_MEAL_TYPE_NAMES("006", "Meal type names has repeated values"),
+    MEAL_TYPE_NOT_FOUND("007", "Meal Type was not found"),
+    STANDARD_OPTION_NOT_FOUND("008", "Standard Option was not found");
 
     private final String code;
     private final String message;

@@ -21,6 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
@@ -28,14 +29,21 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RequestLoggingFilterConfig extends OncePerRequestFilter {
 
-    private static final String[] IGNORE_PATHS = {
+    private static final Set<String> IGNORE_PATHS = Set.of(
+        // SWAGGER
         "/",
         "/**/api-docs",
         "/**/api-docs/**",
         "/swagger-ui/**",
         "/**/swagger-resources/**",
-        "/actuator/**"
-    };
+        // ACTUATOR
+        "/actuator",
+        "/actuator/**",
+        // MCP
+        "/sse",
+        "/sse/**",
+        "/mcp",
+        "/mcp/**");
 
     private final ObjectMapper objectMapper;
     private final BusinessExceptionMapper businessExceptionMapper;
@@ -44,12 +52,8 @@ public class RequestLoggingFilterConfig extends OncePerRequestFilter {
     @Override
     public boolean shouldNotFilter(final HttpServletRequest request) {
         final String requestPath = request.getRequestURI();
-        for (String pattern : IGNORE_PATHS) {
-            if (pathMatcher.match(pattern, requestPath)) {
-                return true;
-            }
-        }
-        return false;
+        return IGNORE_PATHS.stream()
+            .anyMatch(ignoredPath -> pathMatcher.match(ignoredPath, requestPath));
     }
 
     @Override

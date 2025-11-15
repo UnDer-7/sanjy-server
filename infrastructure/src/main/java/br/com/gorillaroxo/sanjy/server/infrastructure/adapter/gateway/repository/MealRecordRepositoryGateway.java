@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,6 +42,7 @@ public class MealRecordRepositoryGateway implements MealRecordGateway {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PageResultDomain<MealRecordDomain> search(final SearchMealRecordParamDomain searchParam) {
         final var propConsumedAt = "consumedAt";
         final var pageRequest = PageRequest.of(searchParam.getPageNumber(), searchParam.getPageSize(), Sort.by(propConsumedAt).ascending());

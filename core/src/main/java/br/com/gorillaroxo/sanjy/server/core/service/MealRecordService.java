@@ -6,7 +6,11 @@ import br.com.gorillaroxo.sanjy.server.core.domain.PageResultDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.SearchMealRecordParamDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.StandardOptionDomain;
 import br.com.gorillaroxo.sanjy.server.core.exception.InvalidMealRecordException;
+import br.com.gorillaroxo.sanjy.server.core.exception.MealTypeNotFoundException;
+import br.com.gorillaroxo.sanjy.server.core.exception.StandardOptionNotFoundException;
 import br.com.gorillaroxo.sanjy.server.core.ports.driven.MealRecordGateway;
+import br.com.gorillaroxo.sanjy.server.core.ports.driven.MealTypeGateway;
+import br.com.gorillaroxo.sanjy.server.core.ports.driven.StandardOptionGateway;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.argument.StructuredArguments;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -21,6 +26,8 @@ import java.util.List;
 public class MealRecordService {
 
     private final MealRecordGateway mealRecordGateway;
+    private final MealTypeGateway mealTypeGateway;
+    private final StandardOptionGateway standardOptionGateway;
 
     public MealRecordDomain insert(final MealRecordDomain mealRecord) {
         log.info(
@@ -31,6 +38,17 @@ public class MealRecordService {
             StructuredArguments.kv(LogField.MEAL_RECORD_IS_FREE_MEAL.label(), mealRecord.isFreeMeal()),
             StructuredArguments.kv(LogField.MEAL_RECORD_STANDARD_OPTION_ID.label(), mealRecord.getStandardOption().map(StandardOptionDomain::id).orElse(null)),
             StructuredArguments.kv(LogField.MEAL_RECORD_FREE_MEAL_DESCRIPTION.label(), mealRecord.freeMealDescription()));
+
+        if (!mealTypeGateway.existsByIdAndDietPlanActive(mealRecord.mealType().id())) {
+            log.warn(
+                LogField.Placeholders.FOUR.placeholder,
+                StructuredArguments.kv(LogField.MSG.label(), "MealType is not registered in database"),
+                StructuredArguments.kv(LogField.MEAL_RECORD_MEAL_TYPE_ID.label(), mealRecord.mealType().id()),
+                StructuredArguments.kv(LogField.MEAL_RECORD_IS_FREE_MEAL.label(), mealRecord.isFreeMeal()),
+                StructuredArguments.kv(LogField.MEAL_RECORD_FREE_MEAL_DESCRIPTION.label(), mealRecord.freeMealDescription()));
+
+            throw new MealTypeNotFoundException("MealType ID informed: " +  mealRecord.mealType().id());
+        }
 
         if (Boolean.TRUE.equals(mealRecord.isFreeMeal())) {
             validateFreeMealRecord(mealRecord);
@@ -123,14 +141,15 @@ public class MealRecordService {
         }
     }
 
-    private static void validatePlannedMealRecord(final MealRecordDomain mealRecordDomain) {
+    private void validatePlannedMealRecord(final MealRecordDomain mealRecordDomain) {
         if (mealRecordDomain.freeMealDescription() != null) {
+            final Long standardOptionId = Optional.ofNullable(mealRecordDomain.standardOption()).map(StandardOptionDomain::id).orElse(null);
             log.warn(
                 LogField.Placeholders.FIVE.placeholder,
                 StructuredArguments.kv(LogField.MSG.label(), "Planned meal record cannot have free meal description"),
                 StructuredArguments.kv(LogField.MEAL_RECORD_MEAL_TYPE_ID.label(), mealRecordDomain.mealType().id()),
                 StructuredArguments.kv(LogField.MEAL_RECORD_IS_FREE_MEAL.label(), mealRecordDomain.isFreeMeal()),
-                StructuredArguments.kv(LogField.MEAL_RECORD_STANDARD_OPTION_ID.label(), null),
+                StructuredArguments.kv(LogField.MEAL_RECORD_STANDARD_OPTION_ID.label(), standardOptionId),
                 StructuredArguments.kv(LogField.MEAL_RECORD_FREE_MEAL_DESCRIPTION.label(), mealRecordDomain.freeMealDescription()));
 
             throw new InvalidMealRecordException("Planned meal record cannot have free meal description");
@@ -146,6 +165,18 @@ public class MealRecordService {
                 StructuredArguments.kv(LogField.MEAL_RECORD_FREE_MEAL_DESCRIPTION.label(), mealRecordDomain.freeMealDescription()));
 
             throw new InvalidMealRecordException("Planned meal record has invalid standard options");
+        }
+
+        if (!standardOptionGateway.existsByIdAndDietPlanActive(mealRecordDomain.standardOption().id(), mealRecordDomain.mealType().id())) {
+            log.warn(
+                LogField.Placeholders.FIVE.placeholder,
+                StructuredArguments.kv(LogField.MSG.label(), "StandardOption is not registered in database"),
+                StructuredArguments.kv(LogField.MEAL_RECORD_MEAL_TYPE_ID.label(), mealRecordDomain.mealType().id()),
+                StructuredArguments.kv(LogField.MEAL_RECORD_IS_FREE_MEAL.label(), mealRecordDomain.isFreeMeal()),
+                StructuredArguments.kv(LogField.MEAL_RECORD_STANDARD_OPTION_ID.label(), mealRecordDomain.standardOption().id()),
+                StructuredArguments.kv(LogField.MEAL_RECORD_FREE_MEAL_DESCRIPTION.label(), mealRecordDomain.freeMealDescription()));
+
+            throw new StandardOptionNotFoundException("Standard Option ID informed: " + mealRecordDomain.standardOption().id());
         }
     }
 }
