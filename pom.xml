@@ -45,6 +45,7 @@
 
         <spotless-maven-plugin.version>3.0.0</spotless-maven-plugin.version>
         <spotless-palantirJavaFormat.version>2.82.0</spotless-palantirJavaFormat.version>
+        <checkstyle-maven-plugin.version>3.6.0</checkstyle-maven-plugin.version>
     </properties>
 
     <modules>
@@ -258,35 +259,25 @@
                 </executions>
             </plugin>
 
-            <!--                  <plugin>-->
-            <!--                      <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                      <artifactId>maven-checkstyle-plugin</artifactId>-->
-            <!--                      <version>${checkstyle-maven-plugin.version}</version>-->
-            <!--                      <dependencies>-->
-            <!--                          <dependency>-->
-            <!--                              <groupId>com.puppycrawl.tools</groupId>-->
-            <!--                              <artifactId>checkstyle</artifactId>-->
-            <!--                              <version>10.23.0</version>-->
-            <!--                          </dependency>-->
-            <!--                      </dependencies>-->
-            <!--                      <configuration>-->
-            <!--                          <configLocation>.checkstyle/checkstyle.xml</configLocation>-->
-            <!--                          <propertyExpansion>config_loc=${basedir}/.checkstyle</propertyExpansion>-->
-            <!--                          <encoding>UTF-8</encoding>-->
-            <!--                          <consoleOutput>true</consoleOutput>-->
-            <!--                          <failsOnError>true</failsOnError>-->
-            <!--                          <linkXRef>false</linkXRef>-->
-            <!--                      </configuration>-->
-            <!--                      <executions>-->
-            <!--                          <execution>-->
-            <!--                              <id>validate</id>-->
-            <!--                              <phase>validate</phase>-->
-            <!--                              <goals>-->
-            <!--                                  <goal>check</goal>-->
-            <!--                              </goals>-->
-            <!--                          </execution>-->
-            <!--                      </executions>-->
-            <!--                  </plugin>-->
+              <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-checkstyle-plugin</artifactId>
+                  <version>${checkstyle-maven-plugin.version}</version>
+                  <dependencies>
+                      <dependency>
+                          <groupId>com.puppycrawl.tools</groupId>
+                          <artifactId>checkstyle</artifactId>
+                          <version>12.1.2</version>
+                      </dependency>
+                  </dependencies>
+                  <configuration>
+                      <configLocation>.checkstyle/checkstyle.xml</configLocation>
+                      <consoleOutput>true</consoleOutput>
+                      <failsOnError>true</failsOnError>
+                      <linkXRef>false</linkXRef>
+                      <propertyExpansion>config_loc=.checkstyle</propertyExpansion>
+                  </configuration>
+              </plugin>
         </plugins>
     </build>
 
