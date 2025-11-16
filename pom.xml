@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.7</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.5.7</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
 
     <groupId>br.com.gorillaroxo</groupId>
-	<artifactId>sanJy-server</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+    <artifactId>sanJy-server</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>sanJy-server</name>
-	<description>Backend server application for diet and meal management, enabling nutritionists to create diet plans and users to track meal consumption records</description>
+    <description>Backend server application for diet and meal management, enabling nutritionists to create diet plans and users to track meal consumption records</description>
 
     <url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
+    <licenses>
+        <license/>
+    </licenses>
+    <developers>
+        <developer/>
+    </developers>
     <scm>
         <connection/>
         <developerConnection/>
@@ -32,7 +32,7 @@
     </scm>
 
     <properties>
-		<java.version>25</java.version>
+        <java.version>25</java.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -44,7 +44,7 @@
         <spring-ai.version>1.0.3</spring-ai.version>
 
         <spotless-maven-plugin.version>3.0.0</spotless-maven-plugin.version>
-	</properties>
+    </properties>
 
     <modules>
         <module>core</module>
@@ -82,7 +82,7 @@
         </dependencies>
     </dependencyManagement>
 
-	<dependencies>
+    <dependencies>
         <!-- Logging -->
         <dependency>
             <groupId>net.logstash.logback</groupId>
@@ -169,6 +169,29 @@
                 <artifactId>spotless-maven-plugin</artifactId>
                 <version>${spotless-maven-plugin.version}</version>
                 <configuration>
+                    <formats>
+                        <format>
+                            <includes>
+                                <include>.dockerignore</include>
+                                <include>.env</include>
+                                <include>.gitattributes</include>
+                                <include>.gitignore</include>
+                                <include>.sdkmanrc</include>
+                                <include>Dockerfile_graalvm</include>
+                                <include>Dockerfile_jvm</include>
+                                <include>lombok.config</include>
+                                <include>Makefile</include>
+                            </includes>
+                            <!-- define the steps to apply to those files -->
+                            <trimTrailingWhitespace/>
+                            <endWithNewline/>
+                            <indent>
+                                <spaces>true</spaces>
+                                <spacesPerTab>4</spacesPerTab>
+                            </indent>
+
+                        </format>
+                    </formats>
                     <!--          <pom>-->
                     <!--            <sortPom/>-->
                     <!--          </pom>-->
