@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,6 +30,7 @@ public class PageRequestDTO {
     private Integer pageNumber;
 
     @Positive
+    @Builder.Default
     @Schema(
         description = "Number of items per page. If not specified, returns 10 items per page",
         requiredMode = Schema.RequiredMode.NOT_REQUIRED,
