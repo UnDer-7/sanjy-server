@@ -185,6 +185,7 @@
                             <trimTrailingWhitespace/>
                             <endWithNewline/>
                             <indent>
+                                <tabs>false</tabs>
                                 <spaces>true</spaces>
                                 <spacesPerTab>4</spacesPerTab>
                             </indent>
@@ -199,8 +200,8 @@
                             <trimTrailingWhitespace/>
                             <endWithNewline/>
                             <indent>
-                                <spaces>false</spaces>
                                 <tabs>true</tabs>
+                                <spaces>false</spaces>
                                 <spacesPerTab>1</spacesPerTab>
                             </indent>
                         </format>
