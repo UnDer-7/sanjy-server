@@ -34,5 +34,4 @@ public class SanJyApplication {
     public static void main(String[] args) {
         SpringApplication.run(SanJyApplication.class, args);
     }
-
 }

@@ -11,5 +11,4 @@ public class PageRequestDomain {
 
     private final Integer pageNumber;
     private final Integer pageSize;
-
 }

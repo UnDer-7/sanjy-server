@@ -1,11 +1,10 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.jpa.repository;
 
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.DietPlanEntity;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 public interface DietPlanRepository extends CrudRepository<DietPlanEntity, Long> {

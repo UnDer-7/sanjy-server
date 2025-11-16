@@ -20,27 +20,27 @@ public class GetActiveDietPlanUseCaseImpl implements GetActiveDietPlanUseCase {
     @Override
     public DietPlanDomain execute() {
         log.info(
-            LogField.Placeholders.ONE.placeholder,
-            StructuredArguments.kv(LogField.MSG.label(), "Starting to get active diet plan"));
+                LogField.Placeholders.ONE.placeholder,
+                StructuredArguments.kv(LogField.MSG.label(), "Starting to get active diet plan"));
 
-        final DietPlanDomain dietPlan = dietPlanGateway.findActive()
-            .orElseThrow(() -> {
-                log.warn(
+        final DietPlanDomain dietPlan = dietPlanGateway.findActive().orElseThrow(() -> {
+            log.warn(
                     LogField.Placeholders.ONE.placeholder,
                     StructuredArguments.kv(LogField.MSG.label(), "Could not find active diet plan"));
-                return new DietPlanNotFoundException("Could not find active diet plan");
-            });
+            return new DietPlanNotFoundException("Could not find active diet plan");
+        });
 
         log.info(
-            LogField.Placeholders.SIX.placeholder,
-            StructuredArguments.kv(LogField.MSG.label(), "Successfully found active diet plan"),
-            StructuredArguments.kv(LogField.DIET_PLAN_ID.label(), dietPlan.getId()),
-            StructuredArguments.kv(LogField.DIET_PLAN_NAME.label(), dietPlan.getName()),
-            StructuredArguments.kv(LogField.DIET_PLAN_IS_ACTIVE.label(), dietPlan.getIsActive()),
-            StructuredArguments.kv(LogField.DIET_PLAN_CREATED_AT.label(), dietPlan.getCreatedAt()),
-            StructuredArguments.kv(LogField.DIET_PLAN_MEAL_TYPE_SIZE.label(), dietPlan.getMealTypes().size()));
+                LogField.Placeholders.SIX.placeholder,
+                StructuredArguments.kv(LogField.MSG.label(), "Successfully found active diet plan"),
+                StructuredArguments.kv(LogField.DIET_PLAN_ID.label(), dietPlan.getId()),
+                StructuredArguments.kv(LogField.DIET_PLAN_NAME.label(), dietPlan.getName()),
+                StructuredArguments.kv(LogField.DIET_PLAN_IS_ACTIVE.label(), dietPlan.getIsActive()),
+                StructuredArguments.kv(LogField.DIET_PLAN_CREATED_AT.label(), dietPlan.getCreatedAt()),
+                StructuredArguments.kv(
+                        LogField.DIET_PLAN_MEAL_TYPE_SIZE.label(),
+                        dietPlan.getMealTypes().size()));
 
         return dietPlan;
     }
-
 }

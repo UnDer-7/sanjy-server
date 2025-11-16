@@ -34,5 +34,4 @@ public class MealTypeNotFoundException extends BusinessException {
     protected Logger getLogger() {
         return log;
     }
-
 }

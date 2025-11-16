@@ -10,24 +10,23 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisti
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealRecordEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.projection.MealRecordStatisticsProjection;
 import br.com.gorillaroxo.sanjy.server.infrastructure.utils.ConstantsInfrastructure;
+import java.util.List;
+import java.util.Optional;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
-import java.util.List;
-import java.util.Optional;
-
 @Mapper(
-    componentModel = ConstantsInfrastructure.MAPSTRUCT_COMPONENT_MODEL,
-    uses = {MealTypeMapper.class, StandardOptionMapper.class},
-    unmappedTargetPolicy = ReportingPolicy.ERROR
-)
+        componentModel = ConstantsInfrastructure.MAPSTRUCT_COMPONENT_MODEL,
+        uses = {MealTypeMapper.class, StandardOptionMapper.class},
+        unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface MealRecordMapper {
 
     // DTOs
     MealRecordResponseDTO toDTO(MealRecordDomain domain);
+
     List<MealRecordResponseDTO> toDTO(List<MealRecordDomain> domain);
 
     MealRecordStatisticsResponseDTO toDTO(MealRecordStatisticsDomain domain);
@@ -40,21 +39,26 @@ public interface MealRecordMapper {
     MealRecordDomain toDomain(CreateMealRecordRequestDTO dto);
 
     @AfterMapping
-    default void toDomainAfterMapping(@MappingTarget final MealRecordDomain.MealRecordDomainBuilder target, final CreateMealRecordRequestDTO source) {
+    default void toDomainAfterMapping(
+            @MappingTarget final MealRecordDomain.MealRecordDomainBuilder target,
+            final CreateMealRecordRequestDTO source) {
         Optional.ofNullable(source)
-            .map(CreateMealRecordRequestDTO::mealTypeId)
-            .map(mealTypeId -> MealTypeDomain.builder().id(mealTypeId).build())
-            .ifPresent(target::mealType);
+                .map(CreateMealRecordRequestDTO::mealTypeId)
+                .map(mealTypeId -> MealTypeDomain.builder().id(mealTypeId).build())
+                .ifPresent(target::mealType);
         Optional.ofNullable(source)
-            .map(CreateMealRecordRequestDTO::standardOptionId)
-            .map(standardOptionId -> StandardOptionDomain.builder().id(standardOptionId).build())
-            .ifPresent(target::standardOption);
+                .map(CreateMealRecordRequestDTO::standardOptionId)
+                .map(standardOptionId ->
+                        StandardOptionDomain.builder().id(standardOptionId).build())
+                .ifPresent(target::standardOption);
     }
 
     MealRecordDomain toDomain(MealRecordEntity entity);
+
     List<MealRecordDomain> toDomain(List<MealRecordEntity> entities);
 
     MealRecordDomain toDomain(MealRecordResponseDTO dto);
+
     List<MealRecordDomain> toDomainListFromMealRecordResponseDTO(List<MealRecordResponseDTO> dto);
 
     MealRecordStatisticsDomain toDomain(MealRecordStatisticsProjection projection);

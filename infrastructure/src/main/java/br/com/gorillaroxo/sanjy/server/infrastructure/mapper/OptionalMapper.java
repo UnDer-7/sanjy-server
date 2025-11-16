@@ -1,15 +1,13 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.mapper;
 
 import br.com.gorillaroxo.sanjy.server.infrastructure.utils.ConstantsInfrastructure;
+import java.util.Optional;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
-import java.util.Optional;
-
 @Mapper(
-    componentModel = ConstantsInfrastructure.MAPSTRUCT_COMPONENT_MODEL,
-    unmappedTargetPolicy = ReportingPolicy.ERROR
-)
+        componentModel = ConstantsInfrastructure.MAPSTRUCT_COMPONENT_MODEL,
+        unmappedTargetPolicy = ReportingPolicy.ERROR)
 public class OptionalMapper {
 
     public <T> T fromOptional(final Optional<T> optional) {

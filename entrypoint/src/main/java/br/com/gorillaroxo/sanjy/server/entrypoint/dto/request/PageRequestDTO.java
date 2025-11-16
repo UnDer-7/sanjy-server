@@ -23,20 +23,19 @@ public class PageRequestDTO {
     @NotNull
     @Positive
     @Schema(
-        description = "Page number to retrieve (zero-based, where 0 is the first page)",
-        requiredMode = Schema.RequiredMode.REQUIRED,
-        nullable = false,
-        example = "0")
+            description = "Page number to retrieve (zero-based, where 0 is the first page)",
+            requiredMode = Schema.RequiredMode.REQUIRED,
+            nullable = false,
+            example = "0")
     private Integer pageNumber;
 
     @Positive
     @Builder.Default
     @Schema(
-        description = "Number of items per page. If not specified, returns 10 items per page",
-        requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-        nullable = true,
-        defaultValue = "10",
-        example = "10")
+            description = "Number of items per page. If not specified, returns 10 items per page",
+            requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+            nullable = true,
+            defaultValue = "10",
+            example = "10")
     private Integer pageSize = 10;
-
 }

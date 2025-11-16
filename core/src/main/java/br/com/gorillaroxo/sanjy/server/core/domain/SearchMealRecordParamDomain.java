@@ -1,9 +1,8 @@
 package br.com.gorillaroxo.sanjy.server.core.domain;
 
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.ToString;
-
-import java.time.LocalDateTime;
 
 @Getter
 @ToString
@@ -13,11 +12,12 @@ public class SearchMealRecordParamDomain extends PageRequestDomain {
     private final LocalDateTime consumedAtBefore;
     private final Boolean isFreeMeal;
 
-    public SearchMealRecordParamDomain(final Integer pageNumber,
-        final Integer pageSize,
-        final LocalDateTime consumedAtAfter,
-        final LocalDateTime consumedAtBefore,
-        final Boolean isFreeMeal) {
+    public SearchMealRecordParamDomain(
+            final Integer pageNumber,
+            final Integer pageSize,
+            final LocalDateTime consumedAtAfter,
+            final LocalDateTime consumedAtBefore,
+            final Boolean isFreeMeal) {
 
         super(pageNumber, pageSize);
 
@@ -25,5 +25,4 @@ public class SearchMealRecordParamDomain extends PageRequestDomain {
         this.consumedAtBefore = consumedAtBefore;
         this.isFreeMeal = isFreeMeal;
     }
-
 }

@@ -7,6 +7,8 @@ import br.com.gorillaroxo.sanjy.server.core.exception.UnexpectedErrorException;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDTO;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.BusinessExceptionMapper;
 import jakarta.validation.ConstraintViolationException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.argument.StructuredArguments;
@@ -19,9 +21,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
@@ -39,22 +38,28 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
     public ResponseEntity<Object> handleException(final Exception exception) {
         if (exception.getCause() instanceof BusinessException businessException) {
             log.warn(
-                LogField.Placeholders.FIVE.placeholder,
-                StructuredArguments.kv(LogField.MSG.label(), "An unexpected exception occurred but with a BusinessException cause, delegating to BusinessException handler"),
-                StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), exception.getMessage()),
-                StructuredArguments.kv(LogField.EXCEPTION_CLASS.label(), exception.getClass().getSimpleName()),
-                StructuredArguments.kv(LogField.EXCEPTION_CAUSE.label(), exception.getCause()),
-                StructuredArguments.kv(LogField.EXCEPTION_CAUSE_MSG.label(), exception.getCause().getMessage()),
-                exception);
+                    LogField.Placeholders.FIVE.placeholder,
+                    StructuredArguments.kv(
+                            LogField.MSG.label(),
+                            "An unexpected exception occurred but with a BusinessException cause, delegating to BusinessException handler"),
+                    StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), exception.getMessage()),
+                    StructuredArguments.kv(
+                            LogField.EXCEPTION_CLASS.label(),
+                            exception.getClass().getSimpleName()),
+                    StructuredArguments.kv(LogField.EXCEPTION_CAUSE.label(), exception.getCause()),
+                    StructuredArguments.kv(
+                            LogField.EXCEPTION_CAUSE_MSG.label(),
+                            exception.getCause().getMessage()),
+                    exception);
 
             return handleBusinessException(businessException);
         }
 
         log.warn(
-            LogField.Placeholders.TWO.placeholder,
-            StructuredArguments.kv(LogField.MSG.label(), "An unexpected exception occurred"),
-            StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), exception.getMessage()),
-            exception);
+                LogField.Placeholders.TWO.placeholder,
+                StructuredArguments.kv(LogField.MSG.label(), "An unexpected exception occurred"),
+                StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), exception.getMessage()),
+                exception);
 
         final var unexpectedException = new UnexpectedErrorException(exception);
         return logExceptionAndBuild(unexpectedException);
@@ -62,33 +67,35 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleUnexpectedException(final ConstraintViolationException exception) {
-        final String invalidValues = exception.getConstraintViolations()
-            .stream()
-            .map(violation -> buildInvalidAttributeMessage(
-                violation.getPropertyPath().toString().split("\\.")[1],
-                violation.getMessage(),
-                violation.getInvalidValue()))
-            .collect(Collectors.joining(" | "));
+        final String invalidValues = exception.getConstraintViolations().stream()
+                .map(violation -> buildInvalidAttributeMessage(
+                        violation.getPropertyPath().toString().split("\\.")[1],
+                        violation.getMessage(),
+                        violation.getInvalidValue()))
+                .collect(Collectors.joining(" | "));
 
         return logExceptionAndBuild(new InvalidValuesException(invalidValues));
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException ex,
-        final HttpHeaders headers, final HttpStatusCode status, final WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            final MethodArgumentNotValidException ex,
+            final HttpHeaders headers,
+            final HttpStatusCode status,
+            final WebRequest request) {
 
         final String invalidValues = ex.getBindingResult().getFieldErrors().stream()
-            .map(fieldError -> buildInvalidAttributeMessage(
-                fieldError.getField(),
-                fieldError.getDefaultMessage(),
-                fieldError.getRejectedValue()))
-            .collect(Collectors.joining(" | "));
+                .map(fieldError -> buildInvalidAttributeMessage(
+                        fieldError.getField(), fieldError.getDefaultMessage(), fieldError.getRejectedValue()))
+                .collect(Collectors.joining(" | "));
 
         return logExceptionAndBuild(new InvalidValuesException(invalidValues));
     }
 
-    private static String buildInvalidAttributeMessage(final String attributeName, final String errMotive, final Object attributeValue) {
-        return "[ propertyPath: %s - errorMotive: %s - valueProvided: %s ]".formatted(attributeName, errMotive, attributeValue);
+    private static String buildInvalidAttributeMessage(
+            final String attributeName, final String errMotive, final Object attributeValue) {
+        return "[ propertyPath: %s - errorMotive: %s - valueProvided: %s ]"
+                .formatted(attributeName, errMotive, attributeValue);
     }
 
     private ResponseEntity<Object> logExceptionAndBuild(final BusinessException exception) {
@@ -97,10 +104,14 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
             MDC.put(LogField.ERROR_TIMESTAMP.label(), exception.getTimestamp());
             MDC.put(LogField.ERROR_MESSAGE.label(), exception.getExceptionCode().getMessage());
             MDC.put(LogField.HTTP_STATUS_CODE.label(), Integer.toString(exception.getHttpStatusCode()));
-            MDC.put(LogField.CUSTOM_EXCEPTION_STACK_TRACE.label(), Arrays.stream(exception.getStackTrace())
-                .map(StackTraceElement::toString)
-                .collect(Collectors.joining("; ")));
-            exception.getCustomMessage().ifPresent(customMsg -> MDC.put(LogField.CUSTOM_ERROR_MESSAGE.label(), customMsg));
+            MDC.put(
+                    LogField.CUSTOM_EXCEPTION_STACK_TRACE.label(),
+                    Arrays.stream(exception.getStackTrace())
+                            .map(StackTraceElement::toString)
+                            .collect(Collectors.joining("; ")));
+            exception
+                    .getCustomMessage()
+                    .ifPresent(customMsg -> MDC.put(LogField.CUSTOM_ERROR_MESSAGE.label(), customMsg));
 
             exception.executeLogging();
 
@@ -110,5 +121,4 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
             MDC.clear();
         }
     }
-
 }

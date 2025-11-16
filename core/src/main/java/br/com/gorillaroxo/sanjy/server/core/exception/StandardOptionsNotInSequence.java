@@ -34,5 +34,4 @@ public class StandardOptionsNotInSequence extends BusinessException {
     protected Logger getLogger() {
         return log;
     }
-
 }

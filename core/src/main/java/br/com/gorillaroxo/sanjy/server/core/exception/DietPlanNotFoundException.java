@@ -34,5 +34,4 @@ public class DietPlanNotFoundException extends BusinessException {
     protected Logger getLogger() {
         return log;
     }
-
 }

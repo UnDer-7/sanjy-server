@@ -17,5 +17,4 @@ public class StandardOptionRepositoryGateway implements StandardOptionGateway {
     public boolean existsByIdAndDietPlanActive(final Long standardOptionId, final Long mealTypeId) {
         return repository.existsByIdAndMealTypeId(standardOptionId, mealTypeId);
     }
-
 }

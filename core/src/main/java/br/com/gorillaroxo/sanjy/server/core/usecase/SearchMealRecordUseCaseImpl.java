@@ -20,5 +20,4 @@ public class SearchMealRecordUseCaseImpl implements SearchMealRecordUseCase {
     public PageResultDomain<MealRecordDomain> execute(final SearchMealRecordParamDomain searchParam) {
         return mealRecordService.search(searchParam);
     }
-
 }

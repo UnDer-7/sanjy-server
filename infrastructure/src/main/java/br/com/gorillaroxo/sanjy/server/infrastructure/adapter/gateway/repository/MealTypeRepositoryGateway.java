@@ -17,5 +17,4 @@ public class MealTypeRepositoryGateway implements MealTypeGateway {
     public boolean existsByIdAndDietPlanActive(final Long mealTypeId) {
         return mealTypeRepository.existsByIdAndDietPlan_IsActiveIsTrue(mealTypeId);
     }
-
 }

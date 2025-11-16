@@ -10,10 +10,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(
-    componentModel = ConstantsInfrastructure.MAPSTRUCT_COMPONENT_MODEL,
-    uses = MealTypeMapper.class,
-    unmappedTargetPolicy = ReportingPolicy.ERROR
-)
+        componentModel = ConstantsInfrastructure.MAPSTRUCT_COMPONENT_MODEL,
+        uses = MealTypeMapper.class,
+        unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface DietPlanMapper {
 
     // DTOs
