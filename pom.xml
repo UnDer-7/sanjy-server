@@ -180,7 +180,6 @@
                                 <include>Dockerfile_graalvm</include>
                                 <include>Dockerfile_jvm</include>
                                 <include>lombok.config</include>
-                                <include>Makefile</include>
                             </includes>
                             <!-- define the steps to apply to those files -->
                             <trimTrailingWhitespace/>
@@ -189,9 +188,34 @@
                                 <spaces>true</spaces>
                                 <spacesPerTab>4</spacesPerTab>
                             </indent>
+                        </format>
 
+                        <format>
+                            <!-- Makefile must be indented with a single tab character, not spaces -->
+                            <includes>
+                                <include>Makefile</include>
+                            </includes>
+                            <!-- define the steps to apply to those files -->
+                            <trimTrailingWhitespace/>
+                            <endWithNewline/>
+                            <indent>
+                                <spaces>false</spaces>
+                                <tabs>true</tabs>
+                                <spacesPerTab>1</spacesPerTab>
+                            </indent>
                         </format>
                     </formats>
+<!--                    <java>-->
+<!--                        <palantirJavaFormat>-->
+<!--                            <version>2.82.0</version>-->
+<!--                            &lt;!&ndash; optional &ndash;&gt;-->
+<!--                            <style>PALANTIR</style>-->
+<!--                            &lt;!&ndash; or AOSP/GOOGLE (optional) &ndash;&gt;-->
+<!--                            <formatJavadoc>true</formatJavadoc>-->
+<!--                            &lt;!&ndash; defaults to false (optional, requires at least Palantir 2.39.0) &ndash;&gt;-->
+<!--                        </palantirJavaFormat>-->
+<!--                        <removeUnusedImports/>-->
+<!--                    </java>-->
                     <!--          <pom>-->
                     <!--            <sortPom/>-->
                     <!--          </pom>-->
@@ -227,17 +251,6 @@
                     <!--              </yamlFeatures>-->
                     <!--            </jackson>-->
                     <!--          </yaml>-->
-                    <java>
-                        <palantirJavaFormat>
-                            <version>2.82.0</version>
-                            <!-- optional -->
-                            <style>PALANTIR</style>
-                            <!-- or AOSP/GOOGLE (optional) -->
-                            <formatJavadoc>true</formatJavadoc>
-                            <!-- defaults to false (optional, requires at least Palantir 2.39.0) -->
-                        </palantirJavaFormat>
-                        <removeUnusedImports/>
-                    </java>
                 </configuration>
                 <executions>
                     <execution>
