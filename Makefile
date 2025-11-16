@@ -137,3 +137,22 @@ build/graalvm/docker/force:
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "Docker GraalVM force image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
+
+
+
+
+
+# ==================================================================================== #
+## ===== CODING STYLE =====
+# ==================================================================================== #
+## fmt: Format all source code files using Spotless
+.PHONY: fmt
+fmt:
+	@echo ">>> Formatting all source code files…"
+	./mvnw spotless:apply
+
+## fmt/check: Check code formatting without applying changes
+.PHONY: fmt/check
+fmt/check:
+	@echo ">>> Checking code formatting…"
+	./mvnw spotless:check
