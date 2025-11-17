@@ -20,7 +20,7 @@
 
     <property name="charset" value="UTF-8"/>
 
-    <property name="severity" value="${org.checkstyle.google.severity}" default="warning"/>
+    <property name="severity" value="${checkstyle_severity}" default="warning"/>
 
     <property name="fileExtensions" value="java, properties"/>
     <!-- Excludes all 'module-info.java' files              -->
@@ -127,6 +127,22 @@
                      value="Class type name ''{0}'' must match pattern ''{1}''."/>
         </module>
         <module name="CovariantEquals"/> <!-- Java Coding Guidelines: Override ``Object#equals`` consistently -->
+        <!-- Declaration order with access modifier ordering -->
+        <module name="com.github.sevntu.checkstyle.checks.coding.CustomDeclarationOrderCheck">
+            <property name="customDeclarationOrder"
+                      value="Field(public.*static.*) ### Field(protected.*static.*) ### Field(private.*static.*) ###
+                             Field(public.*) ### Field(protected.*) ### Field(private.*) ###
+                             Ctor(public.*) ### Ctor(protected.*) ### Ctor(private.*) ###
+                             Method(public.*static.*) ### Method(public(?!.*static).*) ###
+                             Method(protected.*static.*) ### Method(protected(?!.*static).*) ###
+                             Method(private.*static.*) ### Method(private(?!.*static).*)"/>
+            <message key="custom.declaration.order.field"
+                     value="Field declaration is in wrong order. Global order: [1] Fields, [2] Constructors, [3] Methods. Within fields: public static → protected static → private static → public → protected → private"/>
+            <message key="custom.declaration.order.constructor"
+                     value="Constructor declaration is in wrong order. Global order: [1] Fields, [2] Constructors, [3] Methods. Within constructors: public → protected → private"/>
+            <message key="custom.declaration.order.method"
+                     value="Method declaration is in wrong order. Global order: [1] Fields, [2] Constructors, [3] Methods. Within methods: public static → public → protected static → protected → private static → private"/>
+        </module>
         <module name="DefaultComesLast"/> <!-- Java Style Guide: The default case is present -->
         <module name="EmptyBlock"> <!-- Java Style Guide: Empty blocks: documented -->
             <property name="option" value="TEXT"/>
