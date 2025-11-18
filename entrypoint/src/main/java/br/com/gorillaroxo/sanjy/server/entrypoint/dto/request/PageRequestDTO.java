@@ -2,6 +2,7 @@ package br.com.gorillaroxo.sanjy.server.entrypoint.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,7 @@ import lombok.experimental.SuperBuilder;
 public class PageRequestDTO {
 
     @NotNull
-    @Positive
+    @PositiveOrZero
     @Schema(
             description = "Page number to retrieve (zero-based, where 0 is the first page)",
             requiredMode = Schema.RequiredMode.REQUIRED,

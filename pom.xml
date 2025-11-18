@@ -249,6 +249,15 @@
                     <!--              </yamlFeatures>-->
                     <!--            </jackson>-->
                     <!--          </yaml>-->
+<!--                    <sql>-->
+<!--                        <includes>-->
+<!--                            <include>/**/*.sql</include>-->
+<!--                        </includes>-->
+
+<!--                        <dbeaver>-->
+<!--                            <configFile>.spotless.dbeaver.properties</configFile>-->
+<!--                        </dbeaver>-->
+<!--                    </sql>-->
                 </configuration>
                 <executions>
                     <execution>

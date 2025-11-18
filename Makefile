@@ -56,9 +56,16 @@ test:
 # ==================================================================================== #
 ## ===== DATABASE =====
 # ==================================================================================== #
-## seed-db: Populate database with sample data
-.PHONY: seed-db
-seed-db:
+## db/clean: Clean all database data and reset sequences
+.PHONY: db/clean
+db/clean:
+	@echo ">>> Cleaning database and resetting sequences…"
+	@docker exec -i sanJy_database psql -U admin_usr -d diet_control < local/clean-db.sql
+	@echo ">>> Database cleaned successfully!"
+
+## db/seed: Populate database with sample data
+.PHONY: db/seed
+db/seed:
 	@echo ">>> Populating database with sample data…"
 	@docker exec -i sanJy_database psql -U admin_usr -d diet_control < local/sample-data.sql
 	@echo ">>> Database populated successfully!"

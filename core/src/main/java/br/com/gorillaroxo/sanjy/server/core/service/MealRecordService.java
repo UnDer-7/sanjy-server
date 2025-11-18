@@ -49,7 +49,7 @@ public class MealRecordService {
         if (!mealTypeGateway.existsByIdAndDietPlanActive(mealRecord.mealType().id())) {
             log.warn(
                     LogField.Placeholders.FOUR.placeholder,
-                    StructuredArguments.kv(LogField.MSG.label(), "MealType is not registered in database"),
+                    StructuredArguments.kv(LogField.MSG.label(), "MealType was not found in a active Diet Plan"),
                     StructuredArguments.kv(
                             LogField.MEAL_RECORD_MEAL_TYPE_ID.label(),
                             mealRecord.mealType().id()),
@@ -58,7 +58,7 @@ public class MealRecordService {
                             LogField.MEAL_RECORD_FREE_MEAL_DESCRIPTION.label(), mealRecord.freeMealDescription()));
 
             throw new MealTypeNotFoundException(
-                    "MealType ID informed: " + mealRecord.mealType().id());
+                    "MealType was not found in a active Diet Plan | MealType ID informed: " + mealRecord.mealType().id());
         }
 
         if (Boolean.TRUE.equals(mealRecord.isFreeMeal())) {
@@ -221,7 +221,7 @@ public class MealRecordService {
                 mealRecordDomain.mealType().id())) {
             log.warn(
                     LogField.Placeholders.FIVE.placeholder,
-                    StructuredArguments.kv(LogField.MSG.label(), "StandardOption is not registered in database"),
+                    StructuredArguments.kv(LogField.MSG.label(), "StandardOption was not found in given Meal Type"),
                     StructuredArguments.kv(
                             LogField.MEAL_RECORD_MEAL_TYPE_ID.label(),
                             mealRecordDomain.mealType().id()),
@@ -233,8 +233,8 @@ public class MealRecordService {
                             LogField.MEAL_RECORD_FREE_MEAL_DESCRIPTION.label(),
                             mealRecordDomain.freeMealDescription()));
 
-            throw new StandardOptionNotFoundException("Standard Option ID informed: "
-                    + mealRecordDomain.standardOption().id());
+            throw new StandardOptionNotFoundException("Standard Option was not found in given Meal Type | MealType ID informed: %s - StandardOption ID informed: %s".formatted(
+                mealRecordDomain.mealType().id(), mealRecordDomain.standardOption().id()));
         }
     }
 }

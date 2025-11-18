@@ -5,7 +5,7 @@ meta {
 }
 
 get {
-  url: {{SERVER_URL}}/v1/meal-record?pageNumber=0&pageSize=2&consumedAtAfter=2025-11-12T00:00:00&consumedAtBefore=2025-11-15T23:59:59
+  url: {{SERVER_URL}}/v1/meal-record?pageNumber=0&pageSize=2&consumedAtAfter=2025-11-12T00:00:00&consumedAtBefore=2025-11-20T23:59:59
   body: json
   auth: inherit
 }
@@ -14,7 +14,7 @@ params:query {
   pageNumber: 0
   pageSize: 2
   consumedAtAfter: 2025-11-12T00:00:00
-  consumedAtBefore: 2025-11-15T23:59:59
+  consumedAtBefore: 2025-11-20T23:59:59
   ~isFreeMeal: true
 }
 
