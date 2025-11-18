@@ -57,8 +57,8 @@ public class MealRecordService {
                     StructuredArguments.kv(
                             LogField.MEAL_RECORD_FREE_MEAL_DESCRIPTION.label(), mealRecord.freeMealDescription()));
 
-            throw new MealTypeNotFoundException(
-                    "MealType was not found in a active Diet Plan | MealType ID informed: " + mealRecord.mealType().id());
+            throw new MealTypeNotFoundException("MealType was not found in a active Diet Plan | MealType ID informed: "
+                    + mealRecord.mealType().id());
         }
 
         if (Boolean.TRUE.equals(mealRecord.isFreeMeal())) {
@@ -233,8 +233,11 @@ public class MealRecordService {
                             LogField.MEAL_RECORD_FREE_MEAL_DESCRIPTION.label(),
                             mealRecordDomain.freeMealDescription()));
 
-            throw new StandardOptionNotFoundException("Standard Option was not found in given Meal Type | MealType ID informed: %s - StandardOption ID informed: %s".formatted(
-                mealRecordDomain.mealType().id(), mealRecordDomain.standardOption().id()));
+            throw new StandardOptionNotFoundException(
+                    "Standard Option was not found in given Meal Type | MealType ID informed: %s - StandardOption ID informed: %s"
+                            .formatted(
+                                    mealRecordDomain.mealType().id(),
+                                    mealRecordDomain.standardOption().id()));
         }
     }
 }
