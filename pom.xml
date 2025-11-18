@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.5.7</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
+        <!-- lookup parent from repository -->
     </parent>
 
     <groupId>br.com.gorillaroxo</groupId>
@@ -24,6 +24,12 @@
     <developers>
         <developer/>
     </developers>
+
+    <modules>
+        <module>core</module>
+        <module>entrypoint</module>
+        <module>infrastructure</module>
+    </modules>
     <scm>
         <connection/>
         <developerConnection/>
@@ -47,12 +53,6 @@
         <spotless-palantirJavaFormat.version>2.82.0</spotless-palantirJavaFormat.version>
         <checkstyle-maven-plugin.version>3.6.0</checkstyle-maven-plugin.version>
     </properties>
-
-    <modules>
-        <module>core</module>
-        <module>entrypoint</module>
-        <module>infrastructure</module>
-    </modules>
 
     <dependencyManagement>
         <dependencies>
@@ -209,14 +209,18 @@
                     <java>
                         <palantirJavaFormat>
                             <version>${spotless-palantirJavaFormat.version}</version>
-                            <style>PALANTIR</style> <!-- or PALANTIR | AOSP | GOOGLE (optional) -->
-                            <formatJavadoc>true</formatJavadoc>  <!-- defaults to false (optional, requires at least Palantir 2.39.0) -->
+                            <style>PALANTIR</style>
+                            <!-- or PALANTIR | AOSP | GOOGLE (optional) -->
+                            <formatJavadoc>true</formatJavadoc>
+                            <!-- defaults to false (optional, requires at least Palantir 2.39.0) -->
                         </palantirJavaFormat>
                         <removeUnusedImports/>
                     </java>
-                    <!--          <pom>-->
-                    <!--            <sortPom/>-->
-                    <!--          </pom>-->
+                    <pom>
+                        <sortPom>
+                            <nrOfIndentSpace>4</nrOfIndentSpace>
+                        </sortPom>
+                    </pom>
 
                     <!--          <markdown>-->
                     <!--            <includes>-->
@@ -249,15 +253,15 @@
                     <!--              </yamlFeatures>-->
                     <!--            </jackson>-->
                     <!--          </yaml>-->
-<!--                    <sql>-->
-<!--                        <includes>-->
-<!--                            <include>/**/*.sql</include>-->
-<!--                        </includes>-->
+                    <!--                    <sql>-->
+                    <!--                        <includes>-->
+                    <!--                            <include>/**/*.sql</include>-->
+                    <!--                        </includes>-->
 
-<!--                        <dbeaver>-->
-<!--                            <configFile>.spotless.dbeaver.properties</configFile>-->
-<!--                        </dbeaver>-->
-<!--                    </sql>-->
+                    <!--                        <dbeaver>-->
+                    <!--                            <configFile>.spotless.dbeaver.properties</configFile>-->
+                    <!--                        </dbeaver>-->
+                    <!--                    </sql>-->
                 </configuration>
                 <executions>
                     <execution>
@@ -268,33 +272,31 @@
                 </executions>
             </plugin>
 
-              <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-checkstyle-plugin</artifactId>
-                  <version>${checkstyle-maven-plugin.version}</version>
-                  <dependencies>
-                      <dependency>
-                          <groupId>com.puppycrawl.tools</groupId>
-                          <artifactId>checkstyle</artifactId>
-                          <version>12.1.2</version>
-                      </dependency>
-                      <dependency>
-                          <groupId>com.github.sevntu-checkstyle</groupId>
-                          <artifactId>sevntu-checks</artifactId>
-                          <version>1.44.1</version>
-                      </dependency>
-                  </dependencies>
-                  <configuration>
-                      <configLocation>.checkstyle/checkstyle.xml</configLocation>
-                      <consoleOutput>true</consoleOutput>
-                      <failsOnError>false</failsOnError>
-                      <linkXRef>false</linkXRef>
-                      <propertyExpansion>
-                          config_loc=.checkstyle
-                          checkstyle_severity=error
-                      </propertyExpansion>
-                  </configuration>
-              </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${checkstyle-maven-plugin.version}</version>
+                <configuration>
+                    <configLocation>.checkstyle/checkstyle.xml</configLocation>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>false</failsOnError>
+                    <linkXRef>false</linkXRef>
+                    <propertyExpansion>config_loc=.checkstyle
+                          checkstyle_severity=error</propertyExpansion>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>12.1.2</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.github.sevntu-checkstyle</groupId>
+                        <artifactId>sevntu-checks</artifactId>
+                        <version>1.44.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 
