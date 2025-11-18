@@ -21,7 +21,7 @@ public class GetMealRecordStatisticsUseCaseImpl implements GetMealRecordStatisti
     public MealRecordStatisticsDomain execute(
             final LocalDateTime consumedAtAfter, final LocalDateTime consumedAtBefore) {
         log.info(
-                LogField.Placeholders.THREE.placeholder,
+                LogField.Placeholders.THREE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Starting to get meal record statistics"),
                 StructuredArguments.kv(LogField.CONSUMED_AT_AFTER.label(), consumedAtAfter),
                 StructuredArguments.kv(LogField.CONSUMED_AT_BEFORE.label(), consumedAtBefore));
@@ -31,7 +31,7 @@ public class GetMealRecordStatisticsUseCaseImpl implements GetMealRecordStatisti
                 .orElseGet(MealRecordStatisticsDomain::empty);
 
         log.info(
-                LogField.Placeholders.SIX.placeholder,
+                LogField.Placeholders.SIX.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Successfully finished getting meal record statistics"),
                 StructuredArguments.kv(LogField.CONSUMED_AT_AFTER.label(), consumedAtAfter),
                 StructuredArguments.kv(LogField.CONSUMED_AT_BEFORE.label(), consumedAtBefore),

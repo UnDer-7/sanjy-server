@@ -38,7 +38,7 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
             """)
     public DietPlanCompleteResponseDTO activeDietPlan() {
         log.info(
-                LogField.Placeholders.ONE.placeholder,
+                LogField.Placeholders.ONE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Request to get active diet plan"));
 
         final DietPlanDomain dietPlan = getActiveDietPlanUseCase.execute();
@@ -46,7 +46,7 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
         final DietPlanCompleteResponseDTO dtoResponse = dietPlanMapper.toDTO(dietPlan);
 
         log.debug(
-                LogField.Placeholders.TWO.placeholder,
+                LogField.Placeholders.TWO.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Response body diet plan"),
                 StructuredArguments.kv(LogField.RESPONSE_BODY.label(), "( " + dtoResponse + " )"));
 
@@ -62,10 +62,10 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
             """)
     public DietPlanCompleteResponseDTO newDietPlan(final CreateDietPlanRequestDTO request) {
         log.info(
-                LogField.Placeholders.ONE.placeholder,
+                LogField.Placeholders.ONE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Request to create a new diet plan"));
         log.debug(
-                LogField.Placeholders.TWO.placeholder,
+                LogField.Placeholders.TWO.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Request body to create a new diet plan"),
                 StructuredArguments.kv(LogField.REQUEST_BODY.label(), "( " + request + " )"));
 
@@ -76,7 +76,7 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
         final DietPlanCompleteResponseDTO dtoResponse = dietPlanMapper.toDTO(dietPlanCreated);
 
         log.debug(
-                LogField.Placeholders.TWO.placeholder,
+                LogField.Placeholders.TWO.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Response body diet plan"),
                 StructuredArguments.kv(LogField.RESPONSE_BODY.label(), "( " + dtoResponse + " )"));
 

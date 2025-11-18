@@ -26,7 +26,7 @@ public class DietPlanService {
 
     public DietPlanDomain insert(final DietPlanDomain newDietPlan) {
         log.info(
-                LogField.Placeholders.THREE.placeholder,
+                LogField.Placeholders.THREE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Starting to insert new diet plan"),
                 StructuredArguments.kv(LogField.DIET_PLAN_NAME.label(), newDietPlan.getName()),
                 StructuredArguments.kv(
@@ -38,7 +38,7 @@ public class DietPlanService {
 
         dietPlanGateway.findActive().ifPresent(dietPlanFound -> {
             log.info(
-                    LogField.Placeholders.SIX.placeholder,
+                    LogField.Placeholders.SIX.getPlaceholder(),
                     StructuredArguments.kv(LogField.MSG.label(), "Starting to deactivate old diet plan"),
                     StructuredArguments.kv(LogField.DIET_PLAN_ID.label(), dietPlanFound.getId()),
                     StructuredArguments.kv(LogField.DIET_PLAN_NAME.label(), dietPlanFound.getName()),
@@ -52,7 +52,7 @@ public class DietPlanService {
             dietPlanGateway.insert(dietPlanFound);
 
             log.info(
-                    LogField.Placeholders.SIX.placeholder,
+                    LogField.Placeholders.SIX.getPlaceholder(),
                     StructuredArguments.kv(LogField.MSG.label(), "Successfully deactivated old diet plan"),
                     StructuredArguments.kv(LogField.DIET_PLAN_ID.label(), dietPlanFound.getId()),
                     StructuredArguments.kv(LogField.DIET_PLAN_NAME.label(), dietPlanFound.getName()),
@@ -68,7 +68,7 @@ public class DietPlanService {
         final DietPlanDomain dietPlanCreated = dietPlanGateway.insert(newDietPlan);
 
         log.info(
-                LogField.Placeholders.SIX.placeholder,
+                LogField.Placeholders.SIX.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Successfully inserted new diet pla"),
                 StructuredArguments.kv(LogField.DIET_PLAN_ID.label(), dietPlanCreated.getId()),
                 StructuredArguments.kv(LogField.DIET_PLAN_NAME.label(), dietPlanCreated.getName()),
@@ -93,7 +93,7 @@ public class DietPlanService {
             final var repeatedMealTypeNamesStr = String.join(", ", repeatedMealTypeNames);
 
             log.warn(
-                    LogField.Placeholders.FOUR.placeholder,
+                    LogField.Placeholders.FOUR.getPlaceholder(),
                     StructuredArguments.kv(LogField.MSG.label(), "Diet plan has repeated meal type names"),
                     StructuredArguments.kv(LogField.MEAL_TYPE_NAME.label(), "( " + repeatedMealTypeNamesStr + " ) "),
                     StructuredArguments.kv(LogField.DIET_PLAN_NAME.label(), newDietPlan.getName()),
@@ -115,7 +115,7 @@ public class DietPlanService {
             final Long firstOptionNumber = standardOptionNumbersSorted.getFirst();
             if (firstOptionNumber != 1) {
                 log.warn(
-                        LogField.Placeholders.SEVEN.placeholder,
+                        LogField.Placeholders.SEVEN.getPlaceholder(),
                         StructuredArguments.kv(
                                 LogField.MSG.label(), "StandardOptions informed does not start with number 1"),
                         StructuredArguments.kv(LogField.DIET_PLAN_NAME.label(), dietPlan.getName()),
@@ -144,7 +144,7 @@ public class DietPlanService {
                                 .collect(Collectors.joining(", "));
 
                         log.warn(
-                                LogField.Placeholders.SEVEN.placeholder,
+                                LogField.Placeholders.SEVEN.getPlaceholder(),
                                 StructuredArguments.kv(
                                         LogField.MSG.label(), "StandardOptions informed are not sequential"),
                                 StructuredArguments.kv(LogField.DIET_PLAN_NAME.label(), dietPlan.getName()),

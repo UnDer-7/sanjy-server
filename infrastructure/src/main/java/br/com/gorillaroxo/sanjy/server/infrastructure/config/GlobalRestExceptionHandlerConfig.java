@@ -38,7 +38,7 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
     public ResponseEntity<Object> handleException(final Exception exception) {
         if (exception.getCause() instanceof BusinessException businessException) {
             log.warn(
-                    LogField.Placeholders.FIVE.placeholder,
+                    LogField.Placeholders.FIVE.getPlaceholder(),
                     StructuredArguments.kv(
                             LogField.MSG.label(),
                             "An unexpected exception occurred but with a BusinessException cause, delegating to BusinessException handler"),
@@ -56,7 +56,7 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
         }
 
         log.warn(
-                LogField.Placeholders.TWO.placeholder,
+                LogField.Placeholders.TWO.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "An unexpected exception occurred"),
                 StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), exception.getMessage()),
                 exception);

@@ -20,18 +20,18 @@ public class GetActiveDietPlanUseCaseImpl implements GetActiveDietPlanUseCase {
     @Override
     public DietPlanDomain execute() {
         log.info(
-                LogField.Placeholders.ONE.placeholder,
+                LogField.Placeholders.ONE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Starting to get active diet plan"));
 
         final DietPlanDomain dietPlan = dietPlanGateway.findActive().orElseThrow(() -> {
             log.warn(
-                    LogField.Placeholders.ONE.placeholder,
+                    LogField.Placeholders.ONE.getPlaceholder(),
                     StructuredArguments.kv(LogField.MSG.label(), "Could not find active diet plan"));
             return new DietPlanNotFoundException("Could not find active diet plan");
         });
 
         log.info(
-                LogField.Placeholders.SIX.placeholder,
+                LogField.Placeholders.SIX.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Successfully found active diet plan"),
                 StructuredArguments.kv(LogField.DIET_PLAN_ID.label(), dietPlan.getId()),
                 StructuredArguments.kv(LogField.DIET_PLAN_NAME.label(), dietPlan.getName()),

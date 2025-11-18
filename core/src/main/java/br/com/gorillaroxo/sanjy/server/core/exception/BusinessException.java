@@ -84,35 +84,35 @@ public abstract class BusinessException extends RuntimeException {
             case TRACE ->
                 getLogger()
                         .trace(
-                                LogField.Placeholders.THREE.placeholder,
+                                LogField.Placeholders.THREE.getPlaceholder(),
                                 StructuredArguments.kv(LogField.MSG.label(), defaultMsg),
                                 StructuredArguments.kv(LogField.EXCEPTION_CLASS.label(), className),
                                 StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), super.getMessage()));
             case DEBUG ->
                 getLogger()
                         .debug(
-                                LogField.Placeholders.THREE.placeholder,
+                                LogField.Placeholders.THREE.getPlaceholder(),
                                 StructuredArguments.kv(LogField.MSG.label(), defaultMsg),
                                 StructuredArguments.kv(LogField.EXCEPTION_CLASS.label(), className),
                                 StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), super.getMessage()));
             case INFO ->
                 getLogger()
                         .info(
-                                LogField.Placeholders.THREE.placeholder,
+                                LogField.Placeholders.THREE.getPlaceholder(),
                                 StructuredArguments.kv(LogField.MSG.label(), defaultMsg),
                                 StructuredArguments.kv(LogField.EXCEPTION_CLASS.label(), className),
                                 StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), super.getMessage()));
             case WARN ->
                 getLogger()
                         .warn(
-                                LogField.Placeholders.THREE.placeholder,
+                                LogField.Placeholders.THREE.getPlaceholder(),
                                 StructuredArguments.kv(LogField.MSG.label(), defaultMsg),
                                 StructuredArguments.kv(LogField.EXCEPTION_CLASS.label(), className),
                                 StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), super.getMessage()));
             case ERROR ->
                 getLogger()
                         .error(
-                                LogField.Placeholders.THREE.placeholder,
+                                LogField.Placeholders.THREE.getPlaceholder(),
                                 StructuredArguments.kv(LogField.MSG.label(), defaultMsg),
                                 StructuredArguments.kv(LogField.EXCEPTION_CLASS.label(), className),
                                 StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), super.getMessage()));

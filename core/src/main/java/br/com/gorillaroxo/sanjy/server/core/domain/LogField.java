@@ -60,6 +60,7 @@ public enum LogField {
         return this.name().toLowerCase();
     }
 
+    @Getter
     @RequiredArgsConstructor
     public enum Placeholders {
         ONE(createPlaceholder(1)),
@@ -73,7 +74,7 @@ public enum LogField {
         NINE(createPlaceholder(9)),
         TEN(createPlaceholder(10));
 
-        public final String placeholder;
+        private final String placeholder;
 
         public static String createPlaceholder(final int total) {
             return "{} ".repeat(total);

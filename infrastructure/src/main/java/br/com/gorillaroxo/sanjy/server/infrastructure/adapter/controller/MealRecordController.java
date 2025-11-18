@@ -53,10 +53,10 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
             """)
     public MealRecordResponseDTO newMealRecord(final CreateMealRecordRequestDTO request) {
         log.info(
-                LogField.Placeholders.ONE.placeholder,
+                LogField.Placeholders.ONE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Request to create a new meal record"));
         log.debug(
-                LogField.Placeholders.TWO.placeholder,
+                LogField.Placeholders.TWO.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Request body to create a new meal record"),
                 StructuredArguments.kv(LogField.REQUEST_BODY.label(), "( " + request + " )"));
 
@@ -65,7 +65,7 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
         final MealRecordResponseDTO responseDto = mealRecordMapper.toDTO(mealRecordSaved);
 
         log.debug(
-                LogField.Placeholders.TWO.placeholder,
+                LogField.Placeholders.TWO.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Response body meal record"),
                 StructuredArguments.kv(LogField.RESPONSE_BODY.label(), "( " + responseDto + " )"));
 
@@ -80,14 +80,14 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
             """)
     public List<MealRecordResponseDTO> getTodayMealRecords() {
         log.info(
-                LogField.Placeholders.ONE.placeholder,
+                LogField.Placeholders.ONE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Request to get today meal records"));
 
         final List<MealRecordDomain> mealRecords = getTodayMealRecordsUseCase.execute();
         final List<MealRecordResponseDTO> responseDTO = mealRecordMapper.toDTO(mealRecords);
 
         log.debug(
-                LogField.Placeholders.TWO.placeholder,
+                LogField.Placeholders.TWO.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Response today meal records"),
                 StructuredArguments.kv(LogField.RESPONSE_BODY.label(), "( " + responseDTO + " )"));
 
@@ -102,10 +102,10 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
             """)
     public PageResponseDTO<MealRecordResponseDTO> searchMealRecords(final SearchMealRecordParamRequestDTO pageRequest) {
         log.info(
-                LogField.Placeholders.ONE.placeholder,
+                LogField.Placeholders.ONE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Request to search meal records"));
         log.debug(
-                LogField.Placeholders.TWO.placeholder,
+                LogField.Placeholders.TWO.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Request query-param to search meal records"),
                 StructuredArguments.kv(LogField.MSG.label(), "( " + pageRequest + " )"));
 
@@ -114,7 +114,7 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
         final PageResponseDTO<MealRecordResponseDTO> responseDTO = pageMapper.toDTO(pageResult);
 
         log.debug(
-                LogField.Placeholders.TWO.placeholder,
+                LogField.Placeholders.TWO.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Response search meal records"),
                 StructuredArguments.kv(LogField.RESPONSE_BODY.label(), "( " + responseDTO + " )"));
 
@@ -131,10 +131,10 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
     public MealRecordStatisticsResponseDTO getMealRecordStatisticsByDateRange(
             final LocalDateTime consumedAtAfter, final LocalDateTime consumedAtBefore) {
         log.info(
-                LogField.Placeholders.ONE.placeholder,
+                LogField.Placeholders.ONE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Request to get meal record statistics by date range"));
         log.debug(
-                LogField.Placeholders.THREE.placeholder,
+                LogField.Placeholders.THREE.getPlaceholder(),
                 StructuredArguments.kv(
                         LogField.MSG.label(), "Request query-param to get meal record statistics by date range"),
                 StructuredArguments.kv(LogField.CONSUMED_AT_AFTER.label(), consumedAtAfter),
@@ -145,7 +145,7 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
         final MealRecordStatisticsResponseDTO responseDTO = mealRecordMapper.toDTO(statistics);
 
         log.debug(
-                LogField.Placeholders.TWO.placeholder,
+                LogField.Placeholders.TWO.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Response meal record statistics"),
                 StructuredArguments.kv(LogField.RESPONSE_BODY.label(), "( " + responseDTO + " )"));
 

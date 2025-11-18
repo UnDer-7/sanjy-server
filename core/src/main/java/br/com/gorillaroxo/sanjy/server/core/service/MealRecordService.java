@@ -30,7 +30,7 @@ public class MealRecordService {
 
     public MealRecordDomain insert(final MealRecordDomain mealRecord) {
         log.info(
-                LogField.Placeholders.SIX.placeholder,
+                LogField.Placeholders.SIX.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Starting to insert new meal record"),
                 StructuredArguments.kv(LogField.MEAL_RECORD_CONSUMED_AT.label(), mealRecord.consumedAt()),
                 StructuredArguments.kv(
@@ -48,7 +48,7 @@ public class MealRecordService {
 
         if (!mealTypeGateway.existsByIdAndDietPlanActive(mealRecord.mealType().id())) {
             log.warn(
-                    LogField.Placeholders.FOUR.placeholder,
+                    LogField.Placeholders.FOUR.getPlaceholder(),
                     StructuredArguments.kv(LogField.MSG.label(), "MealType was not found in a active Diet Plan"),
                     StructuredArguments.kv(
                             LogField.MEAL_RECORD_MEAL_TYPE_ID.label(),
@@ -70,7 +70,7 @@ public class MealRecordService {
         final MealRecordDomain mealRecordCreated = mealRecordGateway.insert(mealRecord);
 
         log.info(
-                LogField.Placeholders.EIGHT.placeholder,
+                LogField.Placeholders.EIGHT.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Successfully inserted new meal record"),
                 StructuredArguments.kv(LogField.MEAL_RECORD_ID.label(), mealRecordCreated.id()),
                 StructuredArguments.kv(LogField.MEAL_RECORD_CREATED_AT.label(), mealRecordCreated.createdAt()),
@@ -94,7 +94,7 @@ public class MealRecordService {
     public List<MealRecordDomain> searchByConsumedAt(
             final LocalDateTime consumedAtAfter, final LocalDateTime consumedAtBefore) {
         log.info(
-                LogField.Placeholders.THREE.placeholder,
+                LogField.Placeholders.THREE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Starting to search meal record by consumedAt"),
                 StructuredArguments.kv(LogField.CONSUMED_AT_AFTER.label(), consumedAtAfter),
                 StructuredArguments.kv(LogField.CONSUMED_AT_BEFORE.label(), consumedAtBefore));
@@ -103,7 +103,7 @@ public class MealRecordService {
                 mealRecordGateway.searchByConsumedAt(consumedAtAfter, consumedAtBefore);
 
         log.info(
-                LogField.Placeholders.FOUR.placeholder,
+                LogField.Placeholders.FOUR.getPlaceholder(),
                 StructuredArguments.kv(
                         LogField.MSG.label(), "Successfully finished searching meal record by consumedAt"),
                 StructuredArguments.kv(LogField.CONSUMED_AT_AFTER.label(), consumedAtAfter),
@@ -115,7 +115,7 @@ public class MealRecordService {
 
     public PageResultDomain<MealRecordDomain> search(final SearchMealRecordParamDomain searchParam) {
         log.info(
-                LogField.Placeholders.SIX.placeholder,
+                LogField.Placeholders.SIX.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Starting to search meal record"),
                 StructuredArguments.kv(LogField.MEAL_RECORD_SEARCH_PAGE_NUMBER.label(), searchParam.getPageNumber()),
                 StructuredArguments.kv(LogField.MEAL_RECORD_SEARCH_PAGE_SIZE.label(), searchParam.getPageSize()),
@@ -128,7 +128,7 @@ public class MealRecordService {
         final PageResultDomain<MealRecordDomain> searchResult = mealRecordGateway.search(searchParam);
 
         log.info(
-                LogField.Placeholders.SIX.placeholder,
+                LogField.Placeholders.SIX.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Successfully finished searching meal record"),
                 StructuredArguments.kv(LogField.MEAL_RECORD_SEARCH_TOTAL_PAGES.label(), searchResult.totalPages()),
                 StructuredArguments.kv(LogField.MEAL_RECORD_SEARCH_CURRENT_PAGE.label(), searchResult.currentPage()),
@@ -144,7 +144,7 @@ public class MealRecordService {
     private static void validateFreeMealRecord(final MealRecordDomain mealRecordDomain) {
         if (mealRecordDomain.standardOption() != null) {
             log.warn(
-                    LogField.Placeholders.FIVE.placeholder,
+                    LogField.Placeholders.FIVE.getPlaceholder(),
                     StructuredArguments.kv(LogField.MSG.label(), "Free meal record cannot have standard options"),
                     StructuredArguments.kv(
                             LogField.MEAL_RECORD_MEAL_TYPE_ID.label(),
@@ -163,7 +163,7 @@ public class MealRecordService {
         if (mealRecordDomain.freeMealDescription() == null
                 || mealRecordDomain.freeMealDescription().isBlank()) {
             log.warn(
-                    LogField.Placeholders.FIVE.placeholder,
+                    LogField.Placeholders.FIVE.getPlaceholder(),
                     StructuredArguments.kv(LogField.MSG.label(), "Free meal record has invalid meal description"),
                     StructuredArguments.kv(
                             LogField.MEAL_RECORD_MEAL_TYPE_ID.label(),
@@ -184,7 +184,7 @@ public class MealRecordService {
                     .map(StandardOptionDomain::id)
                     .orElse(null);
             log.warn(
-                    LogField.Placeholders.FIVE.placeholder,
+                    LogField.Placeholders.FIVE.getPlaceholder(),
                     StructuredArguments.kv(
                             LogField.MSG.label(), "Planned meal record cannot have free meal description"),
                     StructuredArguments.kv(
@@ -202,7 +202,7 @@ public class MealRecordService {
         if (mealRecordDomain.standardOption() == null
                 || mealRecordDomain.standardOption().id() == null) {
             log.warn(
-                    LogField.Placeholders.FIVE.placeholder,
+                    LogField.Placeholders.FIVE.getPlaceholder(),
                     StructuredArguments.kv(LogField.MSG.label(), "Planned meal record has invalid standard options"),
                     StructuredArguments.kv(
                             LogField.MEAL_RECORD_MEAL_TYPE_ID.label(),
@@ -220,7 +220,7 @@ public class MealRecordService {
                 mealRecordDomain.standardOption().id(),
                 mealRecordDomain.mealType().id())) {
             log.warn(
-                    LogField.Placeholders.FIVE.placeholder,
+                    LogField.Placeholders.FIVE.getPlaceholder(),
                     StructuredArguments.kv(LogField.MSG.label(), "StandardOption was not found in given Meal Type"),
                     StructuredArguments.kv(
                             LogField.MEAL_RECORD_MEAL_TYPE_ID.label(),
