@@ -4,7 +4,7 @@ import br.com.gorillaroxo.sanjy.server.core.domain.MealRecordDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.MealRecordStatisticsDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.MealTypeDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.StandardOptionDomain;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDTO;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponseDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisticsResponseDTO;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealRecordEntity;
@@ -36,18 +36,18 @@ public interface MealRecordMapper {
     @Mapping(target = "mealType", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "standardOption", ignore = true)
-    MealRecordDomain toDomain(CreateMealRecordRequestDTO dto);
+    MealRecordDomain toDomain(CreateMealRecordRequestDto dto);
 
     @AfterMapping
     default void toDomainAfterMapping(
             @MappingTarget final MealRecordDomain.MealRecordDomainBuilder target,
-            final CreateMealRecordRequestDTO source) {
+            final CreateMealRecordRequestDto source) {
         Optional.ofNullable(source)
-                .map(CreateMealRecordRequestDTO::mealTypeId)
+                .map(CreateMealRecordRequestDto::mealTypeId)
                 .map(mealTypeId -> MealTypeDomain.builder().id(mealTypeId).build())
                 .ifPresent(target::mealType);
         Optional.ofNullable(source)
-                .map(CreateMealRecordRequestDTO::standardOptionId)
+                .map(CreateMealRecordRequestDto::standardOptionId)
                 .map(standardOptionId ->
                         StandardOptionDomain.builder().id(standardOptionId).build())
                 .ifPresent(target::standardOption);

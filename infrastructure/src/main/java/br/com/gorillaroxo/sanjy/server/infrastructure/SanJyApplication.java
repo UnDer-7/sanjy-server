@@ -1,7 +1,7 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure;
 
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequestDto;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDTO;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealTypesRequestDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateStandardOptionRequestDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.PageRequestDTO;
@@ -22,7 +22,7 @@ import org.springframework.context.annotation.ComponentScan;
 @RegisterReflectionForBinding({
     MealRecordStatisticsProjection.class,
     CreateDietPlanRequestDto.class,
-    CreateMealRecordRequestDTO.class,
+    CreateMealRecordRequestDto.class,
     CreateMealTypesRequestDTO.class,
     CreateStandardOptionRequestDTO.class,
     PageRequestDTO.class,

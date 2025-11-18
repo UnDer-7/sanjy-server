@@ -10,7 +10,7 @@ import lombok.Builder;
 
 @Builder
 @Schema(description = "Request DTO for creating a new meal record - represents a single food item consumed")
-public record CreateMealRecordRequestDTO(
+public record CreateMealRecordRequestDto(
         @Schema(
                 description = "ID of the meal type (breakfast, lunch, snack, dinner, etc...)",
                 example = "1",
@@ -77,7 +77,7 @@ public record CreateMealRecordRequestDTO(
                 requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         String notes) {
 
-    public CreateMealRecordRequestDTO {
+    public CreateMealRecordRequestDto {
         quantity = Objects.requireNonNullElse(quantity, BigDecimal.ONE);
         unit = Objects.requireNonNullElse(unit, "serving");
         consumedAt = Objects.requireNonNullElse(consumedAt, LocalDateTime.now());

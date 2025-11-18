@@ -1,6 +1,6 @@
 package br.com.gorillaroxo.sanjy.server.entrypoint.rest;
 
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDTO;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.SearchMealRecordParamRequestDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponseDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisticsResponseDTO;
@@ -30,7 +30,7 @@ public interface MealRecordRestService {
                     "Records a meal consumption with timestamp, meal type, and quantity. "
                             + "Can register either a standard meal (following the diet plan by referencing a standard option) or a free meal (off-plan with custom description). "
                             + "Standard meals must have standardOptionId, while free meals must have isFreeMeal=true and freeMealDescription.")
-    MealRecordResponseDTO newMealRecord(@RequestBody @Valid @NotNull CreateMealRecordRequestDTO request);
+    MealRecordResponseDTO newMealRecord(@RequestBody @Valid @NotNull CreateMealRecordRequestDto request);
 
     @Operation(
             summary = "Get today's meal records",

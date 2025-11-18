@@ -9,7 +9,7 @@ import br.com.gorillaroxo.sanjy.server.core.ports.driver.GetMealRecordStatistics
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.GetTodayMealRecordsUseCase;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.RegisterMealRecordUseCase;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.SearchMealRecordUseCase;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDTO;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.SearchMealRecordParamRequestDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponseDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisticsResponseDTO;
@@ -51,7 +51,7 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
             Records a meal consumption with timestamp, meal type, and quantity. Can register either a standard meal \
             (following the diet plan by referencing a standard option) or a free meal (off-plan with custom description).
             """)
-    public MealRecordResponseDTO newMealRecord(final CreateMealRecordRequestDTO request) {
+    public MealRecordResponseDTO newMealRecord(final CreateMealRecordRequestDto request) {
         log.info(
                 LogField.Placeholders.ONE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Request to create a new meal record"));
