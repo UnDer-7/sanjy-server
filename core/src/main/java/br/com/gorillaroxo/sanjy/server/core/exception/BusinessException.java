@@ -8,9 +8,11 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.argument.StructuredArguments;
 import org.slf4j.Logger;
 
+@Slf4j
 @Getter
 public abstract class BusinessException extends RuntimeException {
 
@@ -80,7 +82,9 @@ public abstract class BusinessException extends RuntimeException {
         final var className = this.getClass().getSimpleName();
         final var defaultMsg = "An exception has occurred";
 
-        switch (getLogLevel()) {
+        final LogLevel logLevel = getLogLevel();
+
+        switch (logLevel) {
             case TRACE ->
                 getLogger()
                         .trace(
@@ -116,6 +120,15 @@ public abstract class BusinessException extends RuntimeException {
                                 StructuredArguments.kv(LogField.MSG.label(), defaultMsg),
                                 StructuredArguments.kv(LogField.EXCEPTION_CLASS.label(), className),
                                 StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), super.getMessage()));
+
+            default -> {
+                log.warn(
+                        LogField.Placeholders.TWO.getPlaceholder(),
+                        StructuredArguments.kv(LogField.MSG.label(), "Log Level Unknown"),
+                        StructuredArguments.kv(LogField.LOG_LEVEL.label(), logLevel));
+
+                throw new UnexpectedErrorException("Unmapped log level: " + logLevel);
+            }
         }
     }
 

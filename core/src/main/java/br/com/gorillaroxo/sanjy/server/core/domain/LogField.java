@@ -54,7 +54,8 @@ public enum LogField {
     CHANNEL,
     FREE_MEAL_QUANTITY,
     PLANNED_MEAL_QUANTITY,
-    MEAL_QUANTITY;
+    MEAL_QUANTITY,
+    LOG_LEVEL;
 
     public String label() {
         return this.name().toLowerCase();

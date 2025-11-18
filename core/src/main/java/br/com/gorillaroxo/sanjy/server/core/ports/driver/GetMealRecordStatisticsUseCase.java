@@ -5,5 +5,5 @@ import java.time.LocalDateTime;
 
 public interface GetMealRecordStatisticsUseCase {
 
-    MealRecordStatisticsDomain execute(final LocalDateTime consumedAtAfter, final LocalDateTime consumedAtBefore);
+    MealRecordStatisticsDomain execute(LocalDateTime consumedAtAfter, LocalDateTime consumedAtBefore);
 }

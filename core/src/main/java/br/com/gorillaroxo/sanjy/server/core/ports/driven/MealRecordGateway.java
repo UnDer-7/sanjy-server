@@ -14,8 +14,8 @@ public interface MealRecordGateway {
 
     List<MealRecordDomain> searchByConsumedAt(LocalDateTime consumedAtAfter, LocalDateTime consumedAtBefore);
 
-    PageResultDomain<MealRecordDomain> search(final SearchMealRecordParamDomain searchParam);
+    PageResultDomain<MealRecordDomain> search(SearchMealRecordParamDomain searchParam);
 
     Optional<MealRecordStatisticsDomain> getMealRecordStatisticsByDateRange(
-            final LocalDateTime consumedAtAfter, final LocalDateTime consumedAtBefore);
+            LocalDateTime consumedAtAfter, LocalDateTime consumedAtBefore);
 }
