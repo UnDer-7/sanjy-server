@@ -1,6 +1,6 @@
 package br.com.gorillaroxo.sanjy.server.entrypoint.rest;
 
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequestDTO;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.DietPlanCompleteResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,5 +23,5 @@ public interface DietPlanRestService {
             description =
                     "Creates a new diet plan with meal types (breakfast, lunch, snack, dinner, etc.), standard meal options, nutritional targets (daily calories, protein, carbs, fat), and goals. "
                             + "The new plan is automatically set as active and any previously active plan is deactivated. Each meal type can have multiple standard options for variety.")
-    DietPlanCompleteResponseDTO newDietPlan(@RequestBody @Valid @NotNull CreateDietPlanRequestDTO request);
+    DietPlanCompleteResponseDTO newDietPlan(@RequestBody @Valid @NotNull CreateDietPlanRequestDto request);
 }

@@ -157,9 +157,11 @@ public class DietPlanService {
                                 StructuredArguments.kv(LogField.MEAL_TYPE_NAME.label(), mealType.name()),
                                 StructuredArguments.kv(LogField.MEAL_TYPE_ID.label(), mealType.id()));
 
-                        throw new StandardOptionsNotInSequence(
-                                "MealType '%s' (ID: %s) has StandardOptions with non-sequential numbers (skipped or repeated numbers detected)"
-                                        .formatted(mealType.name(), mealType.id()));
+                        final String msg = """
+                            MealType '%s' (ID: %s) has StandardOptions with non-sequential numbers (skipped or repeated numbers detected)
+                            """.formatted(mealType.name(), mealType.id());
+
+                        throw new StandardOptionsNotInSequence(msg);
                     }
                 }
             }

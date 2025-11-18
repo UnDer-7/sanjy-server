@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Schema(description = "Request DTO for creating a diet plan by the nutritionist")
-public record CreateDietPlanRequestDTO(
+public record CreateDietPlanRequestDto(
         @NotBlank
         @Schema(
                 description = "Name/identifier of the diet plan",
@@ -30,8 +30,9 @@ public record CreateDietPlanRequestDTO(
         LocalDate startDate,
 
         @Schema(
-                description =
-                        "Date when this diet plan ends. If not provided, defaults to current date + 2 months. If provided, must be a future date",
+                description = """
+                    Date when this diet plan ends. If not provided, defaults to current date + 2 months. If provided, must be a future date
+                    """,
                 example = "2025-04-15",
                 nullable = true,
                 requiredMode = Schema.RequiredMode.NOT_REQUIRED)
@@ -88,7 +89,7 @@ public record CreateDietPlanRequestDTO(
                 requiredMode = Schema.RequiredMode.REQUIRED)
         List<CreateMealTypesRequestDTO> mealTypes) {
 
-    public CreateDietPlanRequestDTO {
+    public CreateDietPlanRequestDto {
         mealTypes = Objects.requireNonNullElseGet(mealTypes, ArrayList::new);
     }
 }

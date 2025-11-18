@@ -1,6 +1,6 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure;
 
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequestDTO;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealTypesRequestDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateStandardOptionRequestDTO;
@@ -21,7 +21,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ConfigurationPropertiesScan(basePackages = "br.com.gorillaroxo.sanjy.server.infrastructure.config")
 @RegisterReflectionForBinding({
     MealRecordStatisticsProjection.class,
-    CreateDietPlanRequestDTO.class,
+    CreateDietPlanRequestDto.class,
     CreateMealRecordRequestDTO.class,
     CreateMealTypesRequestDTO.class,
     CreateStandardOptionRequestDTO.class,

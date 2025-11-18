@@ -233,11 +233,13 @@ public class MealRecordService {
                             LogField.MEAL_RECORD_FREE_MEAL_DESCRIPTION.label(),
                             mealRecordDomain.freeMealDescription()));
 
-            throw new StandardOptionNotFoundException(
-                    "Standard Option was not found in given Meal Type | MealType ID informed: %s - StandardOption ID informed: %s"
-                            .formatted(
-                                    mealRecordDomain.mealType().id(),
-                                    mealRecordDomain.standardOption().id()));
+            final String errMsg = """
+                Standard Option was not found in given Meal Type | MealType ID informed: %s - StandardOption ID informed: %s
+                """.formatted(
+                            mealRecordDomain.mealType().id(),
+                            mealRecordDomain.standardOption().id());
+
+            throw new StandardOptionNotFoundException(errMsg);
         }
     }
 }

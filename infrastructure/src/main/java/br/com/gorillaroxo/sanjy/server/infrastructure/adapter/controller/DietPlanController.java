@@ -4,7 +4,7 @@ import br.com.gorillaroxo.sanjy.server.core.domain.DietPlanDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.CreateDietPlanUseCase;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.GetActiveDietPlanUseCase;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequestDTO;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.DietPlanCompleteResponseDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.rest.DietPlanRestService;
 import br.com.gorillaroxo.sanjy.server.infrastructure.config.McpToolMarker;
@@ -60,7 +60,7 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
             Creates a new diet plan with meal types (breakfast, lunch, snack, dinner, etc.), \
             standard meal options, nutritional targets, and goals. The new plan is automatically set as active and any previously active plan is deactivated.
             """)
-    public DietPlanCompleteResponseDTO newDietPlan(final CreateDietPlanRequestDTO request) {
+    public DietPlanCompleteResponseDTO newDietPlan(final CreateDietPlanRequestDto request) {
         log.info(
                 LogField.Placeholders.ONE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Request to create a new diet plan"));
