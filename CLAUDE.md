@@ -9,6 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Build & Development Commands
 
 ### Prerequisites
+
 - Java 21 (or GraalVM Java 25 for native image builds)
 - Maven 3.x (or use included Maven wrapper)
 - Docker (for PostgreSQL database)
@@ -59,6 +60,7 @@ sudo apt-get install build-essential zlib1g-dev
 #### GraalVM Installation
 
 Option 1: Using SDKMAN (Recommended):
+
 ```bash
 # Install SDKMAN if not already installed
 curl -s "https://get.sdkman.io" | bash
@@ -131,26 +133,23 @@ Common issues:
    - **Cause:** Environment variables not loaded during AOT processing
    - **Solution:** Load `.env` before building: `set -a && source .env && set +a`
    - **Why:** Spring Boot's AOT engine processes configuration at compile time and needs actual values
-
 2. **Missing zlib:** `cannot find -lz`
    - **Cause:** zlib development library not installed
    - **Solution:** `sudo apt-get install zlib1g-dev build-essential`
    - **Verify:** `dpkg -l | grep zlib1g-dev`
-
 3. **Out of memory during compilation:**
    - **Symptoms:** Process killed, "GC overhead limit exceeded"
    - **Solution:** Increase available RAM or add build arg: `-Dorg.graalvm.buildtools.memory=4G`
    - **Alternative:** Close memory-intensive applications during build
-
 4. **Wrong Java version:**
    - **Cause:** Using regular JDK instead of GraalVM
    - **Solution:** Ensure GraalVM is active: `sdk use java 25-graal && java -version`
    - **Expected:** Output should show "Oracle GraalVM"
-
 5. **Missing reflection configuration for JPA projections:**
    - **Symptoms:** `org.hibernate.query.SemanticException: Missing constructor for type 'YourProjection'`
    - **Cause:** JPA projection classes used in `SELECT new` queries require reflection hints
    - **Solution:** Add `@RegisterReflectionForBinding` to projection classes:
+
      ```java
      import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 
@@ -186,6 +185,7 @@ Infrastructure (Application Layer)
 ### Module Responsibilities
 
 #### 1. Core Module (`core/`)
+
 **Pure business logic with no framework dependencies.**
 
 - **Domain Models** (`domain/`): Rich domain objects (DietPlanDomain, MealRecordDomain, MealTypeDomain, StandardOptionDomain)
@@ -199,6 +199,7 @@ Infrastructure (Application Layer)
 **Key Pattern:** The core module defines interfaces but doesn't implement infrastructure concerns.
 
 #### 2. Entrypoint Module (`entrypoint/`)
+
 **API contracts and DTOs with no implementation.**
 
 - **REST Interfaces** (`rest/`): REST service contracts with OpenAPI annotations
@@ -208,6 +209,7 @@ Infrastructure (Application Layer)
 **Key Pattern:** This module only defines contracts - actual implementations are in Infrastructure.
 
 #### 3. Infrastructure Module (`infrastructure/`)
+
 **Framework implementations and external adapters.**
 
 - **Controllers** (`adapter/controller/`): REST endpoints implementing entrypoint interfaces
@@ -305,15 +307,12 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
 1. **diet_plan** - Nutritionist-created diet plans
    - Constraint: Only ONE active plan allowed (`uk_one_active_plan`)
    - Columns: name, start_date, end_date, is_active, daily macros (calories, protein, carbs, fat), goal, nutritionist_notes
-
 2. **meal_type** - Meal types within a diet plan (breakfast, lunch, dinner, etc.)
    - FK: diet_plan_id (CASCADE delete)
    - Unique constraint: (diet_plan_id, name)
-
 3. **standard_options** - Pre-defined meal options for each meal type
    - FK: meal_type_id (CASCADE delete)
    - Unique constraint: (meal_type_id, option_number)
-
 4. **meal_record** - Individual meal consumption records
    - FKs: meal_type_id, standard_option_id (nullable for free meals)
    - Check constraint: Ensures either standard or free meal (mutually exclusive)
@@ -371,6 +370,7 @@ This includes:
 ### MapStruct Configuration
 
 All mappers use:
+
 ```java
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.ERROR)
@@ -401,7 +401,6 @@ Tests are located in `src/test/java` within each module.
 - **Core module**: Unit tests for domain logic, services, and use cases
   - Uses JUnit 5 and Mockito
   - Example: `ExceptionCodeTest.java`
-
 - **Infrastructure module**: Integration tests with Spring Boot Test
   - Tests controllers, repositories, and mappers
 
@@ -412,6 +411,7 @@ Tests are located in `src/test/java` within each module.
 - Import AssertJ using wildcard: `import static org.assertj.core.api.Assertions.*;`
 
 **Example:**
+
 ```java
 import static org.assertj.core.api.Assertions.*;
 
@@ -491,6 +491,7 @@ API test collections are located in `local/bruno/sanjy_server/`:
 ### Docker Compose
 
 Local PostgreSQL instance:
+
 ```bash
 cd local
 docker compose up -d
@@ -501,10 +502,12 @@ Database: `pgvector/pgvector:pg17-trixie` (PostgreSQL 17 with vector extension)
 ## API Endpoints Overview
 
 ### Diet Plan Management
+
 - `GET /diet-plan/active` - Get currently active diet plan
 - `POST /diet-plan` - Create new diet plan
 
 ### Meal Record Management
+
 - `POST /meal-record` - Register meal consumption
 - `GET /meal-record/search` - Search meal records with pagination
 - `GET /meal-record/today` - Get today's meal records
@@ -521,6 +524,7 @@ All endpoints return structured responses with consistent error handling.
 ## GraalVM Native Image Support
 
 The project is configured for GraalVM native compilation:
+
 ```bash
 ./mvnw -Pnative native:compile
 ```

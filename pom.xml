@@ -222,12 +222,12 @@
                         </sortPom>
                     </pom>
 
-                    <!--          <markdown>-->
-                    <!--            <includes>-->
-                    <!--              <include>**/*.md</include>-->
-                    <!--            </includes>-->
-                    <!--            <flexmark/>-->
-                    <!--          </markdown>-->
+                    <markdown>
+                        <includes>
+                            <include>**/*.md</include>
+                        </includes>
+                        <flexmark/>
+                    </markdown>
 
                     <!--          <yaml>-->
                     <!--            <includes>-->
