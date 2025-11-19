@@ -120,7 +120,7 @@ build/graalvm:
 	echo 'Installing all modules...' && \
 	./mvnw clean install -DskipTests -B && \
 	echo 'Building GraalVM native image...' && \
-	./mvnw -Pnative -Dmaven.test.skip -B -pl infrastructure native:compile && \
+	./mvnw -Pnative -Dmaven.test.skip -B -pl infrastructure clean native:compile && \
 	END=$$(date +%s) && \
 	ELAPSED=$$((END-START)) && \
 	echo "GraalVM build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
@@ -162,7 +162,7 @@ fmt:
 .PHONY: fmt/check
 fmt/check:
 	@echo ">>> Checking code formatting…"
-	./mvnw clena spotless:check -B -ntp
+	./mvnw clean spotless:check -B -ntp
 
 ## lint: Verify code compliance with Checkstyle standards
 .PHONY: lint
