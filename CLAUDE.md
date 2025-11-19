@@ -170,6 +170,33 @@ Database connection is configured in `infrastructure/src/main/resources/applicat
 - Database: `diet_control` on `localhost:5432`
 - Credentials: `admin_usr` / `admin_pass`
 
+### Maven Wrapper Configuration
+
+The project uses Maven Wrapper with a JVM configuration file at `.mvn/jvm.config` containing:
+
+```
+--sun-misc-unsafe-memory-access=allow
+```
+
+**Why this exists:**
+
+Maven 3.9.x and 4.0.x use Google Guice, which calls deprecated `sun.misc.Unsafe` APIs. On Java 21+, this causes warnings:
+
+```
+WARNING: sun.misc.Unsafe::staticFieldBase has been called
+WARNING: Please consider reporting this to the maintainers of
+         com.google.inject.internal.aop.HiddenClassDefiner
+```
+
+The JVM flag suppresses these warnings temporarily.
+
+**Timeline (JEP 498):**
+- **Java 24**: Warnings issued (current behavior)
+- **Java 26+**: Will throw exceptions (BREAKING!)
+- **Java 27+**: APIs completely removed
+
+**Action required:** When upgrading to Java 26+, you MUST update to a Maven version that fixes [MNG-8760](https://issues.apache.org/jira/browse/MNG-8760). Otherwise, Maven will fail to run. Once fixed, delete `.mvn/jvm.config`.
+
 ## Architecture
 
 This is a **multi-module Maven project** using **Hexagonal Architecture** (Ports & Adapters) with **Domain-Driven Design** principles.

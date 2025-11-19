@@ -89,22 +89,6 @@ build/jvm:
 	ELAPSED=$$((END-START)); \
 	echo "JVM build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
 
-## build/graalvm: Build an executable to be run without JVM
-.PHONY: build/graalvm
-build/graalvm:
-	@START=$$(date +%s) && \
-	echo 'Loading environment variables from .env...' && \
-	set -a && \
-	. $(CURDIR)/.env && \
-	set +a && \
-	echo 'Installing all modules...' && \
-	./mvnw clean install -DskipTests -B && \
-	echo 'Building GraalVM native image...' && \
-	./mvnw -Pnative -Dmaven.test.skip -B -pl infrastructure native:compile && \
-	END=$$(date +%s) && \
-	ELAPSED=$$((END-START)) && \
-	echo "GraalVM build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
-
 ## build/jvm/docker: Build a Docker image with jvm
 .PHONY: build/jvm/docker
 build/jvm/docker:
@@ -124,6 +108,22 @@ build/jvm/docker/force:
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "Docker JVM force image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
+
+## build/graalvm: Build an executable to be run without JVM
+.PHONY: build/graalvm
+build/graalvm:
+	@START=$$(date +%s) && \
+	echo 'Loading environment variables from .env...' && \
+	set -a && \
+	. $(CURDIR)/.env && \
+	set +a && \
+	echo 'Installing all modules...' && \
+	./mvnw clean install -DskipTests -B && \
+	echo 'Building GraalVM native image...' && \
+	./mvnw -Pnative -Dmaven.test.skip -B -pl infrastructure clean native:compile && \
+	END=$$(date +%s) && \
+	ELAPSED=$$((END-START)) && \
+	echo "GraalVM build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
 
 ## build/graalvm/docker: Build a Docker image with GraalVM
 .PHONY: build/graalvm/docker
@@ -156,19 +156,19 @@ build/graalvm/docker/force:
 .PHONY: fmt
 fmt:
 	@echo ">>> Formatting all source code files…"
-	./mvnw spotless:apply
+	./mvnw clean spotless:apply -B -ntp
 
 ## fmt/check: Check code formatting without applying changes
 .PHONY: fmt/check
 fmt/check:
 	@echo ">>> Checking code formatting…"
-	./mvnw spotless:check
+	./mvnw clean spotless:check -B -ntp
 
 ## lint: Verify code compliance with Checkstyle standards
 .PHONY: lint
 lint:
 	@echo ">>> Running Checkstyle validation…"
-	@./mvnw clean checkstyle:check || (echo "" && \
+	@./mvnw clean checkstyle:check -B -ntp || (echo "" && \
 	echo "==========================================================================" && \
 	echo " ⚠️  CODE STYLE VIOLATIONS DETECTED  ⚠️" && \
 	echo "==========================================================================" && \
@@ -186,7 +186,7 @@ lint:
 .PHONY: lint/report
 lint/report:
 	@echo ">>> Generating Checkstyle HTML report…"
-	@./mvnw clean checkstyle:checkstyle-aggregate && (echo "" && \
+	@./mvnw clean checkstyle:checkstyle-aggregate -B -ntp && (echo "" && \
 	echo "==========================================================================" && \
 	echo " ✅  CHECKSTYLE REPORT GENERATED SUCCESSFULLY  ✅" && \
 	echo "==========================================================================" && \
