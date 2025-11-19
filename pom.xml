@@ -206,6 +206,7 @@
                             </indent>
                         </format>
                     </formats>
+
                     <java>
                         <palantirJavaFormat>
                             <version>${spotless-palantirJavaFormat.version}</version>
@@ -216,6 +217,7 @@
                         </palantirJavaFormat>
                         <removeUnusedImports/>
                     </java>
+
                     <pom>
                         <sortPom>
                             <nrOfIndentSpace>4</nrOfIndentSpace>
@@ -229,39 +231,40 @@
                         <flexmark/>
                     </markdown>
 
-                    <!--          <yaml>-->
-                    <!--            <includes>-->
-                    <!--              &lt;!&ndash; You have to set the target manually &ndash;&gt;-->
-                    <!--              <include>src/**/*.yaml</include>-->
-                    <!--            </includes>-->
+                    <sql>
+                        <includes>
+                            <include>**/*.sql</include>
+                        </includes>
+                        <dbeaver>
+                            <configFile>.spotless.dbeaver.properties</configFile>
+                        </dbeaver>
+                    </sql>
 
-                    <!--            <jackson>-->
-                    <!--              <version>2.20.1</version>-->
-                    <!--              &lt;!&ndash; optional: The version of 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml' to be used &ndash;&gt;-->
-                    <!--              <features>-->
-                    <!--                &lt;!&ndash; optional: Customize the set of features (based on com.fasterxml.jackson.databind.SerializationFeature) &ndash;&gt;-->
-                    <!--                <INDENT_OUTPUT>true</INDENT_OUTPUT>-->
-                    <!--                &lt;!&ndash; true by default &ndash;&gt;-->
-                    <!--                <ORDER_MAP_ENTRIES_BY_KEYS>false</ORDER_MAP_ENTRIES_BY_KEYS>-->
-                    <!--                &lt;!&ndash; false by default &ndash;&gt;-->
-                    <!--              </features>-->
-                    <!--              <yamlFeatures>-->
-                    <!--                <WRITE_DOC_START_MARKER>true</WRITE_DOC_START_MARKER>-->
-                    <!--                &lt;!&ndash; false by default &ndash;&gt;-->
-                    <!--                <MINIMIZE_QUOTES>false</MINIMIZE_QUOTES>-->
-                    <!--                &lt;!&ndash; false by default &ndash;&gt;-->
-                    <!--              </yamlFeatures>-->
-                    <!--            </jackson>-->
-                    <!--          </yaml>-->
-                    <!--                    <sql>-->
+                    <!-- Jackson formating removes comments and prettier requires a NodeJS installation. See better options in the future -->
+                    <!--                    <yaml>-->
                     <!--                        <includes>-->
-                    <!--                            <include>/**/*.sql</include>-->
+                    <!--                            <include>**/*.yaml</include>-->
+                    <!--                            <include>**/*.yml</include>-->
                     <!--                        </includes>-->
 
-                    <!--                        <dbeaver>-->
-                    <!--                            <configFile>.spotless.dbeaver.properties</configFile>-->
-                    <!--                        </dbeaver>-->
-                    <!--                    </sql>-->
+                    <!--                        <jackson>-->
+                    <!--                            <version>2.20.1</version>-->
+                    <!--                            &lt;!&ndash; optional: The version of 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml' to be used &ndash;&gt;-->
+                    <!--                            <features>-->
+                    <!--                                &lt;!&ndash; optional: Customize the set of features (based on com.fasterxml.jackson.databind.SerializationFeature) &ndash;&gt;-->
+                    <!--                                <INDENT_OUTPUT>true</INDENT_OUTPUT>-->
+                    <!--                                &lt;!&ndash; true by default &ndash;&gt;-->
+                    <!--                                <ORDER_MAP_ENTRIES_BY_KEYS>false</ORDER_MAP_ENTRIES_BY_KEYS>-->
+                    <!--                                &lt;!&ndash; false by default &ndash;&gt;-->
+                    <!--                            </features>-->
+                    <!--                            <yamlFeatures>-->
+                    <!--                                <WRITE_DOC_START_MARKER>true</WRITE_DOC_START_MARKER>-->
+                    <!--                                &lt;!&ndash; false by default &ndash;&gt;-->
+                    <!--                                <MINIMIZE_QUOTES>false</MINIMIZE_QUOTES>-->
+                    <!--                                &lt;!&ndash; false by default &ndash;&gt;-->
+                    <!--                            </yamlFeatures>-->
+                    <!--                        </jackson>-->
+                    <!--                    </yaml>-->
                 </configuration>
                 <executions>
                     <execution>
