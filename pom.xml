@@ -1,29 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.7</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.5.7</version>
+        <relativePath/>
+        <!-- lookup parent from repository -->
+    </parent>
 
     <groupId>br.com.gorillaroxo</groupId>
-	<artifactId>sanJy-server</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+    <artifactId>sanJy-server</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>sanJy-server</name>
-	<description>Backend server application for diet and meal management, enabling nutritionists to create diet plans and users to track meal consumption records</description>
+    <description>Backend server application for diet and meal management, enabling nutritionists to create diet plans and users to track meal consumption records</description>
 
     <url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
+    <licenses>
+        <license/>
+    </licenses>
+    <developers>
+        <developer/>
+    </developers>
+
+    <modules>
+        <module>core</module>
+        <module>entrypoint</module>
+        <module>infrastructure</module>
+    </modules>
     <scm>
         <connection/>
         <developerConnection/>
@@ -32,7 +38,7 @@
     </scm>
 
     <properties>
-		<java.version>25</java.version>
+        <java.version>25</java.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -42,13 +48,11 @@
         <projectlombok.version>1.18.34</projectlombok.version>
 
         <spring-ai.version>1.0.3</spring-ai.version>
-	</properties>
 
-    <modules>
-        <module>core</module>
-        <module>entrypoint</module>
-        <module>infrastructure</module>
-    </modules>
+        <spotless-maven-plugin.version>3.0.0</spotless-maven-plugin.version>
+        <spotless-palantirJavaFormat.version>2.82.0</spotless-palantirJavaFormat.version>
+        <checkstyle-maven-plugin.version>3.6.0</checkstyle-maven-plugin.version>
+    </properties>
 
     <dependencyManagement>
         <dependencies>
@@ -80,7 +84,7 @@
         </dependencies>
     </dependencyManagement>
 
-	<dependencies>
+    <dependencies>
         <!-- Logging -->
         <dependency>
             <groupId>net.logstash.logback</groupId>
@@ -162,24 +166,141 @@
                 </configuration>
             </plugin>
 
-<!--            <plugin>-->
-<!--                <groupId>org.hibernate.orm.tooling</groupId>-->
-<!--                <artifactId>hibernate-enhance-maven-plugin</artifactId>-->
-<!--                <version>${hibernate.version}</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>enhance</id>-->
-<!--                        <goals>-->
-<!--                            <goal>enhance</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <enableLazyInitialization>true</enableLazyInitialization>-->
-<!--                            <enableDirtyTracking>true</enableDirtyTracking>-->
-<!--                            <enableAssociationManagement>true</enableAssociationManagement>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+            <plugin>
+                <!-- Documentation: https://github.com/diffplug/spotless/tree/main/plugin-maven#table-of-contents -->
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${spotless-maven-plugin.version}</version>
+                <configuration>
+                    <formats>
+                        <format>
+                            <includes>
+                                <include>.dockerignore</include>
+                                <include>.env</include>
+                                <include>.gitattributes</include>
+                                <include>.gitignore</include>
+                                <include>.sdkmanrc</include>
+                                <include>Dockerfile_graalvm</include>
+                                <include>Dockerfile_jvm</include>
+                                <include>lombok.config</include>
+                            </includes>
+                            <trimTrailingWhitespace/>
+                            <endWithNewline/>
+                            <indent>
+                                <tabs>false</tabs>
+                                <spaces>true</spaces>
+                                <spacesPerTab>4</spacesPerTab>
+                            </indent>
+                        </format>
+
+                        <format>
+                            <!-- Makefile must be indented with a single tab character, not spaces -->
+                            <includes>
+                                <include>Makefile</include>
+                            </includes>
+                            <trimTrailingWhitespace/>
+                            <endWithNewline/>
+                            <indent>
+                                <tabs>true</tabs>
+                                <spaces>false</spaces>
+                                <spacesPerTab>1</spacesPerTab>
+                            </indent>
+                        </format>
+                    </formats>
+
+                    <java>
+                        <palantirJavaFormat>
+                            <version>${spotless-palantirJavaFormat.version}</version>
+                            <style>PALANTIR</style>
+                            <!-- or PALANTIR | AOSP | GOOGLE (optional) -->
+                            <formatJavadoc>true</formatJavadoc>
+                            <!-- defaults to false (optional, requires at least Palantir 2.39.0) -->
+                        </palantirJavaFormat>
+                        <removeUnusedImports/>
+                    </java>
+
+                    <pom>
+                        <sortPom>
+                            <nrOfIndentSpace>4</nrOfIndentSpace>
+                        </sortPom>
+                    </pom>
+
+                    <markdown>
+                        <includes>
+                            <include>**/*.md</include>
+                        </includes>
+                        <flexmark/>
+                    </markdown>
+
+                    <sql>
+                        <includes>
+                            <include>**/*.sql</include>
+                        </includes>
+                        <dbeaver>
+                            <configFile>.spotless.dbeaver.properties</configFile>
+                        </dbeaver>
+                    </sql>
+
+                    <!-- Jackson formating removes comments and prettier requires a NodeJS installation. See better options in the future -->
+                    <!--                    <yaml>-->
+                    <!--                        <includes>-->
+                    <!--                            <include>**/*.yaml</include>-->
+                    <!--                            <include>**/*.yml</include>-->
+                    <!--                        </includes>-->
+
+                    <!--                        <jackson>-->
+                    <!--                            <version>2.20.1</version>-->
+                    <!--                            &lt;!&ndash; optional: The version of 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml' to be used &ndash;&gt;-->
+                    <!--                            <features>-->
+                    <!--                                &lt;!&ndash; optional: Customize the set of features (based on com.fasterxml.jackson.databind.SerializationFeature) &ndash;&gt;-->
+                    <!--                                <INDENT_OUTPUT>true</INDENT_OUTPUT>-->
+                    <!--                                &lt;!&ndash; true by default &ndash;&gt;-->
+                    <!--                                <ORDER_MAP_ENTRIES_BY_KEYS>false</ORDER_MAP_ENTRIES_BY_KEYS>-->
+                    <!--                                &lt;!&ndash; false by default &ndash;&gt;-->
+                    <!--                            </features>-->
+                    <!--                            <yamlFeatures>-->
+                    <!--                                <WRITE_DOC_START_MARKER>true</WRITE_DOC_START_MARKER>-->
+                    <!--                                &lt;!&ndash; false by default &ndash;&gt;-->
+                    <!--                                <MINIMIZE_QUOTES>false</MINIMIZE_QUOTES>-->
+                    <!--                                &lt;!&ndash; false by default &ndash;&gt;-->
+                    <!--                            </yamlFeatures>-->
+                    <!--                        </jackson>-->
+                    <!--                    </yaml>-->
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${checkstyle-maven-plugin.version}</version>
+                <configuration>
+                    <configLocation>.checkstyle/checkstyle.xml</configLocation>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>false</failsOnError>
+                    <linkXRef>false</linkXRef>
+                    <propertyExpansion>config_loc=.checkstyle
+                          checkstyle_severity=error</propertyExpansion>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>12.1.2</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.github.sevntu-checkstyle</groupId>
+                        <artifactId>sevntu-checks</artifactId>
+                        <version>1.44.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 

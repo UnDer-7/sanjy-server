@@ -11,10 +11,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(
-    componentModel = ConstantsInfrastructure.MAPSTRUCT_COMPONENT_MODEL,
-    unmappedTargetPolicy = ReportingPolicy.ERROR,
-    uses = MealRecordMapper.class
-)
+        componentModel = ConstantsInfrastructure.MAPSTRUCT_COMPONENT_MODEL,
+        unmappedTargetPolicy = ReportingPolicy.ERROR,
+        uses = MealRecordMapper.class)
 public interface PageMapper {
 
     // DTOs - MealRecordDomain

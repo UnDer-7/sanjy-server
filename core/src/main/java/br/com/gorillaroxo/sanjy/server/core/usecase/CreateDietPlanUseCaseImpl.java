@@ -18,5 +18,4 @@ public class CreateDietPlanUseCaseImpl implements CreateDietPlanUseCase {
     public DietPlanDomain execute(final DietPlanDomain dietPlan) {
         return dietPlanService.insert(dietPlan);
     }
-
 }

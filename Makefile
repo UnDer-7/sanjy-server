@@ -56,9 +56,16 @@ test:
 # ==================================================================================== #
 ## ===== DATABASE =====
 # ==================================================================================== #
-## seed-db: Populate database with sample data
-.PHONY: seed-db
-seed-db:
+## db/clean: Clean all database data and reset sequences
+.PHONY: db/clean
+db/clean:
+	@echo ">>> Cleaning database and resetting sequences…"
+	@docker exec -i sanJy_database psql -U admin_usr -d diet_control < local/clean-db.sql
+	@echo ">>> Database cleaned successfully!"
+
+## db/seed: Populate database with sample data
+.PHONY: db/seed
+db/seed:
 	@echo ">>> Populating database with sample data…"
 	@docker exec -i sanJy_database psql -U admin_usr -d diet_control < local/sample-data.sql
 	@echo ">>> Database populated successfully!"
@@ -137,3 +144,55 @@ build/graalvm/docker/force:
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "Docker GraalVM force image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
+
+
+
+
+
+# ==================================================================================== #
+## ===== CODING STYLE =====
+# ==================================================================================== #
+## fmt: Format all source code files using Spotless
+.PHONY: fmt
+fmt:
+	@echo ">>> Formatting all source code files…"
+	./mvnw spotless:apply
+
+## fmt/check: Check code formatting without applying changes
+.PHONY: fmt/check
+fmt/check:
+	@echo ">>> Checking code formatting…"
+	./mvnw spotless:check
+
+## lint: Verify code compliance with Checkstyle standards
+.PHONY: lint
+lint:
+	@echo ">>> Running Checkstyle validation…"
+	@./mvnw clean checkstyle:check || (echo "" && \
+	echo "==========================================================================" && \
+	echo " ⚠️  CODE STYLE VIOLATIONS DETECTED  ⚠️" && \
+	echo "==========================================================================" && \
+	echo "" && \
+	echo "The code does not comply with the project's coding standards." && \
+	echo "" && \
+	echo "To see a detailed HTML report with specific violations, run:" && \
+	echo "    make lint/report" && \
+	echo "" && \
+	echo "The report makes it much easier to identify and fix the issues." && \
+	echo "==========================================================================" && \
+	echo "" && exit 1)
+
+## lint/report: Generate detailed HTML report of Checkstyle violations
+.PHONY: lint/report
+lint/report:
+	@echo ">>> Generating Checkstyle HTML report…"
+	@./mvnw clean checkstyle:checkstyle-aggregate && (echo "" && \
+	echo "==========================================================================" && \
+	echo " ✅  CHECKSTYLE REPORT GENERATED SUCCESSFULLY  ✅" && \
+	echo "==========================================================================" && \
+	echo "" && \
+	echo "Report location: target/site/checkstyle-aggregate.html" && \
+	echo "" && \
+	echo "Simply open it in your browser to view detailed violation information." && \
+	echo "==========================================================================" && \
+	echo "")

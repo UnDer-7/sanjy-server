@@ -5,13 +5,12 @@ import br.com.gorillaroxo.sanjy.server.core.ports.driven.DietPlanGateway;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.DietPlanEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.repository.DietPlanRepository;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.DietPlanMapper;
+import java.util.LinkedHashSet;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.LinkedHashSet;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -43,8 +42,6 @@ public class DietPlanRepositoryGateway implements DietPlanGateway {
     @Override
     @Transactional(readOnly = true)
     public Optional<DietPlanDomain> findActive() {
-        return dietPlanRepository.findActiveDietPlan()
-            .map(dietPlanMapper::toDomain);
+        return dietPlanRepository.findActiveDietPlan().map(dietPlanMapper::toDomain);
     }
-
 }

@@ -34,5 +34,4 @@ public class StandardOptionNotFoundException extends BusinessException {
     protected Logger getLogger() {
         return log;
     }
-
 }

@@ -1,15 +1,10 @@
 package br.com.gorillaroxo.sanjy.server.core.domain;
 
+import java.util.Objects;
 import lombok.Builder;
 
-import java.util.Objects;
-
 @Builder
-public record MealRecordStatisticsDomain(
-    Long freeMealQuantity,
-    Long plannedMealQuantity,
-    Long mealQuantity
-) {
+public record MealRecordStatisticsDomain(Long freeMealQuantity, Long plannedMealQuantity, Long mealQuantity) {
 
     public MealRecordStatisticsDomain {
         freeMealQuantity = Objects.requireNonNullElse(freeMealQuantity, 0L);

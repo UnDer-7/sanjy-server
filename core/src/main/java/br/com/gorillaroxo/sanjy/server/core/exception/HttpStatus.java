@@ -17,5 +17,4 @@ public enum HttpStatus {
 
     private final int value;
     private final String reasonPhrase;
-
 }

@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MealTypeRepository extends CrudRepository<MealTypeEntity, Long> {
 
-    boolean existsByIdAndDietPlan_IsActiveIsTrue(Long id);
+    boolean existsByIdAndDietPlanIsActiveIsTrue(Long id);
 }

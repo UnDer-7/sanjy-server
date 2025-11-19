@@ -5,5 +5,4 @@ import br.com.gorillaroxo.sanjy.server.core.domain.DietPlanDomain;
 public interface CreateDietPlanUseCase {
 
     DietPlanDomain execute(DietPlanDomain dietPlan);
-
 }

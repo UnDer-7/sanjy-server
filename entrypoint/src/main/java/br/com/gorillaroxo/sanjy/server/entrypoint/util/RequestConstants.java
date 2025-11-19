@@ -26,7 +26,5 @@ public final class RequestConstants {
         private Headers() {
             throw new IllegalStateException("Utility class");
         }
-
     }
-
 }

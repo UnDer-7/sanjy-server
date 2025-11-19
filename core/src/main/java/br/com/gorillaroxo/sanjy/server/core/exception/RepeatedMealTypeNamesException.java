@@ -34,5 +34,4 @@ public class RepeatedMealTypeNamesException extends BusinessException {
     protected Logger getLogger() {
         return log;
     }
-
 }

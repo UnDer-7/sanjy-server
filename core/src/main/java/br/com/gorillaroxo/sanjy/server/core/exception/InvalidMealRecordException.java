@@ -34,5 +34,4 @@ public class InvalidMealRecordException extends BusinessException {
     protected Logger getLogger() {
         return log;
     }
-
 }

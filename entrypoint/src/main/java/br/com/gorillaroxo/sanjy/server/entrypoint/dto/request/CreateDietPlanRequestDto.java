@@ -1,22 +1,19 @@
-package br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose;
+package br.com.gorillaroxo.sanjy.server.entrypoint.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import lombok.Builder;
+import java.util.Objects;
 
-@Builder
-@Schema(
-        description =
-                "Complete response DTO representing a diet plan with all its details, nutritional targets, and associated meal types")
-public record DietPlanCompleteResponseDTO(
-        @Schema(
-                description = "Unique identifier of the Diet Plan",
-                example = "123",
-                requiredMode = Schema.RequiredMode.REQUIRED)
-        Long id,
-
+@Schema(description = "Request DTO for creating a diet plan by the nutritionist")
+public record CreateDietPlanRequestDto(
+        @NotBlank
         @Schema(
                 description = "Name/identifier of the diet plan",
                 example = "Plan N°02 - Cutting",
@@ -25,16 +22,21 @@ public record DietPlanCompleteResponseDTO(
         String name,
 
         @Schema(
-                description = "Date when this diet plan starts",
+                description = "Date when this diet plan starts. If not provided, defaults to current date",
                 example = "2025-01-15",
                 format = "yyyy-MM-dd",
-                requiredMode = Schema.RequiredMode.REQUIRED)
+                nullable = true,
+                requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         LocalDate startDate,
 
         @Schema(
-                description = "Date when this diet plan ends",
+                description = """
+                    Date when this diet plan ends. If not provided, defaults to current date + 2 months. If provided, must be a future date
+                    """,
                 example = "2025-04-15",
-                requiredMode = Schema.RequiredMode.REQUIRED)
+                nullable = true,
+                requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        @Future
         LocalDate endDate,
 
         @Schema(
@@ -79,19 +81,15 @@ public record DietPlanCompleteResponseDTO(
                 requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         String nutritionistNotes,
 
+        @Valid
+        @NotNull
+        @NotEmpty
         @Schema(
                 description = "List of meal types associated with this diet plan",
                 requiredMode = Schema.RequiredMode.REQUIRED)
-        List<MealTypeResponseDTO> mealTypes,
+        List<CreateMealTypesRequestDTO> mealTypes) {
 
-        @Schema(
-                description = "Indicates whether this diet plan is currently active",
-                example = "true",
-                requiredMode = Schema.RequiredMode.REQUIRED)
-        Boolean isActive,
-
-        @Schema(
-                description = "Timestamp when this diet plan was created",
-                example = "2025-01-10T14:30:00",
-                requiredMode = Schema.RequiredMode.REQUIRED)
-        LocalDateTime createdAt) {}
+    public CreateDietPlanRequestDto {
+        mealTypes = Objects.requireNonNullElseGet(mealTypes, ArrayList::new);
+    }
+}

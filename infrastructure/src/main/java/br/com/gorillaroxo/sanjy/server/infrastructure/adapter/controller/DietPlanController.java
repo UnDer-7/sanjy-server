@@ -4,7 +4,7 @@ import br.com.gorillaroxo.sanjy.server.core.domain.DietPlanDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.CreateDietPlanUseCase;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.GetActiveDietPlanUseCase;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequestDTO;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.DietPlanCompleteResponseDTO;
 import br.com.gorillaroxo.sanjy.server.entrypoint.rest.DietPlanRestService;
 import br.com.gorillaroxo.sanjy.server.infrastructure.config.McpToolMarker;
@@ -32,25 +32,23 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
 
     @Override
     @GetMapping("/v1/diet-plan/active")
-    @Tool(
-        name = "activeDietPlan",
-        description = """
+    @Tool(name = "activeDietPlan", description = """
             Retrieves the currently active diet plan with all meal types, standard options, \
             nutritional targets (calories, protein, carbs, fat), and goals. Only one diet plan can be active at a time.
             """)
     public DietPlanCompleteResponseDTO activeDietPlan() {
         log.info(
-            LogField.Placeholders.ONE.placeholder,
-            StructuredArguments.kv(LogField.MSG.label(), "Request to get active diet plan"));
+                LogField.Placeholders.ONE.getPlaceholder(),
+                StructuredArguments.kv(LogField.MSG.label(), "Request to get active diet plan"));
 
         final DietPlanDomain dietPlan = getActiveDietPlanUseCase.execute();
 
         final DietPlanCompleteResponseDTO dtoResponse = dietPlanMapper.toDTO(dietPlan);
 
         log.debug(
-            LogField.Placeholders.TWO.placeholder,
-            StructuredArguments.kv(LogField.MSG.label(), "Response body diet plan"),
-            StructuredArguments.kv(LogField.RESPONSE_BODY.label(), "( " + dtoResponse + " )"));
+                LogField.Placeholders.TWO.getPlaceholder(),
+                StructuredArguments.kv(LogField.MSG.label(), "Response body diet plan"),
+                StructuredArguments.kv(LogField.RESPONSE_BODY.label(), "( " + dtoResponse + " )"));
 
         return dtoResponse;
     }
@@ -58,20 +56,18 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
     @Override
     @PostMapping("/v1/diet-plan")
     @ResponseStatus(HttpStatus.CREATED)
-    @Tool(
-        name = "newDietPlan",
-        description = """
+    @Tool(name = "newDietPlan", description = """
             Creates a new diet plan with meal types (breakfast, lunch, snack, dinner, etc.), \
             standard meal options, nutritional targets, and goals. The new plan is automatically set as active and any previously active plan is deactivated.
             """)
-    public DietPlanCompleteResponseDTO newDietPlan(final CreateDietPlanRequestDTO request) {
+    public DietPlanCompleteResponseDTO newDietPlan(final CreateDietPlanRequestDto request) {
         log.info(
-            LogField.Placeholders.ONE.placeholder,
-            StructuredArguments.kv(LogField.MSG.label(), "Request to create a new diet plan"));
+                LogField.Placeholders.ONE.getPlaceholder(),
+                StructuredArguments.kv(LogField.MSG.label(), "Request to create a new diet plan"));
         log.debug(
-            LogField.Placeholders.TWO.placeholder,
-            StructuredArguments.kv(LogField.MSG.label(), "Request body to create a new diet plan"),
-            StructuredArguments.kv(LogField.REQUEST_BODY.label(), "( " + request + " )"));
+                LogField.Placeholders.TWO.getPlaceholder(),
+                StructuredArguments.kv(LogField.MSG.label(), "Request body to create a new diet plan"),
+                StructuredArguments.kv(LogField.REQUEST_BODY.label(), "( " + request + " )"));
 
         final DietPlanDomain dietPlan = dietPlanMapper.toDomain(request);
 
@@ -80,11 +76,10 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
         final DietPlanCompleteResponseDTO dtoResponse = dietPlanMapper.toDTO(dietPlanCreated);
 
         log.debug(
-            LogField.Placeholders.TWO.placeholder,
-            StructuredArguments.kv(LogField.MSG.label(), "Response body diet plan"),
-            StructuredArguments.kv(LogField.RESPONSE_BODY.label(), "( " + dtoResponse + " )"));
+                LogField.Placeholders.TWO.getPlaceholder(),
+                StructuredArguments.kv(LogField.MSG.label(), "Response body diet plan"),
+                StructuredArguments.kv(LogField.RESPONSE_BODY.label(), "( " + dtoResponse + " )"));
 
         return dtoResponse;
     }
-
 }

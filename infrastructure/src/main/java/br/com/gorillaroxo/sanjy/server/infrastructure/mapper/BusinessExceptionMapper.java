@@ -8,10 +8,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(
-    componentModel = ConstantsInfrastructure.MAPSTRUCT_COMPONENT_MODEL,
-    uses = OptionalMapper.class,
-    unmappedTargetPolicy = ReportingPolicy.ERROR
-)
+        componentModel = ConstantsInfrastructure.MAPSTRUCT_COMPONENT_MODEL,
+        uses = OptionalMapper.class,
+        unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface BusinessExceptionMapper {
 
     @Mapping(target = "code", source = "exceptionCode.code")

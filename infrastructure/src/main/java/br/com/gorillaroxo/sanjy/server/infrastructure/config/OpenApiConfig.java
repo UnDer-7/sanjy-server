@@ -9,6 +9,7 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.media.UUIDSchema;
 import io.swagger.v3.oas.models.parameters.Parameter;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.customizers.OpenApiCustomizer;
@@ -16,8 +17,6 @@ import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.HandlerMethod;
-
-import java.util.Objects;
 
 @Slf4j
 @Configuration
@@ -38,20 +37,21 @@ public class OpenApiConfig {
     public OperationCustomizer globalHeadersCustomizer() {
         return (Operation operation, HandlerMethod handlerMethod) -> {
             final Parameter correlationIdParam = new Parameter()
-                .in("header")
-                .name(RequestConstants.Headers.X_CORRELATION_ID)
-                .description("Unique identifier for tracking the request across services. Must be a valid UUID format.")
-                .required(true)
-                .schema(new UUIDSchema())
-                .example("550e8400-e29b-41d4-a716-446655440000");
+                    .in("header")
+                    .name(RequestConstants.Headers.X_CORRELATION_ID)
+                    .description(
+                            "Unique identifier for tracking the request across services. Must be a valid UUID format.")
+                    .required(true)
+                    .schema(new UUIDSchema())
+                    .example("550e8400-e29b-41d4-a716-446655440000");
 
             final Parameter channelParam = new Parameter()
-                .in("header")
-                .name(RequestConstants.Headers.X_CHANNEL)
-                .description("Channel/Client that originated the request (e.g., Web, Telegram, WhatsApp)")
-                .required(true)
-                .schema(new StringSchema())
-                .example("Web");
+                    .in("header")
+                    .name(RequestConstants.Headers.X_CHANNEL)
+                    .description("Channel/Client that originated the request (e.g., Web, Telegram, WhatsApp)")
+                    .required(true)
+                    .schema(new StringSchema())
+                    .example("Web");
 
             operation.addParametersItem(correlationIdParam);
             operation.addParametersItem(channelParam);

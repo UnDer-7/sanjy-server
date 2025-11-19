@@ -1,15 +1,14 @@
 package br.com.gorillaroxo.sanjy.server.core.exception;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class ExceptionCodeTest {
@@ -20,8 +19,8 @@ class ExceptionCodeTest {
         ExceptionCode[] allExceptionCodes = ExceptionCode.values();
 
         // When
-        Map<String, List<ExceptionCode>> codesByValue = Arrays.stream(allExceptionCodes)
-                .collect(Collectors.groupingBy(ExceptionCode::getCode));
+        Map<String, List<ExceptionCode>> codesByValue =
+                Arrays.stream(allExceptionCodes).collect(Collectors.groupingBy(ExceptionCode::getCode));
 
         List<String> duplicateCodes = codesByValue.entrySet().stream()
                 .filter(entry -> entry.getValue().size() > 1)
@@ -33,5 +32,4 @@ class ExceptionCodeTest {
                 .as("Found duplicate exception codes: %s in enum %s", duplicateCodes, ExceptionCode.class.getName())
                 .isEmpty();
     }
-
 }

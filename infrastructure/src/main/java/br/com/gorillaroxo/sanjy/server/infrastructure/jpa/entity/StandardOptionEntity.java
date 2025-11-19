@@ -26,11 +26,12 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "standard_options",
-    uniqueConstraints = @UniqueConstraint(
-        name = "uk_type_option",
-        columnNames = {"meal_type_id", "option_number"}
-    ))
+@Table(
+        name = "standard_options",
+        uniqueConstraints =
+                @UniqueConstraint(
+                        name = "uk_type_option",
+                        columnNames = {"meal_type_id", "option_number"}))
 public class StandardOptionEntity {
 
     @Id
@@ -49,8 +50,8 @@ public class StandardOptionEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
-//    @Builder.Default
-//    @OneToMany(mappedBy = "standardOption")
-//    private List<MealRecordEntity> mealRecords = new ArrayList<>();
+    //    @Builder.Default
+    //    @OneToMany(mappedBy = "standardOption")
+    //    private List<MealRecordEntity> mealRecords = new ArrayList<>();
 
 }

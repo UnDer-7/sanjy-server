@@ -34,5 +34,4 @@ public class InvalidValuesException extends BusinessException {
     protected Logger getLogger() {
         return log;
     }
-
 }
