@@ -1,0 +1,70 @@
+name: Pull Request Pipeline
+
+on:
+  pull_request:
+    types: [opened, labeled, synchronize, reopened]
+
+jobs:
+  validate:
+    name: Code Quality & Tests
+    runs-on: ubuntu-latest
+
+    # Only run if PR has 'run-pipe' label
+    if: contains(github.event.pull_request.labels.*.name, 'run-pipe')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup GraalVM 25 (Oracle)
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '25'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: 'maven'
+
+      - name: Verify GraalVM installation
+        run: |
+          echo "GRAALVM_HOME: $GRAALVM_HOME"
+          echo "JAVA_HOME: $JAVA_HOME"
+          java -version
+
+      - name: Check code formatting
+        id: format-check
+        run: make fmt/check
+        continue-on-error: true
+
+      - name: Format check failed
+        if: steps.format-check.outcome == 'failure'
+        run: |
+          echo "::error::Code formatting check failed!"
+          echo ""
+          echo "❌ To resolve this issue, format the code following the project guidelines."
+          echo ""
+          echo "💡 You can run the following command to automatically format the code:"
+          echo "   make fmt"
+          echo ""
+          echo "After that, commit and push the formatted code."
+          exit 1
+
+      - name: Run lint check
+        id: lint-check
+        run: make lint
+        continue-on-error: true
+
+      - name: Lint check failed
+        if: steps.lint-check.outcome == 'failure'
+        run: |
+          echo "::error::Lint check failed!"
+          echo ""
+          echo "❌ The project lint failed, some checkstyle rule was not followed."
+          echo ""
+          echo "💡 You can run the following command in your terminal to create an HTML report of the issues found:"
+          echo "   make lint/report"
+          echo ""
+          echo "The report will show in detail which rules were violated."
+          exit 1
+
+      - name: Run tests
+        run: make test
