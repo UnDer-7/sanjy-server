@@ -156,19 +156,19 @@ build/graalvm/docker/force:
 .PHONY: fmt
 fmt:
 	@echo ">>> Formatting all source code files…"
-	./mvnw spotless:apply
+	./mvnw clean spotless:apply -B -ntp
 
 ## fmt/check: Check code formatting without applying changes
 .PHONY: fmt/check
 fmt/check:
 	@echo ">>> Checking code formatting…"
-	./mvnw spotless:check
+	./mvnw clena spotless:check -B -ntp
 
 ## lint: Verify code compliance with Checkstyle standards
 .PHONY: lint
 lint:
 	@echo ">>> Running Checkstyle validation…"
-	@./mvnw clean checkstyle:check || (echo "" && \
+	@./mvnw clean checkstyle:check -B -ntp || (echo "" && \
 	echo "==========================================================================" && \
 	echo " ⚠️  CODE STYLE VIOLATIONS DETECTED  ⚠️" && \
 	echo "==========================================================================" && \
@@ -186,7 +186,7 @@ lint:
 .PHONY: lint/report
 lint/report:
 	@echo ">>> Generating Checkstyle HTML report…"
-	@./mvnw clean checkstyle:checkstyle-aggregate && (echo "" && \
+	@./mvnw clean checkstyle:checkstyle-aggregate -B -ntp && (echo "" && \
 	echo "==========================================================================" && \
 	echo " ✅  CHECKSTYLE REPORT GENERATED SUCCESSFULLY  ✅" && \
 	echo "==========================================================================" && \
