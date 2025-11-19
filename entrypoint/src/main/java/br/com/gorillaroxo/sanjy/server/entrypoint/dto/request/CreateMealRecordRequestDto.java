@@ -19,9 +19,10 @@ public record CreateMealRecordRequestDto(
         Long mealTypeId,
 
         @Schema(
-                description =
-                        "Date and time when the item was consumed. This field should only be set when registering a meal that was eaten in the past and forgotten to be logged at the time. "
-                                + "Must be a past or present date/time (cannot be in the future). If not provided, defaults to current time.",
+                description = """
+                    Date and time when the item was consumed. This field should only be set when registering a meal that was eaten in the past and \
+                    forgotten to be logged at the time. Must be a past or present date/time (cannot be in the future). If not provided, defaults to current time.
+                    """,
                 example = "2025-10-13T08:30:00",
                 nullable = true,
                 requiredMode = Schema.RequiredMode.NOT_REQUIRED)
@@ -38,16 +39,18 @@ public record CreateMealRecordRequestDto(
         Boolean isFreeMeal,
 
         @Schema(
-                description =
-                        "ID of the chosen diet plan option. Required when isFreeMeal = FALSE, should be NULL when isFreeMeal = TRUE",
+                description = """
+                    ID of the chosen diet plan option. Required when isFreeMeal = FALSE, should be NULL when isFreeMeal = TRUE
+                    """,
                 example = "5",
                 nullable = true,
                 requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         Long standardOptionId,
 
         @Schema(
-                description =
-                        "Text description of the free meal item. Required when isFreeMeal = TRUE, should be NULL when isFreeMeal = FALSE",
+                description = """
+                    Text description of the free meal item. Required when isFreeMeal = TRUE, should be NULL when isFreeMeal = FALSE
+                    """,
                 example = "Grilled chicken with vegetables",
                 nullable = true,
                 requiredMode = Schema.RequiredMode.NOT_REQUIRED)
@@ -62,8 +65,9 @@ public record CreateMealRecordRequestDto(
         BigDecimal quantity,
 
         @Schema(
-                description =
-                        "Unit of measurement for the quantity (serving, g, ml, units, etc...). Defaults to 'serving' if not provided",
+                description = """
+                    Unit of measurement for the quantity (serving, g, ml, units, etc...). Defaults to 'serving' if not provided
+                    """,
                 example = "serving",
                 defaultValue = "serving",
                 nullable = true,
