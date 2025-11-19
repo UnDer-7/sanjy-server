@@ -89,22 +89,6 @@ build/jvm:
 	ELAPSED=$$((END-START)); \
 	echo "JVM build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
 
-## build/graalvm: Build an executable to be run without JVM
-.PHONY: build/graalvm
-build/graalvm:
-	@START=$$(date +%s) && \
-	echo 'Loading environment variables from .env...' && \
-	set -a && \
-	. $(CURDIR)/.env && \
-	set +a && \
-	echo 'Installing all modules...' && \
-	./mvnw clean install -DskipTests -B && \
-	echo 'Building GraalVM native image...' && \
-	./mvnw -Pnative -Dmaven.test.skip -B -pl infrastructure native:compile && \
-	END=$$(date +%s) && \
-	ELAPSED=$$((END-START)) && \
-	echo "GraalVM build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
-
 ## build/jvm/docker: Build a Docker image with jvm
 .PHONY: build/jvm/docker
 build/jvm/docker:
@@ -124,6 +108,22 @@ build/jvm/docker/force:
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "Docker JVM force image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
+
+## build/graalvm: Build an executable to be run without JVM
+.PHONY: build/graalvm
+build/graalvm:
+	@START=$$(date +%s) && \
+	echo 'Loading environment variables from .env...' && \
+	set -a && \
+	. $(CURDIR)/.env && \
+	set +a && \
+	echo 'Installing all modules...' && \
+	./mvnw clean install -DskipTests -B && \
+	echo 'Building GraalVM native image...' && \
+	./mvnw -Pnative -Dmaven.test.skip -B -pl infrastructure native:compile && \
+	END=$$(date +%s) && \
+	ELAPSED=$$((END-START)) && \
+	echo "GraalVM build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
 
 ## build/graalvm/docker: Build a Docker image with GraalVM
 .PHONY: build/graalvm/docker
