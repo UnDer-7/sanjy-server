@@ -5,7 +5,7 @@ import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.CreateDietPlanUseCase;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.GetActiveDietPlanUseCase;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequestDto;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.DietPlanCompleteResponseDTO;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.DietPlanCompleteResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.rest.DietPlanRestService;
 import br.com.gorillaroxo.sanjy.server.infrastructure.config.McpToolMarker;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.DietPlanMapper;
@@ -36,14 +36,14 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
             Retrieves the currently active diet plan with all meal types, standard options, \
             nutritional targets (calories, protein, carbs, fat), and goals. Only one diet plan can be active at a time.
             """)
-    public DietPlanCompleteResponseDTO activeDietPlan() {
+    public DietPlanCompleteResponseDto activeDietPlan() {
         log.info(
                 LogField.Placeholders.ONE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Request to get active diet plan"));
 
         final DietPlanDomain dietPlan = getActiveDietPlanUseCase.execute();
 
-        final DietPlanCompleteResponseDTO dtoResponse = dietPlanMapper.toDTO(dietPlan);
+        final DietPlanCompleteResponseDto dtoResponse = dietPlanMapper.toDto(dietPlan);
 
         log.debug(
                 LogField.Placeholders.TWO.getPlaceholder(),
@@ -60,7 +60,7 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
             Creates a new diet plan with meal types (breakfast, lunch, snack, dinner, etc.), \
             standard meal options, nutritional targets, and goals. The new plan is automatically set as active and any previously active plan is deactivated.
             """)
-    public DietPlanCompleteResponseDTO newDietPlan(final CreateDietPlanRequestDto request) {
+    public DietPlanCompleteResponseDto newDietPlan(final CreateDietPlanRequestDto request) {
         log.info(
                 LogField.Placeholders.ONE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Request to create a new diet plan"));
@@ -73,7 +73,7 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
 
         final DietPlanDomain dietPlanCreated = createDietPlanUseCase.execute(dietPlan);
 
-        final DietPlanCompleteResponseDTO dtoResponse = dietPlanMapper.toDTO(dietPlanCreated);
+        final DietPlanCompleteResponseDto dtoResponse = dietPlanMapper.toDto(dietPlanCreated);
 
         log.debug(
                 LogField.Placeholders.TWO.getPlaceholder(),

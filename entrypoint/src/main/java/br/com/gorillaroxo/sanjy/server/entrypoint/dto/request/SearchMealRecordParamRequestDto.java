@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @ToString(callSuper = true)
 @Schema(description = "Search parameters for meal records with pagination support")
-public class SearchMealRecordParamRequestDTO extends PageRequestDTO {
+public class SearchMealRecordParamRequestDto extends PageRequestDto {
 
     @Schema(
             description = "Filter meals consumed after this date/time",
@@ -32,11 +32,9 @@ public class SearchMealRecordParamRequestDTO extends PageRequestDTO {
             example = "2024-12-31T23:59:59")
     private LocalDateTime consumedAtBefore;
 
-    @Schema(
-            description =
-                    "Filter by meal type. True returns only free meals (off-plan), false returns only standard meals (following the diet plan). If not specified, returns both types",
-            requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-            nullable = true,
-            example = "false")
+    @Schema(description = """
+                Filter by meal type. True returns only free meals (off-plan), false returns only standard meals (following the diet plan). \
+                If not specified, returns both types
+                """, requiredMode = Schema.RequiredMode.NOT_REQUIRED, nullable = true, example = "false")
     private Boolean isFreeMeal;
 }

@@ -2,11 +2,11 @@ package br.com.gorillaroxo.sanjy.server.infrastructure;
 
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDto;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealTypesRequestDTO;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateStandardOptionRequestDTO;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.PageRequestDTO;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.SearchMealRecordParamRequestDTO;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDTO;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealTypesRequestDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateStandardOptionRequestDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.PageRequestDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.SearchMealRecordParamRequestDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.projection.MealRecordStatisticsProjection;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.boot.SpringApplication;
@@ -23,13 +23,15 @@ import org.springframework.context.annotation.ComponentScan;
     MealRecordStatisticsProjection.class,
     CreateDietPlanRequestDto.class,
     CreateMealRecordRequestDto.class,
-    CreateMealTypesRequestDTO.class,
-    CreateStandardOptionRequestDTO.class,
-    PageRequestDTO.class,
-    SearchMealRecordParamRequestDTO.class,
-    ErrorResponseDTO.class
+    CreateMealTypesRequestDto.class,
+    CreateStandardOptionRequestDto.class,
+    PageRequestDto.class,
+    SearchMealRecordParamRequestDto.class,
+    ErrorResponseDto.class
 })
 public class SanJyApplication {
+
+    private SanJyApplication() {}
 
     public static void main(String[] args) {
         SpringApplication.run(SanJyApplication.class, args);

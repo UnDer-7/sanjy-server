@@ -7,10 +7,10 @@ import java.util.List;
 import lombok.Builder;
 
 @Builder
-@Schema(
-        description =
-                "Complete response DTO representing a diet plan with all its details, nutritional targets, and associated meal types")
-public record DietPlanCompleteResponseDTO(
+@Schema(description = """
+            Complete response DTO representing a diet plan with all its details, nutritional targets, and associated meal types
+            """)
+public record DietPlanCompleteResponseDto(
         @Schema(
                 description = "Unique identifier of the Diet Plan",
                 example = "123",
@@ -82,7 +82,7 @@ public record DietPlanCompleteResponseDTO(
         @Schema(
                 description = "List of meal types associated with this diet plan",
                 requiredMode = Schema.RequiredMode.REQUIRED)
-        List<MealTypeResponseDTO> mealTypes,
+        List<MealTypeResponseDto> mealTypes,
 
         @Schema(
                 description = "Indicates whether this diet plan is currently active",

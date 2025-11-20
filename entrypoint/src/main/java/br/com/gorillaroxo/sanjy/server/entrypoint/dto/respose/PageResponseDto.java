@@ -6,7 +6,7 @@ import lombok.Builder;
 
 @Builder(toBuilder = true)
 @Schema(description = "Paginated response wrapper containing page metadata and content")
-public record PageResponseDTO<T>(
+public record PageResponseDto<T>(
         @Schema(description = "Total number of pages available", example = "5")
         Long totalPages,
 

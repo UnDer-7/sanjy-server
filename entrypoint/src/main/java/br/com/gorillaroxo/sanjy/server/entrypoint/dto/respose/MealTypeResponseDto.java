@@ -9,7 +9,7 @@ import lombok.Builder;
 
 @Builder
 @Schema(description = "Response DTO representing a meal type with its scheduled time and standard food options")
-public record MealTypeResponseDTO(
+public record MealTypeResponseDto(
         @Schema(
                 description = "Unique identifier of the meal type",
                 example = "123",
@@ -32,8 +32,9 @@ public record MealTypeResponseDTO(
         LocalTime scheduledTime,
 
         @Schema(
-                description =
-                        "Additional observations about the meal type, such as target macronutrients (protein, carbs, fat in grams) and total calories (kcal)",
+                description = """
+                    Additional observations about the meal type, such as target macronutrients (protein, carbs, fat in grams) and total calories (kcal)
+                    """,
                 example = "30 g proteína | 20 g carbo | 5 g gordura | 250 kcal",
                 nullable = true,
                 requiredMode = Schema.RequiredMode.NOT_REQUIRED)
@@ -48,9 +49,9 @@ public record MealTypeResponseDTO(
         @Schema(
                 description = "Set of standard food options for this meal type",
                 requiredMode = Schema.RequiredMode.REQUIRED)
-        List<StandardOptionResponseDTO> standardOptions) {
+        List<StandardOptionResponseDto> standardOptions) {
 
-    public MealTypeResponseDTO {
+    public MealTypeResponseDto {
         standardOptions = Objects.requireNonNullElse(standardOptions, Collections.emptyList());
     }
 }

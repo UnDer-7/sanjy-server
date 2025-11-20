@@ -4,7 +4,7 @@ import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
 import br.com.gorillaroxo.sanjy.server.core.exception.BusinessException;
 import br.com.gorillaroxo.sanjy.server.core.exception.InvalidValuesException;
 import br.com.gorillaroxo.sanjy.server.core.exception.UnexpectedErrorException;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDTO;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.BusinessExceptionMapper;
 import jakarta.validation.ConstraintViolationException;
 import java.util.Arrays;
@@ -37,11 +37,14 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleException(final Exception exception) {
         if (exception.getCause() instanceof BusinessException businessException) {
+            final String warnMsg = """
+                An unexpected exception occurred but with a BusinessException cause, \
+                delegating to BusinessException handler
+                """;
+
             log.warn(
                     LogField.Placeholders.FIVE.getPlaceholder(),
-                    StructuredArguments.kv(
-                            LogField.MSG.label(),
-                            "An unexpected exception occurred but with a BusinessException cause, delegating to BusinessException handler"),
+                    StructuredArguments.kv(LogField.MSG.label(), warnMsg),
                     StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), exception.getMessage()),
                     StructuredArguments.kv(
                             LogField.EXCEPTION_CLASS.label(),
@@ -115,8 +118,8 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
 
             exception.executeLogging();
 
-            final ErrorResponseDTO errorDTO = businessExceptionMapper.toDTO(exception);
-            return ResponseEntity.status(exception.getHttpStatusCode()).body(errorDTO);
+            final ErrorResponseDto errorDto = businessExceptionMapper.toDto(exception);
+            return ResponseEntity.status(exception.getHttpStatusCode()).body(errorDto);
         } finally {
             MDC.clear();
         }

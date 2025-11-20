@@ -5,5 +5,5 @@ import lombok.Builder;
 
 @Builder(toBuilder = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record ErrorResponseDTO(
+public record ErrorResponseDto(
         String code, String timestamp, String message, String customMessage, int httpStatusCode) {}
