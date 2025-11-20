@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Schema(description = "Request DTO for creating a meal type within a diet plan")
-public record CreateMealTypesRequestDTO(
+public record CreateMealTypesRequestDto(
         @NotBlank
         @Schema(
                 description = "Meal type name. Must be unique within the diet plan's meal types list "
@@ -30,8 +30,9 @@ public record CreateMealTypesRequestDTO(
         LocalTime scheduledTime,
 
         @Schema(
-                description =
-                        "Additional observations about the meal type, such as target macronutrients (protein, carbs, fat in grams) and total calories (kcal)",
+                description = """
+                    Additional observations about the meal type, such as target macronutrients (protein, carbs, fat in grams) and total calories (kcal)
+                    """,
                 example = "30 g proteína | 20 g carbo | 5 g gordura | 250 kcal",
                 nullable = true,
                 requiredMode = Schema.RequiredMode.NOT_REQUIRED)
@@ -43,9 +44,9 @@ public record CreateMealTypesRequestDTO(
         @Schema(
                 description = "List of standard food options for this meal type",
                 requiredMode = Schema.RequiredMode.REQUIRED)
-        List<CreateStandardOptionRequestDTO> standardOptions) {
+        List<CreateStandardOptionRequestDto> standardOptions) {
 
-    public CreateMealTypesRequestDTO {
+    public CreateMealTypesRequestDto {
         standardOptions = Objects.requireNonNullElseGet(standardOptions, ArrayList::new);
     }
 }

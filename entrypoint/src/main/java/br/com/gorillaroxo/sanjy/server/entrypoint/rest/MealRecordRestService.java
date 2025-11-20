@@ -1,10 +1,10 @@
 package br.com.gorillaroxo.sanjy.server.entrypoint.rest;
 
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDto;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.SearchMealRecordParamRequestDTO;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponseDTO;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisticsResponseDTO;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseDTO;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.SearchMealRecordParamRequestDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponseDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisticsResponseDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -24,26 +24,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Tag(name = "Meal Record", description = "Handles meal record operations")
 public interface MealRecordRestService {
 
-    @Operation(
-            summary = "Create a new meal record",
-            description =
-                    "Records a meal consumption with timestamp, meal type, and quantity. "
-                            + "Can register either a standard meal (following the diet plan by referencing a standard option) or a free meal (off-plan with custom description). "
-                            + "Standard meals must have standardOptionId, while free meals must have isFreeMeal=true and freeMealDescription.")
-    MealRecordResponseDTO newMealRecord(@RequestBody @Valid @NotNull CreateMealRecordRequestDto request);
+    @Operation(summary = "Create a new meal record", description = """
+                Records a meal consumption with timestamp, meal type, and quantity. Can register either a standard meal \
+                (following the diet plan by referencing a standard option) or a free meal (off-plan with custom description). \
+                Standard meals must have standardOptionId, while free meals must have isFreeMeal=true and freeMealDescription.
+                """)
+    MealRecordResponseDto newMealRecord(@RequestBody @Valid @NotNull CreateMealRecordRequestDto request);
 
-    @Operation(
-            summary = "Get today's meal records",
-            description = "Retrieves all meals consumed today, ordered by consumption time. "
-                    + "Includes both standard meals (following the diet plan) and free meals (off-plan). "
-                    + "Use this to check daily food intake and diet adherence.")
-    List<MealRecordResponseDTO> getTodayMealRecords();
+    @Operation(summary = "Get today's meal records", description = """
+                Retrieves all meals consumed today, ordered by consumption time. Includes both standard meals (following the diet plan) \
+                and free meals (off-plan). Use this to check daily food intake and diet adherence.
+                """)
+    List<MealRecordResponseDto> getTodayMealRecords();
 
-    @Operation(
-            summary = "Search meal records with filters and pagination",
-            description =
-                    "Searches meal records with pagination and optional filters (date range via consumedAtAfter/consumedAtBefore, and meal type via isFreeMeal). "
-                            + "Returns paginated results with total count. Use this to view historical meal data, analyze eating patterns, or generate reports.")
+    @Operation(summary = "Search meal records with filters and pagination", description = """
+                Searches meal records with pagination and optional filters (date range via consumedAtAfter/consumedAtBefore, and meal type via isFreeMeal). \
+                Returns paginated results with total count. Use this to view historical meal data, analyze eating patterns, or generate reports.
+                """)
     @Parameter(
             name = RequestConstants.Query.PAGE_NUMBER,
             description = "Page number to retrieve (zero-based, where 0 is the first page)",
@@ -74,21 +71,22 @@ public interface MealRecordRestService {
             schema = @Schema(type = "string", format = "date-time", defaultValue = "current day at 23:59:59"))
     @Parameter(
             name = RequestConstants.Query.IS_FREE_MEAL,
-            description =
-                    "Filter by meal type. True returns only free meals (off-plan), false returns only standard meals (following the diet plan). If not specified, returns both types",
+            description = """
+                Filter by meal type. True returns only free meals (off-plan), false returns only standard meals (following the diet plan). \
+                If not specified, returns both types
+                """,
             required = false,
             example = "false",
             in = ParameterIn.QUERY,
             schema = @Schema(type = "boolean"))
-    PageResponseDTO<MealRecordResponseDTO> searchMealRecords(
-            @Parameter(hidden = true) @NotNull @Valid SearchMealRecordParamRequestDTO pageRequest);
+    PageResponseDto<MealRecordResponseDto> searchMealRecords(
+            @Parameter(hidden = true) @NotNull @Valid SearchMealRecordParamRequestDto pageRequest);
 
-    @Operation(
-            summary = "Get meal record statistics by date range",
-            description =
-                    "Retrieves aggregated statistics for meal records within a specified date range. "
-                            + "Returns metrics such as total meals consumed, breakdown by meal type (standard vs free meals), "
-                            + "and nutritional totals. Use this to analyze eating patterns, track diet adherence, and monitor nutritional intake over a period.")
+    @Operation(summary = "Get meal record statistics by date range", description = """
+                Retrieves aggregated statistics for meal records within a specified date range. Returns metrics such as total meals consumed, \
+                breakdown by meal type (standard vs free meals), and nutritional totals. Use this to analyze eating patterns, track diet adherence, \
+                and monitor nutritional intake over a period.
+                """)
     @Parameter(
             name = RequestConstants.Query.CONSUMED_AT_AFTER,
             description = "Filter meals consumed after this date/time",
@@ -132,9 +130,9 @@ public interface MealRecordRestService {
                         }
                         """)
                             }))
-    MealRecordStatisticsResponseDTO getMealRecordStatisticsByDateRange(
+    MealRecordStatisticsResponseDto getMealRecordStatisticsByDateRange(
             @RequestParam(name = RequestConstants.Query.CONSUMED_AT_AFTER, required = false) @NotNull
-                    final LocalDateTime consumedAtAfter,
+                    LocalDateTime consumedAtAfter,
             @RequestParam(name = RequestConstants.Query.CONSUMED_AT_BEFORE, required = false) @NotNull
-                    final LocalDateTime consumedAtBefore);
+                    LocalDateTime consumedAtBefore);
 }

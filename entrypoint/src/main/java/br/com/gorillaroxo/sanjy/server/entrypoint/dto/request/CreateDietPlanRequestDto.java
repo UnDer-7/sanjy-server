@@ -87,7 +87,7 @@ public record CreateDietPlanRequestDto(
         @Schema(
                 description = "List of meal types associated with this diet plan",
                 requiredMode = Schema.RequiredMode.REQUIRED)
-        List<CreateMealTypesRequestDTO> mealTypes) {
+        List<CreateMealTypesRequestDto> mealTypes) {
 
     public CreateDietPlanRequestDto {
         mealTypes = Objects.requireNonNullElseGet(mealTypes, ArrayList::new);

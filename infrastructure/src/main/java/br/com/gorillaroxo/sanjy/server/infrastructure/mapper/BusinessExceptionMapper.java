@@ -1,7 +1,7 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.mapper;
 
 import br.com.gorillaroxo.sanjy.server.core.exception.BusinessException;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDTO;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
 import br.com.gorillaroxo.sanjy.server.infrastructure.utils.ConstantsInfrastructure;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,5 +15,5 @@ public interface BusinessExceptionMapper {
 
     @Mapping(target = "code", source = "exceptionCode.code")
     @Mapping(target = "message", source = "exceptionCode.message")
-    ErrorResponseDTO toDTO(BusinessException exception);
+    ErrorResponseDto toDto(BusinessException exception);
 }

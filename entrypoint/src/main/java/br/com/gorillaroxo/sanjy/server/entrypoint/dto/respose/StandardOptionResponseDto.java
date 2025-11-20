@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 @Builder
-public record StandardOptionResponseDTO(
+public record StandardOptionResponseDto(
         @Schema(
                 description = "Unique identifier of the Standard Option",
                 example = "123",

@@ -115,7 +115,7 @@ public class RequestLoggingFilterConfig extends OncePerRequestFilter {
         response.setStatus(errorResponse.getHttpStatusCode());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(objectMapper.writeValueAsString(businessExceptionMapper.toDTO(errorResponse)));
+        response.getWriter().write(objectMapper.writeValueAsString(businessExceptionMapper.toDto(errorResponse)));
     }
 
     private void sendInvalidUuidErrorResponse(final HttpServletResponse response, final String invalidValue)
@@ -126,6 +126,6 @@ public class RequestLoggingFilterConfig extends OncePerRequestFilter {
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(objectMapper.writeValueAsString(businessExceptionMapper.toDTO(errorResponse)));
+        response.getWriter().write(objectMapper.writeValueAsString(businessExceptionMapper.toDto(errorResponse)));
     }
 }

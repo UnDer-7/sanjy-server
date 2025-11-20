@@ -1,8 +1,8 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.mapper;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.MealTypeDomain;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealTypesRequestDTO;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealTypeResponseDTO;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealTypesRequestDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealTypeResponseDto;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealTypeEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.utils.ConstantsInfrastructure;
 import java.util.List;
@@ -18,25 +18,25 @@ import org.mapstruct.ReportingPolicy;
 public interface MealTypeMapper {
 
     // DTOs
-    MealTypeResponseDTO toDTO(final MealTypeDomain domain);
+    MealTypeResponseDto toDto(MealTypeDomain domain);
 
-    List<MealTypeResponseDTO> toDTO(final List<MealTypeDomain> domain);
+    List<MealTypeResponseDto> toDto(List<MealTypeDomain> domain);
 
     // Domains
     @Mapping(target = "dietPlanId", source = "dietPlan.id")
     MealTypeDomain toDomain(MealTypeEntity dto);
 
-    List<MealTypeDomain> toDomainListFromMealTypeEntity(final List<MealTypeEntity> dto);
-
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "dietPlanId", ignore = true)
-    MealTypeDomain toDomain(CreateMealTypesRequestDTO dto);
+    MealTypeDomain toDomain(CreateMealTypesRequestDto dto);
 
-    List<MealTypeDomain> toDomainListFromCreateMealTypesRequestDTO(List<CreateMealTypesRequestDTO> dto);
+    List<MealTypeDomain> toDomainListFromMealTypeEntity(List<MealTypeEntity> dto);
+
+    List<MealTypeDomain> toDomainListFromCreateMealTypesRequestDto(List<CreateMealTypesRequestDto> dto);
 
     // Entities
     @Mapping(target = "dietPlan", ignore = true)
-    MealTypeEntity toEntity(final MealTypeDomain domain);
+    MealTypeEntity toEntity(MealTypeDomain domain);
 
-    Set<MealTypeEntity> toEntity(final List<MealTypeDomain> domain);
+    Set<MealTypeEntity> toEntity(List<MealTypeDomain> domain);
 }

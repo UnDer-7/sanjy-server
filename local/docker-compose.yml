@@ -16,3 +16,4 @@ services:
 
 volumes:
   sanJy_database:
+    name: sanJy_database_local

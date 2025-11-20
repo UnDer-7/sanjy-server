@@ -19,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "Pagination request parameters")
-public class PageRequestDTO {
+public class PageRequestDto {
 
     @NotNull
     @PositiveOrZero
