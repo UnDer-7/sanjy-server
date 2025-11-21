@@ -53,6 +53,9 @@
         <spotless-maven-plugin.version>3.0.0</spotless-maven-plugin.version>
         <spotless-palantirJavaFormat.version>2.82.0</spotless-palantirJavaFormat.version>
         <checkstyle-maven-plugin.version>3.6.0</checkstyle-maven-plugin.version>
+
+        <!-- Need latest version to fix this bug: https://github.com/testcontainers/testcontainers-java/issues/11212 -->
+        <testcontainers.version>2.0.2</testcontainers.version>
     </properties>
 
     <dependencyManagement>

@@ -34,7 +34,7 @@ all: help
 .PHONY: compile
 compile:
 	@echo ">>> Compiling…"
-	./mvnw clean compile
+	./mvnw -B -ntp clean compile
 
 
 
@@ -47,7 +47,7 @@ compile:
 .PHONY: test
 test:
 	@echo ">>> Running all tests…"
-	./mvnw clean compile test
+	./mvnw -B -ntp clean compile verify
 
 
 
@@ -82,9 +82,9 @@ db/seed:
 build/jvm:
 	@START=$$(date +%s); \
 	echo 'Installing all modules...'; \
-	./mvnw clean install -DskipTests -B; \
+	./mvnw -B -ntp clean install -DskipTests; \
 	echo 'Building for JVM...'; \
-	./mvnw clean package -B -Dmaven.test.skip -T1C -DargLine="Xms2g -Xmx2g" --batch-mode -q; \
+	./mvnw -B -ntp clean package -Dmaven.test.skip -T1C -DargLine="Xms2g -Xmx2g" --batch-mode -q; \
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "JVM build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
@@ -118,9 +118,9 @@ build/graalvm:
 	. $(CURDIR)/.env && \
 	set +a && \
 	echo 'Installing all modules...' && \
-	./mvnw clean install -DskipTests -B && \
+	./mvnw -B -ntp clean install -DskipTests && \
 	echo 'Building GraalVM native image...' && \
-	./mvnw -Pnative -Dmaven.test.skip -B -pl infrastructure clean native:compile && \
+	./mvnw -B -ntp -Pnative -Dmaven.test.skip -pl infrastructure clean native:compile && \
 	END=$$(date +%s) && \
 	ELAPSED=$$((END-START)) && \
 	echo "GraalVM build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
@@ -156,19 +156,19 @@ build/graalvm/docker/force:
 .PHONY: fmt
 fmt:
 	@echo ">>> Formatting all source code files…"
-	./mvnw clean spotless:apply -B -ntp
+	./mvnw -B -ntp clean spotless:apply
 
 ## fmt/check: Check code formatting without applying changes
 .PHONY: fmt/check
 fmt/check:
 	@echo ">>> Checking code formatting…"
-	./mvnw clean spotless:check -B -ntp
+	./mvnw -B -ntp clean spotless:check
 
 ## lint: Verify code compliance with Checkstyle standards
 .PHONY: lint
 lint:
 	@echo ">>> Running Checkstyle validation…"
-	@./mvnw clean checkstyle:check -B -ntp || (echo "" && \
+	@./mvnw -B -ntp clean checkstyle:check || (echo "" && \
 	echo "==========================================================================" && \
 	echo " ⚠️  CODE STYLE VIOLATIONS DETECTED  ⚠️" && \
 	echo "==========================================================================" && \
@@ -186,7 +186,7 @@ lint:
 .PHONY: lint/report
 lint/report:
 	@echo ">>> Generating Checkstyle HTML report…"
-	@./mvnw clean checkstyle:checkstyle-aggregate -B -ntp && (echo "" && \
+	@./mvnw -B -ntp clean checkstyle:checkstyle-aggregate && (echo "" && \
 	echo "==========================================================================" && \
 	echo " ✅  CHECKSTYLE REPORT GENERATED SUCCESSFULLY  ✅" && \
 	echo "==========================================================================" && \
