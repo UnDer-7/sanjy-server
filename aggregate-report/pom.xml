@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>br.com.gorillaroxo</groupId>
@@ -32,10 +32,10 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <phase>verify</phase>
                         <goals>
                             <goal>report-aggregate</goal>
                         </goals>
+                        <phase>verify</phase>
                         <configuration>
                             <dataFileIncludes>
                                 <dataFileInclude>**/jacoco.exec</dataFileInclude>
@@ -43,8 +43,6 @@
                             <outputDirectory>${project.reporting.outputDirectory}/jacoco-aggregate</outputDirectory>
                         </configuration>
                     </execution>
-
-
                 </executions>
             </plugin>
         </plugins>

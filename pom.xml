@@ -152,6 +152,11 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
+                    <configuration>
+                        <includes>
+                            <include>**/*IT.java</include>
+                        </includes>
+                    </configuration>
                     <executions>
                         <execution>
                             <goals>
@@ -160,11 +165,6 @@
                             </goals>
                         </execution>
                     </executions>
-                    <configuration>
-                        <includes>
-                            <include>**/*IT.java</include>
-                        </includes>
-                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
