@@ -47,7 +47,7 @@ compile:
 .PHONY: test
 test:
 	@echo ">>> Running all tests…"
-	./mvnw clean compile test
+	./mvnw clean compile verify
 
 
 
