@@ -5,8 +5,8 @@ on:
     types: [opened, labeled, synchronize, reopened]
 
 jobs:
-  validate:
-    name: Code Quality & Tests
+  coding-style:
+    name: Coding Style
     runs-on: ubuntu-latest
 
     # Only run if PR has 'run-pipe' label
@@ -14,10 +14,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 #v6.0.0
 
       - name: Setup GraalVM 25 (Oracle)
-        uses: graalvm/setup-graalvm@v1
+        uses: graalvm/setup-graalvm@eec48106e0bf45f2976c2ff0c3e22395cced8243 #v1.4.2
         with:
           java-version: '25'
           distribution: 'graalvm'
@@ -66,5 +66,40 @@ jobs:
           echo "The report will show in detail which rules were violated."
           exit 1
 
+  quality:
+    name: Quality Analysis
+    runs-on: ubuntu-latest
+
+    # Only run if coding-style job succeeded
+    needs: coding-style
+    if: success()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 #v6.0.0
+        with:
+          fetch-depth: 0  # Fetch all history for SonarCloud analysis
+
+      - name: Setup GraalVM 25 (Oracle)
+        uses: graalvm/setup-graalvm@eec48106e0bf45f2976c2ff0c3e22395cced8243 #v1.4.2
+        with:
+          java-version: '25'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: 'maven'
+
+      - name: Verify GraalVM installation
+        run: |
+          echo "GRAALVM_HOME: $GRAALVM_HOME"
+          echo "JAVA_HOME: $JAVA_HOME"
+          java -version
+
       - name: Run tests
+        id: test
         run: make test
+
+      - name: Publish to SonarCloud
+        if: steps.test.outcome == 'success'
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: make sonar
