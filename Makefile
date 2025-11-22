@@ -150,6 +150,31 @@ build/graalvm/docker/force:
 
 
 # ==================================================================================== #
+## ===== QUALITY =====
+# ==================================================================================== #
+## sonar: Publish analysis results to SonarCloud (run 'make test' first, requires SONAR_TOKEN env var)
+.PHONY: sonar
+sonar:
+	@echo ">>> Publishing analysis to SonarCloud..."
+	@if [ -z "$$SONAR_TOKEN" ]; then \
+		echo "ERROR: SONAR_TOKEN environment variable is not set"; \
+		echo "Please set it with: export SONAR_TOKEN=your_token_here"; \
+		exit 1; \
+	fi
+	@if [ ! -f "aggregate-report/target/site/jacoco-aggregate/jacoco.xml" ]; then \
+		echo "ERROR: JaCoCo coverage report not found"; \
+		echo "Please run 'make test' first to generate the coverage report"; \
+		exit 1; \
+	fi
+	./mvnw -B -ntp sonar:sonar
+	@echo ">>> Analysis published successfully!"
+	@echo ">>> View results at: https://sonarcloud.io/dashboard?id=UnDer-7_sanjy-server"
+
+
+
+
+
+# ==================================================================================== #
 ## ===== CODING STYLE =====
 # ==================================================================================== #
 ## fmt: Format all source code files using Spotless
