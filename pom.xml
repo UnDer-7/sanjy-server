@@ -56,6 +56,13 @@
 
         <!-- Need latest version to fix this bug: https://github.com/testcontainers/testcontainers-java/issues/11212 -->
         <testcontainers.version>2.0.2</testcontainers.version>
+
+        <!-- SonarCloud Configuration -->
+        <sonar.projectKey>UnDer-7_sanjy-server</sonar.projectKey>
+        <sonar.organization>under-7</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.java.source>25</sonar.java.source>
+        <sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/aggregate-report/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <dependencyManagement>
@@ -172,6 +179,12 @@
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>5.3.0.6276</version>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
