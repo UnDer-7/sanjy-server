@@ -14,10 +14,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.0.0
 
       - name: Setup GraalVM 25 (Oracle)
-        uses: graalvm/setup-graalvm@v1
+        uses: graalvm/setup-graalvm@v1.4.2
         with:
           java-version: '25'
           distribution: 'graalvm'
@@ -76,12 +76,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.0.0
         with:
           fetch-depth: 0  # Fetch all history for SonarCloud analysis
 
       - name: Setup GraalVM 25 (Oracle)
-        uses: graalvm/setup-graalvm@v1
+        uses: graalvm/setup-graalvm@v1.4.2
         with:
           java-version: '25'
           distribution: 'graalvm'
