@@ -44,7 +44,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <springdoc.version>2.6.0</springdoc.version>
+        <springdoc.version>2.8.14</springdoc.version>
         <mapstruct.version>1.6.2</mapstruct.version>
         <projectlombok.version>1.18.34</projectlombok.version>
 
@@ -67,6 +67,15 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Security Fix -->
+            <!-- Override vulnerable commons-lang3 version -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.20.0</version>
+            </dependency>
+            <!-- ####################### -->
+
             <dependency>
                 <groupId>org.springframework.ai</groupId>
                 <artifactId>spring-ai-bom</artifactId>

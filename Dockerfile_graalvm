@@ -13,6 +13,7 @@ WORKDIR /build
 COPY core core
 COPY entrypoint entrypoint
 COPY infrastructure infrastructure
+COPY aggregate-report aggregate-report
 COPY lombok.config .
 COPY Makefile .
 COPY pom.xml .
@@ -32,8 +33,9 @@ WORKDIR /app
 
 COPY --from=builder /build/infrastructure/target/sanjy-server .
 
-# Install glibc compatibility for GraalVM native image
-RUN apk add --no-cache gcompat
+# Update busybox to fix CVE-2025-46394 and install glibc compatibility
+RUN apk upgrade --no-cache busybox busybox-binsh ssl_client && \
+    apk add --no-cache gcompat
 
 # Set up directories
 ARG S_DATA_PATH=/app/data

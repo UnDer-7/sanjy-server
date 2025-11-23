@@ -13,6 +13,7 @@ RUN apk add --no-cache make
 COPY core core
 COPY entrypoint entrypoint
 COPY infrastructure infrastructure
+COPY aggregate-report aggregate-report
 COPY lombok.config .
 COPY Makefile .
 COPY pom.xml .
