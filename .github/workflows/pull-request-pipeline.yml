@@ -94,6 +94,12 @@ jobs:
           echo "JAVA_HOME: $JAVA_HOME"
           java -version
 
+      - name: Run Snyk vulnerability scan
+        id: snyk
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: make snyk/test
+
       - name: Run tests
         id: test
         run: make test
