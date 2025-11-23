@@ -152,6 +152,31 @@ build/graalvm/docker/force:
 # ==================================================================================== #
 ## ===== QUALITY =====
 # ==================================================================================== #
+## snyk/test: Scan for vulnerabilities in dependencies and code (requires SNYK_TOKEN env var)
+.PHONY: snyk/test
+snyk/test:
+	@echo ">>> Running Snyk vulnerability scan..."
+	@if [ -z "$$SNYK_TOKEN" ]; then \
+		echo "ERROR: SNYK_TOKEN environment variable is not set"; \
+		echo "Please set it with: export SNYK_TOKEN=your_token_here"; \
+		exit 1; \
+	fi
+	./mvnw -B -ntp snyk:test
+	@echo ">>> Snyk scan completed!"
+
+## snyk/monitor: Upload project snapshot to Snyk for continuous monitoring (requires SNYK_TOKEN env var)
+.PHONY: snyk/monitor
+snyk/monitor:
+	@echo ">>> Uploading project snapshot to Snyk..."
+	@if [ -z "$$SNYK_TOKEN" ]; then \
+		echo "ERROR: SNYK_TOKEN environment variable is not set"; \
+		echo "Please set it with: export SNYK_TOKEN=your_token_here"; \
+		exit 1; \
+	fi
+	./mvnw -B -ntp snyk:monitor
+	@echo ">>> Project snapshot uploaded successfully!"
+	@echo ">>> View results in your Snyk dashboard"
+
 ## sonar: Publish analysis results to SonarCloud (run 'make test' first, requires SONAR_TOKEN env var)
 .PHONY: sonar
 sonar:
