@@ -5,11 +5,14 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
+
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Builder
 @Schema(description = "Request DTO for creating a meal type within a diet plan")
 public record CreateMealTypesRequestDto(
         @NotBlank

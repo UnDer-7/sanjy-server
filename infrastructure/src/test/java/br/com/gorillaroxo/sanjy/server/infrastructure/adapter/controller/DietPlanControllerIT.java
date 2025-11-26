@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.*;
 
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import br.com.gorillaroxo.sanjy.server.infrastructure.test.IntegrationTestController;
+import br.com.gorillaroxo.sanjy.server.infrastructure.test.builder.DtoBuilders;
+import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -90,5 +92,19 @@ class DietPlanControllerIT extends IntegrationTestController {
                     .body("customMessage", containsStringIgnoringCase(headerNameXChannel))
                     .body("customMessage", not(containsStringIgnoringCase(headerNameXCorrelationId)));
         }
+    }
+
+    @Test
+    void should_create_diet_plan() {
+        final var request = DtoBuilders.buildCreateDietPlanRequestDto().build();
+
+        given()
+        .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+            .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+            .contentType(ContentType.JSON)
+            .body(request)
+            .post(BASE_URL)
+            .then()
+            .statusCode(HttpStatus.CREATED.value());
     }
 }

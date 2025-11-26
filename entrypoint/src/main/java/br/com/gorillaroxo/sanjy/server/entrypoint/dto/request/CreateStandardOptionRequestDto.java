@@ -3,7 +3,9 @@ package br.com.gorillaroxo.sanjy.server.entrypoint.dto.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 
+@Builder
 @Schema(description = "Request DTO for creating a standard meal option within a meal type")
 public record CreateStandardOptionRequestDto(
         @Schema(description = """
