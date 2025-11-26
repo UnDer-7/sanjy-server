@@ -19,8 +19,8 @@ public class TestcontainersConfig {
     }
 
     /**
-     * Provides JdbcConnectionDetails bean for GraalVM native image tests.
-     * This is necessary because @ServiceConnection doesn't work in AOT mode.
+     * Provides JdbcConnectionDetails bean for GraalVM native image tests. This is necessary because @ServiceConnection
+     * doesn't work in AOT mode.
      */
     @Bean
     public JdbcConnectionDetails jdbcConnectionDetails(PostgreSQLContainer<?> container) {
@@ -43,8 +43,8 @@ public class TestcontainersConfig {
     }
 
     /**
-     * Provides JdbcConnectionDetails bean for GraalVM native image tests.
-     * This is necessary because @ServiceConnection doesn't work in AOT mode.
+     * Provides JdbcConnectionDetails bean for GraalVM native image tests. This is necessary because @ServiceConnection
+     * doesn't work in AOT mode.
      */
     @Bean
     public FlywayConnectionDetails flywayConnectionDetails(final PostgreSQLContainer<?> container) {
@@ -65,5 +65,4 @@ public class TestcontainersConfig {
             }
         };
     }
-
 }

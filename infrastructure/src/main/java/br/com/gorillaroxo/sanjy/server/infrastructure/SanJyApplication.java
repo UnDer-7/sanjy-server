@@ -21,7 +21,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ConfigurationPropertiesScan(basePackages = "br.com.gorillaroxo.sanjy.server.infrastructure.config")
 @RegisterReflectionForBinding({
     MealRecordStatisticsProjection.class,
-//    CreateDietPlanRequestDto.class,
+    CreateDietPlanRequestDto.class,
     CreateMealRecordRequestDto.class,
     CreateMealTypesRequestDto.class,
     CreateStandardOptionRequestDto.class,
