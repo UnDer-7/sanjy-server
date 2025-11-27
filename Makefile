@@ -46,9 +46,14 @@ compile:
 ## test: Run all the application test
 .PHONY: test
 test:
-	@echo ">>> Running all tests…"
-	./mvnw -B -ntp clean compile verify
+	echo ">>> Running all tests…" && \
+	./mvnw -B -ntp -Pnative clean compile verify
 
+## test/native: Run all the application test
+.PHONY: test/native
+test/native:
+	echo ">>> Running all tests…" && \
+	./mvnw -B -ntp -PnativeTest clean compile test
 
 
 
