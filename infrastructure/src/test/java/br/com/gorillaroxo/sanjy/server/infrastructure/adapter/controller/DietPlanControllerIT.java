@@ -19,10 +19,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-/**
- * Integration tests for DietPlanController using WebTestClient. Compatible with both JVM and GraalVM Native Image
- * modes.
- */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class DietPlanControllerIT extends IntegrationTestController {
 
