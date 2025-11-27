@@ -39,12 +39,12 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
             """)
     public DietPlanCompleteResponseDto newDietPlan(final CreateDietPlanRequestDto request) {
         log.info(
-            LogField.Placeholders.ONE.getPlaceholder(),
-            StructuredArguments.kv(LogField.MSG.label(), "Request to create a new diet plan"));
+                LogField.Placeholders.ONE.getPlaceholder(),
+                StructuredArguments.kv(LogField.MSG.label(), "Request to create a new diet plan"));
         log.debug(
-            LogField.Placeholders.TWO.getPlaceholder(),
-            StructuredArguments.kv(LogField.MSG.label(), "Request body to create a new diet plan"),
-            StructuredArguments.kv(LogField.REQUEST_BODY.label(), "( " + request + " )"));
+                LogField.Placeholders.TWO.getPlaceholder(),
+                StructuredArguments.kv(LogField.MSG.label(), "Request body to create a new diet plan"),
+                StructuredArguments.kv(LogField.REQUEST_BODY.label(), "( " + request + " )"));
 
         final DietPlanDomain dietPlan = dietPlanMapper.toDomain(request);
 
@@ -53,9 +53,9 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
         final DietPlanCompleteResponseDto dtoResponse = dietPlanMapper.toDto(dietPlanCreated);
 
         log.debug(
-            LogField.Placeholders.TWO.getPlaceholder(),
-            StructuredArguments.kv(LogField.MSG.label(), "Response body diet plan"),
-            StructuredArguments.kv(LogField.RESPONSE_BODY.label(), "( " + dtoResponse + " )"));
+                LogField.Placeholders.TWO.getPlaceholder(),
+                StructuredArguments.kv(LogField.MSG.label(), "Response body diet plan"),
+                StructuredArguments.kv(LogField.RESPONSE_BODY.label(), "( " + dtoResponse + " )"));
 
         return dtoResponse;
     }

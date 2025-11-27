@@ -4,7 +4,6 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequ
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealTypesRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateStandardOptionRequestDto;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -47,27 +46,29 @@ public final class DtoBuilders {
                         "Pão francês sem miolo -- 45g | Ovos mexidos -- 3 ovos (150g) | Queijo minas frescal zero lactose -- 25g");
     }
 
-    public static CreateMealRecordRequestDto.CreateMealRecordRequestDtoBuilder buildCreateMealRecordRequestDtoFreeMeal() {
+    public static CreateMealRecordRequestDto.CreateMealRecordRequestDtoBuilder
+            buildCreateMealRecordRequestDtoFreeMeal() {
         return CreateMealRecordRequestDto.builder()
-            .mealTypeId(100L)
-            .consumedAt(LocalDateTime.now().minusMinutes(2))
-            .isFreeMeal(true)
-            .standardOptionId(null)
-            .freeMealDescription("BigMac")
-            .quantity(BigDecimal.TWO)
-            .unit("units")
-            .notes("It was very good");
+                .mealTypeId(100L)
+                .consumedAt(LocalDateTime.now().minusMinutes(2))
+                .isFreeMeal(true)
+                .standardOptionId(null)
+                .freeMealDescription("BigMac")
+                .quantity(BigDecimal.TWO)
+                .unit("units")
+                .notes("It was very good");
     }
 
-    public static CreateMealRecordRequestDto.CreateMealRecordRequestDtoBuilder buildCreateMealRecordRequestDtoPlannedMeal() {
+    public static CreateMealRecordRequestDto.CreateMealRecordRequestDtoBuilder
+            buildCreateMealRecordRequestDtoPlannedMeal() {
         return CreateMealRecordRequestDto.builder()
-            .mealTypeId(100L)
-            .consumedAt(LocalDateTime.now().minusMinutes(2))
-            .isFreeMeal(false)
-            .standardOptionId(34L)
-            .freeMealDescription(null)
-            .quantity(BigDecimal.ONE)
-            .unit("units")
-            .notes(null);
+                .mealTypeId(100L)
+                .consumedAt(LocalDateTime.now().minusMinutes(2))
+                .isFreeMeal(false)
+                .standardOptionId(34L)
+                .freeMealDescription(null)
+                .quantity(BigDecimal.ONE)
+                .unit("units")
+                .notes(null);
     }
 }
