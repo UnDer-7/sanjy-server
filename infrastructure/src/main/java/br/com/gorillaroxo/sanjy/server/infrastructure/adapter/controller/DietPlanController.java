@@ -31,6 +31,36 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
     private final DietPlanMapper dietPlanMapper;
 
     @Override
+    @PostMapping("/v1/diet-plan")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Tool(name = "newDietPlan", description = """
+            Creates a new diet plan with meal types (breakfast, lunch, snack, dinner, etc.), \
+            standard meal options, nutritional targets, and goals. The new plan is automatically set as active and any previously active plan is deactivated.
+            """)
+    public DietPlanCompleteResponseDto newDietPlan(final CreateDietPlanRequestDto request) {
+        log.info(
+            LogField.Placeholders.ONE.getPlaceholder(),
+            StructuredArguments.kv(LogField.MSG.label(), "Request to create a new diet plan"));
+        log.debug(
+            LogField.Placeholders.TWO.getPlaceholder(),
+            StructuredArguments.kv(LogField.MSG.label(), "Request body to create a new diet plan"),
+            StructuredArguments.kv(LogField.REQUEST_BODY.label(), "( " + request + " )"));
+
+        final DietPlanDomain dietPlan = dietPlanMapper.toDomain(request);
+
+        final DietPlanDomain dietPlanCreated = createDietPlanUseCase.execute(dietPlan);
+
+        final DietPlanCompleteResponseDto dtoResponse = dietPlanMapper.toDto(dietPlanCreated);
+
+        log.debug(
+            LogField.Placeholders.TWO.getPlaceholder(),
+            StructuredArguments.kv(LogField.MSG.label(), "Response body diet plan"),
+            StructuredArguments.kv(LogField.RESPONSE_BODY.label(), "( " + dtoResponse + " )"));
+
+        return dtoResponse;
+    }
+
+    @Override
     @GetMapping("/v1/diet-plan/active")
     @Tool(name = "activeDietPlan", description = """
             Retrieves the currently active diet plan with all meal types, standard options, \
@@ -44,36 +74,6 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
         final DietPlanDomain dietPlan = getActiveDietPlanUseCase.execute();
 
         final DietPlanCompleteResponseDto dtoResponse = dietPlanMapper.toDto(dietPlan);
-
-        log.debug(
-                LogField.Placeholders.TWO.getPlaceholder(),
-                StructuredArguments.kv(LogField.MSG.label(), "Response body diet plan"),
-                StructuredArguments.kv(LogField.RESPONSE_BODY.label(), "( " + dtoResponse + " )"));
-
-        return dtoResponse;
-    }
-
-    @Override
-    @PostMapping("/v1/diet-plan")
-    @ResponseStatus(HttpStatus.CREATED)
-    @Tool(name = "newDietPlan", description = """
-            Creates a new diet plan with meal types (breakfast, lunch, snack, dinner, etc.), \
-            standard meal options, nutritional targets, and goals. The new plan is automatically set as active and any previously active plan is deactivated.
-            """)
-    public DietPlanCompleteResponseDto newDietPlan(final CreateDietPlanRequestDto request) {
-        log.info(
-                LogField.Placeholders.ONE.getPlaceholder(),
-                StructuredArguments.kv(LogField.MSG.label(), "Request to create a new diet plan"));
-        log.debug(
-                LogField.Placeholders.TWO.getPlaceholder(),
-                StructuredArguments.kv(LogField.MSG.label(), "Request body to create a new diet plan"),
-                StructuredArguments.kv(LogField.REQUEST_BODY.label(), "( " + request + " )"));
-
-        final DietPlanDomain dietPlan = dietPlanMapper.toDomain(request);
-
-        final DietPlanDomain dietPlanCreated = createDietPlanUseCase.execute(dietPlan);
-
-        final DietPlanCompleteResponseDto dtoResponse = dietPlanMapper.toDto(dietPlanCreated);
 
         log.debug(
                 LogField.Placeholders.TWO.getPlaceholder(),
