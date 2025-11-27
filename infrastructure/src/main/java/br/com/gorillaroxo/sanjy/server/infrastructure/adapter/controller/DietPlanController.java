@@ -31,29 +31,6 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
     private final DietPlanMapper dietPlanMapper;
 
     @Override
-    @GetMapping("/v1/diet-plan/active")
-    @Tool(name = "activeDietPlan", description = """
-            Retrieves the currently active diet plan with all meal types, standard options, \
-            nutritional targets (calories, protein, carbs, fat), and goals. Only one diet plan can be active at a time.
-            """)
-    public DietPlanCompleteResponseDto activeDietPlan() {
-        log.info(
-                LogField.Placeholders.ONE.getPlaceholder(),
-                StructuredArguments.kv(LogField.MSG.label(), "Request to get active diet plan"));
-
-        final DietPlanDomain dietPlan = getActiveDietPlanUseCase.execute();
-
-        final DietPlanCompleteResponseDto dtoResponse = dietPlanMapper.toDto(dietPlan);
-
-        log.debug(
-                LogField.Placeholders.TWO.getPlaceholder(),
-                StructuredArguments.kv(LogField.MSG.label(), "Response body diet plan"),
-                StructuredArguments.kv(LogField.RESPONSE_BODY.label(), "( " + dtoResponse + " )"));
-
-        return dtoResponse;
-    }
-
-    @Override
     @PostMapping("/v1/diet-plan")
     @ResponseStatus(HttpStatus.CREATED)
     @Tool(name = "newDietPlan", description = """
@@ -74,6 +51,29 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
         final DietPlanDomain dietPlanCreated = createDietPlanUseCase.execute(dietPlan);
 
         final DietPlanCompleteResponseDto dtoResponse = dietPlanMapper.toDto(dietPlanCreated);
+
+        log.debug(
+                LogField.Placeholders.TWO.getPlaceholder(),
+                StructuredArguments.kv(LogField.MSG.label(), "Response body diet plan"),
+                StructuredArguments.kv(LogField.RESPONSE_BODY.label(), "( " + dtoResponse + " )"));
+
+        return dtoResponse;
+    }
+
+    @Override
+    @GetMapping("/v1/diet-plan/active")
+    @Tool(name = "activeDietPlan", description = """
+            Retrieves the currently active diet plan with all meal types, standard options, \
+            nutritional targets (calories, protein, carbs, fat), and goals. Only one diet plan can be active at a time.
+            """)
+    public DietPlanCompleteResponseDto activeDietPlan() {
+        log.info(
+                LogField.Placeholders.ONE.getPlaceholder(),
+                StructuredArguments.kv(LogField.MSG.label(), "Request to get active diet plan"));
+
+        final DietPlanDomain dietPlan = getActiveDietPlanUseCase.execute();
+
+        final DietPlanCompleteResponseDto dtoResponse = dietPlanMapper.toDto(dietPlan);
 
         log.debug(
                 LogField.Placeholders.TWO.getPlaceholder(),
