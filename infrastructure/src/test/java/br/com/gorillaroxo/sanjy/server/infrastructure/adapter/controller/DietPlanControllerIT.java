@@ -6,6 +6,7 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import br.com.gorillaroxo.sanjy.server.infrastructure.test.IntegrationTestController;
 import br.com.gorillaroxo.sanjy.server.infrastructure.test.builder.DtoBuilders;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -25,7 +26,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class DietPlanControllerIT extends IntegrationTestController {
 
-    static final String BASE_URL = "/v1/diet-plan";
+    @BeforeAll
+    void setup() {
+        cleanUpDatabase();
+    }
+
+    @Override
+    protected String getBaseUrl() {
+        return "/v1/diet-plan";
+    }
 
     @Test
     @Order(1)
@@ -34,7 +43,7 @@ class DietPlanControllerIT extends IntegrationTestController {
 
         webTestClient
             .post()
-            .uri(BASE_URL)
+            .uri(getBaseUrl())
             .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
             .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
             .contentType(MediaType.APPLICATION_JSON)
@@ -64,7 +73,7 @@ class DietPlanControllerIT extends IntegrationTestController {
 
         webTestClient
             .post()
-            .uri(BASE_URL)
+            .uri(getBaseUrl())
             .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
             .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
             .contentType(MediaType.APPLICATION_JSON)
@@ -102,7 +111,7 @@ class DietPlanControllerIT extends IntegrationTestController {
 
         webTestClient
             .post()
-            .uri(BASE_URL)
+            .uri(getBaseUrl())
             .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
             .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
             .contentType(MediaType.APPLICATION_JSON)
@@ -112,7 +121,7 @@ class DietPlanControllerIT extends IntegrationTestController {
             .isCreated();
         webTestClient
             .post()
-            .uri(BASE_URL)
+            .uri(getBaseUrl())
             .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
             .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
             .contentType(MediaType.APPLICATION_JSON)
@@ -124,7 +133,7 @@ class DietPlanControllerIT extends IntegrationTestController {
         // When/Then
         webTestClient
             .get()
-            .uri(BASE_URL + "/active")
+            .uri(getBaseUrl() + "/active")
             .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
             .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
             .exchange()
@@ -147,7 +156,7 @@ class DietPlanControllerIT extends IntegrationTestController {
         // When/Then
         webTestClient
             .get()
-            .uri(BASE_URL + "/active")
+            .uri(getBaseUrl() + "/active")
             .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
             .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
             .exchange()
@@ -173,7 +182,7 @@ class DietPlanControllerIT extends IntegrationTestController {
             // Testing without required headers instead
             webTestClient
                 .post()
-                .uri(BASE_URL)
+                .uri(getBaseUrl())
                 .contentType(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus()
@@ -192,7 +201,7 @@ class DietPlanControllerIT extends IntegrationTestController {
 
             webTestClient
                 .post()
-                .uri(BASE_URL)
+                .uri(getBaseUrl())
                 .header(headerNameXCorrelationId, "7d1c9e48034744eca14256e77fc11dfe")
                 .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -217,7 +226,7 @@ class DietPlanControllerIT extends IntegrationTestController {
             // Testing with invalid UUID format instead
             webTestClient
                 .post()
-                .uri(BASE_URL)
+                .uri(getBaseUrl())
                 .header(headerNameXCorrelationId, "invalid-uuid")
                 .header(headerNameXChannel, "integration-test")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -244,7 +253,7 @@ class DietPlanControllerIT extends IntegrationTestController {
             // Testing without X-Channel header instead
             webTestClient
                 .post()
-                .uri(BASE_URL)
+                .uri(getBaseUrl())
                 .header(headerNameXCorrelationId, "7f804519-7a52-485c-983d-19439e5cc7a3")
                 .contentType(MediaType.APPLICATION_JSON)
                 .exchange()
