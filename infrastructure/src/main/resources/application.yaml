@@ -64,6 +64,9 @@ spring:
     virtual:
       enabled: true
 
+  aot:
+    enabled: true
+
 springdoc:
   api-docs:
     path: /api-docs
