@@ -9,7 +9,9 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import lombok.Builder;
 
+@Builder
 @Schema(description = "Request DTO for creating a meal type within a diet plan")
 public record CreateMealTypesRequestDto(
         @NotBlank
