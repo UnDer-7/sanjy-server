@@ -8,7 +8,6 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.IdOnlyResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisticsResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseDto;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.StandardOptionResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.DietPlanEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealTypeEntity;
