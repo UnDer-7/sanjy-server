@@ -45,7 +45,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <springdoc.version>2.8.14</springdoc.version>
-        <mapstruct.version>1.6.2</mapstruct.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
         <projectlombok.version>1.18.34</projectlombok.version>
 
         <spring-ai.version>1.0.3</spring-ai.version>
@@ -109,7 +109,7 @@
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
-            <version>8.0</version>
+            <version>8.1</version>
         </dependency>
         <!-- ####################### -->
 
@@ -164,6 +164,7 @@
                     <configuration>
                         <includes>
                             <include>**/*Test.java</include>
+                            <include>**/*IT.java</include>
                         </includes>
                     </configuration>
                 </plugin>
