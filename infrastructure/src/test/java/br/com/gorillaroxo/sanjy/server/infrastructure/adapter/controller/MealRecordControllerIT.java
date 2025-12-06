@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import br.com.gorillaroxo.sanjy.server.core.exception.ExceptionCode;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.IdOnlyResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisticsResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseDto;
@@ -163,7 +164,7 @@ class MealRecordControllerIT extends IntegrationTestController {
                             .filteredOn(Predicate.not(MealRecordResponseDto::isFreeMeal))
                             .first()
                             .extracting(MealRecordResponseDto::standardOption)
-                            .extracting(StandardOptionResponseDto::id)
+                            .extracting(IdOnlyResponseDto::id)
                             .isEqualTo(requestPlannedMealRecord.standardOptionId());
                 });
     }
