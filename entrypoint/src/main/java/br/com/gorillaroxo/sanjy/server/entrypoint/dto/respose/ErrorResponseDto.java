@@ -41,10 +41,7 @@ public record ErrorResponseDto(
                 requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         String customMessage,
 
-        @Schema(
-                description = """
+        @Schema(description = """
                     HTTP status code of the error response (400 for validation errors, 404 for not found, 500 for server errors, etc.)
-                    """,
-                example = "404",
-                requiredMode = Schema.RequiredMode.REQUIRED)
+                    """, example = "404", requiredMode = Schema.RequiredMode.REQUIRED)
         int httpStatusCode) {}
