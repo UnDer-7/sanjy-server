@@ -5,7 +5,6 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.SearchMealRecordPa
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisticsResponseDto;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseMealRecordDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +20,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
-
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,20 +33,26 @@ public interface MealRecordRestService {
                 Standard meals must have standardOptionId, while free meals must have isFreeMeal=true and freeMealDescription.
                 """)
     @ApiResponse(
-        responseCode = "201",
-        description = "Meal Record successfully created",
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = MealRecordResponseDto.class))
-    )
+            responseCode = "201",
+            description = "Meal Record successfully created",
+            content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = MealRecordResponseDto.class)))
     @ApiResponse(
-        responseCode = "400",
-        description = "client error",
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDto.class))
-    )
+            responseCode = "400",
+            description = "client error",
+            content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponseDto.class)))
     @ApiResponse(
-        responseCode = "500",
-        description = "unexpected error occurred",
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDto.class))
-    )
+            responseCode = "500",
+            description = "unexpected error occurred",
+            content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponseDto.class)))
     MealRecordResponseDto newMealRecord(@RequestBody @Valid @NotNull CreateMealRecordRequestDto request);
 
     @Operation(summary = "Get today's meal records", description = """
@@ -56,20 +60,26 @@ public interface MealRecordRestService {
                 and free meals (off-plan). Use this to check daily food intake and diet adherence.
                 """)
     @ApiResponse(
-        responseCode = "200",
-        description = "Today Meal Record",
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = MealRecordResponseDto.class)))
-    )
+            responseCode = "200",
+            description = "Today Meal Record",
+            content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            array = @ArraySchema(schema = @Schema(implementation = MealRecordResponseDto.class))))
     @ApiResponse(
-        responseCode = "400",
-        description = "client error",
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDto.class))
-    )
+            responseCode = "400",
+            description = "client error",
+            content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponseDto.class)))
     @ApiResponse(
-        responseCode = "500",
-        description = "unexpected error occurred",
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDto.class))
-    )
+            responseCode = "500",
+            description = "unexpected error occurred",
+            content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponseDto.class)))
     List<MealRecordResponseDto> getTodayMealRecords();
 
     @Operation(summary = "Search meal records with filters and pagination", description = """
@@ -115,20 +125,26 @@ public interface MealRecordRestService {
             in = ParameterIn.QUERY,
             schema = @Schema(type = "boolean"))
     @ApiResponse(
-        responseCode = "200",
-        description = "Today Meal Record",
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = PageResponseMealRecordDto.class))
-    )
+            responseCode = "200",
+            description = "Today Meal Record",
+            content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = PageResponseMealRecordDto.class)))
     @ApiResponse(
-        responseCode = "400",
-        description = "client error",
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDto.class))
-    )
+            responseCode = "400",
+            description = "client error",
+            content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponseDto.class)))
     @ApiResponse(
-        responseCode = "500",
-        description = "unexpected error occurred",
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDto.class))
-    )
+            responseCode = "500",
+            description = "unexpected error occurred",
+            content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponseDto.class)))
     PageResponseMealRecordDto searchMealRecords(
             @Parameter(hidden = true) @NotNull @Valid SearchMealRecordParamRequestDto pageRequest);
 
@@ -181,15 +197,19 @@ public interface MealRecordRestService {
                         """)
                             }))
     @ApiResponse(
-        responseCode = "400",
-        description = "client error",
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDto.class))
-    )
+            responseCode = "400",
+            description = "client error",
+            content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponseDto.class)))
     @ApiResponse(
-        responseCode = "500",
-        description = "unexpected error occurred",
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDto.class))
-    )
+            responseCode = "500",
+            description = "unexpected error occurred",
+            content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponseDto.class)))
     MealRecordStatisticsResponseDto getMealRecordStatisticsByDateRange(
             @RequestParam(name = RequestConstants.Query.CONSUMED_AT_AFTER, required = false) @NotNull
                     LocalDateTime consumedAtAfter,

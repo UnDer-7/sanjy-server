@@ -22,20 +22,26 @@ public interface DietPlanRestService {
                 Each meal type can have multiple standard options for variety.
                 """)
     @ApiResponse(
-        responseCode = "201",
-        description = "Diet Plan successfully created",
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = DietPlanCompleteResponseDto.class))
-    )
+            responseCode = "201",
+            description = "Diet Plan successfully created",
+            content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = DietPlanCompleteResponseDto.class)))
     @ApiResponse(
-        responseCode = "400",
-        description = "client error",
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDto.class))
-    )
+            responseCode = "400",
+            description = "client error",
+            content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponseDto.class)))
     @ApiResponse(
-        responseCode = "500",
-        description = "unexpected error occurred",
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDto.class))
-    )
+            responseCode = "500",
+            description = "unexpected error occurred",
+            content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponseDto.class)))
     DietPlanCompleteResponseDto newDietPlan(@RequestBody @Valid @NotNull CreateDietPlanRequestDto request);
 
     @Operation(summary = "Get the currently active diet plan", description = """
@@ -43,19 +49,25 @@ public interface DietPlanRestService {
                 and goals. Only one diet plan can be active at a time. Use this to check the current diet configuration.
                 """)
     @ApiResponse(
-        responseCode = "200",
-        description = "Active Diet Plan",
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = DietPlanCompleteResponseDto.class))
-    )
+            responseCode = "200",
+            description = "Active Diet Plan",
+            content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = DietPlanCompleteResponseDto.class)))
     @ApiResponse(
-        responseCode = "400",
-        description = "client error",
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDto.class))
-    )
+            responseCode = "400",
+            description = "client error",
+            content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponseDto.class)))
     @ApiResponse(
-        responseCode = "500",
-        description = "unexpected error occurred",
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDto.class))
-    )
+            responseCode = "500",
+            description = "unexpected error occurred",
+            content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponseDto.class)))
     DietPlanCompleteResponseDto activeDietPlan();
 }

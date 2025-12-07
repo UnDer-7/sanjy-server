@@ -8,6 +8,14 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.properties.SpringDocConfigProperties;
 import org.springdoc.core.properties.SwaggerUiConfigProperties;
@@ -18,15 +26,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @Order(2)
@@ -43,10 +42,12 @@ public class RequiredHeaderFilterConfig extends OncePerRequestFilter {
     private final Set<String> ignoredPaths;
 
     public RequiredHeaderFilterConfig(
-        final AntPathMatcher pathMatcher,
-        final SwaggerUiConfigProperties swaggerUiConfigProperties,
-        final SpringDocConfigProperties springDocConfigProperties,
-        final McpServerProperties mcpServerProperties, final ObjectMapper objectMapper, final BusinessExceptionMapper businessExceptionMapper) {
+            final AntPathMatcher pathMatcher,
+            final SwaggerUiConfigProperties swaggerUiConfigProperties,
+            final SpringDocConfigProperties springDocConfigProperties,
+            final McpServerProperties mcpServerProperties,
+            final ObjectMapper objectMapper,
+            final BusinessExceptionMapper businessExceptionMapper) {
 
         this.pathMatcher = pathMatcher;
 
@@ -56,25 +57,24 @@ public class RequiredHeaderFilterConfig extends OncePerRequestFilter {
         this.objectMapper = objectMapper;
         this.businessExceptionMapper = businessExceptionMapper;
 
-        final var customIgnoredPath = List.of(
-            "/favicon.ico");
+        final var customIgnoredPath = List.of("/favicon.ico");
 
         this.ignoredPaths = Stream.of(getApiDocsPaths(), getSwaggerUiPaths(), getMcpServerPaths(), customIgnoredPath)
-            .flatMap(Collection::stream)
-            .collect(Collectors.toSet());
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
     }
 
     @Override
     protected boolean shouldNotFilter(final HttpServletRequest request) throws ServletException {
 
         final var requestUrl = request.getRequestURI();
-        return ignoredPaths.stream()
-            .anyMatch(ignoredPath -> pathMatcher.match(ignoredPath, requestUrl));
+        return ignoredPaths.stream().anyMatch(ignoredPath -> pathMatcher.match(ignoredPath, requestUrl));
     }
 
     @Override
-    protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
-        final FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain)
+            throws ServletException, IOException {
 
         final boolean isValid = validateRequiredHeaders(request, response);
         if (isValid) {
@@ -82,7 +82,8 @@ public class RequiredHeaderFilterConfig extends OncePerRequestFilter {
         }
     }
 
-    private boolean validateRequiredHeaders(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+    private boolean validateRequiredHeaders(final HttpServletRequest request, final HttpServletResponse response)
+            throws IOException {
         final String correlationId = request.getHeader(RequestConstants.Headers.X_CORRELATION_ID);
         final String channel = request.getHeader(RequestConstants.Headers.X_CHANNEL);
 
@@ -119,9 +120,9 @@ public class RequiredHeaderFilterConfig extends OncePerRequestFilter {
     }
 
     private void sendInvalidUuidErrorResponse(final HttpServletResponse response, final String invalidValue)
-        throws IOException {
+            throws IOException {
         final var errorResponse = new InvalidValuesException("Header '%s' must be a valid UUID format. Received: '%s'"
-            .formatted(RequestConstants.Headers.X_CORRELATION_ID, invalidValue));
+                .formatted(RequestConstants.Headers.X_CORRELATION_ID, invalidValue));
 
         errorResponse.executeLogging();
 
@@ -132,9 +133,9 @@ public class RequiredHeaderFilterConfig extends OncePerRequestFilter {
     }
 
     private void sendMissingHeadersErrorResponse(final HttpServletResponse response, final List<String> missingHeaders)
-        throws IOException {
+            throws IOException {
         final var errorResponse =
-            new InvalidValuesException("Missing headers. Headers: %s are required".formatted(missingHeaders));
+                new InvalidValuesException("Missing headers. Headers: %s are required".formatted(missingHeaders));
 
         errorResponse.executeLogging();
 
@@ -144,20 +145,14 @@ public class RequiredHeaderFilterConfig extends OncePerRequestFilter {
         response.getWriter().write(objectMapper.writeValueAsString(businessExceptionMapper.toDto(errorResponse)));
     }
 
-
     private List<String> getApiDocsPaths() {
         final String path = springDocConfigProperties.getApiDocs().getPath();
-        return List.of(
-            path,
-            path + WILDCARD_PATH
-                      );
+        return List.of(path, path + WILDCARD_PATH);
     }
 
     private List<String> getSwaggerUiPaths() {
         final String path = swaggerUiConfigProperties.getPath();
-        return List.of(
-            path,
-            "/swagger-ui" + WILDCARD_PATH);
+        return List.of(path, "/swagger-ui" + WILDCARD_PATH);
     }
 
     private List<String> getMcpServerPaths() {
@@ -165,9 +160,6 @@ public class RequiredHeaderFilterConfig extends OncePerRequestFilter {
         final String sseEndpoint = mcpServerProperties.getSseEndpoint();
 
         return List.of(
-            sseMessageEndpoint,
-            sseMessageEndpoint + WILDCARD_PATH,
-            sseEndpoint,
-            sseEndpoint + WILDCARD_PATH);
+                sseMessageEndpoint, sseMessageEndpoint + WILDCARD_PATH, sseEndpoint, sseEndpoint + WILDCARD_PATH);
     }
 }

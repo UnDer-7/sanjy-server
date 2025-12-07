@@ -68,15 +68,15 @@ public abstract class IntegrationTestController {
 
     protected final DietPlanEntity createDietPlan() {
         final var standardOption =
-            EntityBuilders.buildStandardOptionEntity().id(null).build();
+                EntityBuilders.buildStandardOptionEntity().id(null).build();
         final var mealType = EntityBuilders.buildMealTypeEntity()
-            .id(null)
-            .standardOptions(Set.of(standardOption))
-            .build();
+                .id(null)
+                .standardOptions(Set.of(standardOption))
+                .build();
         final var dietPlan = EntityBuilders.buildDietPlanEntity()
-            .id(null)
-            .mealTypes(Set.of(mealType))
-            .build();
+                .id(null)
+                .mealTypes(Set.of(mealType))
+                .build();
         return dietPlanRepository.save(dietPlan);
     }
 }
