@@ -12,6 +12,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -23,6 +24,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(classes = SanJyApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = {TestcontainersConfig.class})
+@ActiveProfiles("test")
 public abstract class IntegrationTestController {
 
     @Autowired
@@ -66,15 +68,15 @@ public abstract class IntegrationTestController {
 
     protected final DietPlanEntity createDietPlan() {
         final var standardOption =
-                EntityBuilders.buildStandardOptionEntity().id(null).build();
+            EntityBuilders.buildStandardOptionEntity().id(null).build();
         final var mealType = EntityBuilders.buildMealTypeEntity()
-                .id(null)
-                .standardOptions(Set.of(standardOption))
-                .build();
+            .id(null)
+            .standardOptions(Set.of(standardOption))
+            .build();
         final var dietPlan = EntityBuilders.buildDietPlanEntity()
-                .id(null)
-                .mealTypes(Set.of(mealType))
-                .build();
+            .id(null)
+            .mealTypes(Set.of(mealType))
+            .build();
         return dietPlanRepository.save(dietPlan);
     }
 }
