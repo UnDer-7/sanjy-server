@@ -82,6 +82,15 @@ public class RequiredHeaderFilterConfig extends OncePerRequestFilter {
         }
     }
 
+    private static boolean isValidUuid(final String value) {
+        try {
+            UUID.fromString(value);
+            return true;
+        } catch (IllegalArgumentException _) {
+            return false;
+        }
+    }
+
     private boolean validateRequiredHeaders(final HttpServletRequest request, final HttpServletResponse response)
             throws IOException {
         final String correlationId = request.getHeader(RequestConstants.Headers.X_CORRELATION_ID);
@@ -108,15 +117,6 @@ public class RequiredHeaderFilterConfig extends OncePerRequestFilter {
         }
 
         return true;
-    }
-
-    private static boolean isValidUuid(final String value) {
-        try {
-            UUID.fromString(value);
-            return true;
-        } catch (IllegalArgumentException _) {
-            return false;
-        }
     }
 
     private void sendInvalidUuidErrorResponse(final HttpServletResponse response, final String invalidValue)
