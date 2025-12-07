@@ -250,11 +250,11 @@ class MealRecordControllerIT extends IntegrationTestController {
                 .expectBody(new ParameterizedTypeReference<PageResponseDto<MealRecordResponseDto>>() {})
                 .value(response -> {
                     assertThat(response).isNotNull();
-                    assertThat(response.totalPages()).isEqualTo(1);
-                    assertThat(response.currentPage()).isEqualTo(0);
-                    assertThat(response.pageSize()).isNotNull();
-                    assertThat(response.totalItems()).isEqualTo(4);
-                    assertThat(response.content()).isNotNull().hasSize(4);
+                    assertThat(response.getTotalPages()).isEqualTo(1);
+                    assertThat(response.getCurrentPage()).isEqualTo(0);
+                    assertThat(response.getPageSize()).isNotNull();
+                    assertThat(response.getTotalItems()).isEqualTo(4);
+                    assertThat(response.getContent()).isNotNull().hasSize(4);
                 });
     }
 
@@ -275,11 +275,11 @@ class MealRecordControllerIT extends IntegrationTestController {
                 .expectBody(new ParameterizedTypeReference<PageResponseDto<MealRecordResponseDto>>() {})
                 .value(response -> {
                     assertThat(response).isNotNull();
-                    assertThat(response.totalPages()).isEqualTo(0);
-                    assertThat(response.currentPage()).isEqualTo(0);
-                    assertThat(response.pageSize()).isNotNull();
-                    assertThat(response.totalItems()).isEqualTo(0);
-                    assertThat(response.content()).isNotNull().hasSize(0);
+                    assertThat(response.getTotalPages()).isEqualTo(0);
+                    assertThat(response.getCurrentPage()).isEqualTo(0);
+                    assertThat(response.getPageSize()).isNotNull();
+                    assertThat(response.getTotalItems()).isEqualTo(0);
+                    assertThat(response.getContent()).isNotNull().hasSize(0);
                 });
     }
 

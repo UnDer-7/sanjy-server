@@ -34,11 +34,12 @@ spring:
   ai:
     mcp:
       server:
-        name: webmvc-mcp-server
-        version: 1.0.0
+        name: ${spring.application.name}-mcp-server
+        version: "@project.version@"
         type: SYNC
-        instructions: "This server provides weather information tools and resources"
-        sse-message-endpoint: /mcp/messages
+        instructions: "This server provides diet and meal management tools. You can create and retrieve diet plans with nutritional targets, register meal consumption records (both standard and free meals), view today's meals, search historical meal data with pagination, and analyze diet adherence statistics over time periods."
+        sse-message-endpoint: ${SANJY_SERVER_MCP_SSE_MESSAGE_ENDPOINT}
+        sse-endpoint: ${SANJY_SERVER_MCP_SSE_ENDPOINT}
         capabilities:
           tool: true
           resource: false
@@ -69,12 +70,13 @@ spring:
 
 springdoc:
   api-docs:
-    path: /api-docs
+    path: ${SANJY_SERVER_OPEN_API_API_DOCS_PATH}
     resolve-schema-properties: true
+    enabled: ${SANJY_SERVER_OPEN_API_API_DOCS_ENABLE}
   override-with-generic-response: false
-  paths-to-exclude: /**/api-docs,/swagger-ui/**,/**/swagger-resources/**
   swagger-ui:
-    path: /
+    path: ${SANJY_SERVER_OPEN_API_SWAGGER_UI_REDIRECT_PATH}
+    enabled: ${SANJY_SERVER_OPEN_API_SWAGGER_UI_ENABLE}
 
 logging:
   level:

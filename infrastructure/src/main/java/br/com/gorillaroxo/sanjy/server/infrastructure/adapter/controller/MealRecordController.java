@@ -14,6 +14,7 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.SearchMealRecordPa
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisticsResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseMealRecordDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.rest.MealRecordRestService;
 import br.com.gorillaroxo.sanjy.server.infrastructure.config.McpToolMarker;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.MealRecordMapper;
@@ -100,7 +101,7 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
             Searches meal records with pagination and optional filters (date range, meal type). Returns paginated results with total count. \
             Use this to view historical meal data, analyze eating patterns, or generate reports.
             """)
-    public PageResponseDto<MealRecordResponseDto> searchMealRecords(final SearchMealRecordParamRequestDto pageRequest) {
+    public PageResponseMealRecordDto searchMealRecords(final SearchMealRecordParamRequestDto pageRequest) {
         log.info(
                 LogField.Placeholders.ONE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Request to search meal records"));
@@ -118,7 +119,7 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
                 StructuredArguments.kv(LogField.MSG.label(), "Response search meal records"),
                 StructuredArguments.kv(LogField.RESPONSE_BODY.label(), "( " + responseDto + " )"));
 
-        return responseDto;
+        return new PageResponseMealRecordDto(responseDto);
     }
 
     @Override
