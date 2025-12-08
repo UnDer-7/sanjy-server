@@ -61,6 +61,7 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
     }
 
     @Override
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/v1/diet-plan/active")
     @Tool(name = "activeDietPlan", description = """
             Retrieves the currently active diet plan with all meal types, standard options, \

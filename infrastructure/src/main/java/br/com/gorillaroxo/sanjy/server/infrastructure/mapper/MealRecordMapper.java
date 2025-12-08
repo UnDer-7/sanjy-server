@@ -42,6 +42,14 @@ public interface MealRecordMapper {
 
     List<MealRecordDomain> toDomain(List<MealRecordEntity> entities);
 
+    @Mapping(target = "mealType.name", ignore = true)
+    @Mapping(target = "mealType.scheduledTime", ignore = true)
+    @Mapping(target = "mealType.dietPlanId", ignore = true)
+    @Mapping(target = "mealType.observation", ignore = true)
+    @Mapping(target = "mealType.standardOptions", ignore = true)
+    @Mapping(target = "standardOption.optionNumber", ignore = true)
+    @Mapping(target = "standardOption.description", ignore = true)
+    @Mapping(target = "standardOption.mealTypeId", ignore = true)
     MealRecordDomain toDomain(MealRecordResponseDto dto);
 
     MealRecordStatisticsDomain toDomain(MealRecordStatisticsProjection projection);
