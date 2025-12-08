@@ -31,7 +31,7 @@ FROM alpine:3.22.2 AS release
 
 WORKDIR /app
 
-COPY --from=builder /build/infrastructure/target/sanjy-server .
+COPY --from=builder /build/infrastructure/target/*.graal ./app.graal
 
 # Update busybox to fix CVE-2025-46394 and install glibc compatibility
 RUN apk upgrade --no-cache busybox busybox-binsh ssl_client && \
@@ -51,4 +51,4 @@ USER sanjy
 
 EXPOSE 8080
 
-ENTRYPOINT ["./sanjy-server"]
+ENTRYPOINT ["./app.graal"]

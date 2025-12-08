@@ -1,0 +1,143 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  tag-and-release:
+    name: Tag and Release
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 #v6.0.0
+
+      - name: Setup GraalVM 25 (Oracle)
+        uses: graalvm/setup-graalvm@eec48106e0bf45f2976c2ff0c3e22395cced8243 #v1.4.2
+        with:
+          java-version: '25'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: 'maven'
+
+      - name: Verify GraalVM installation
+        run: |
+          echo "GRAALVM_HOME: $GRAALVM_HOME"
+          echo "JAVA_HOME: $JAVA_HOME"
+          java -version
+
+      - name: Get current project version
+        id: project-version
+        run: |
+          VERSION=$(make version)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Current project version: $VERSION"
+
+      - name: Check if tag already exists
+        id: check-tag
+        run: |
+          VERSION="${{ steps.project-version.outputs.version }}"
+
+          if git ls-remote --tags origin | grep -q "refs/tags/$VERSION$"; then
+            echo "::error::Tag $VERSION already exists in the repository!"
+            echo ""
+            echo "❌ A release for version $VERSION has already been created."
+            echo ""
+            echo "💡 This should not happen if the pull request pipeline is working correctly."
+            echo "   The version validation should have prevented this."
+            echo ""
+            echo "Possible causes:"
+            echo "  1. The tag was created manually"
+            echo "  2. A previous deploy workflow run already created this tag"
+            echo "  3. The pull request pipeline was bypassed"
+            exit 1
+          fi
+
+          echo "✅ Tag $VERSION does not exist, proceeding with release"
+
+      - name: Load environment variables
+        run: |
+          # Load .env file variables into GitHub environment
+          if [ -f .env ]; then
+            cat .env >> $GITHUB_ENV
+          else
+            echo "::error::.env file not found!"
+            exit 1
+          fi
+
+      - name: Build GraalVM native image and JAR
+        run: make build/graalvm
+
+      - name: Find build artifacts
+        id: artifacts
+        run: |
+          JAR_FILE=$(find infrastructure/target -name "*.jar" -type f | head -n 1)
+          GRAAL_FILE=$(find infrastructure/target -name "*.graal" -type f | head -n 1)
+
+          if [ -z "$JAR_FILE" ]; then
+            echo "::error::JAR file not found in infrastructure/target/"
+            exit 1
+          fi
+
+          if [ -z "$GRAAL_FILE" ]; then
+            echo "::error::GraalVM binary (.graal) not found in infrastructure/target/"
+            exit 1
+          fi
+
+          echo "jar_file=$JAR_FILE" >> $GITHUB_OUTPUT
+          echo "graal_file=$GRAAL_FILE" >> $GITHUB_OUTPUT
+          echo "Found JAR: $JAR_FILE"
+          echo "Found GraalVM binary: $GRAAL_FILE"
+
+      - name: Extract CHANGELOG for current version
+        id: changelog
+        run: |
+          VERSION="${{ steps.project-version.outputs.version }}"
+          CHANGELOG_FILE="CHANGELOG.md"
+
+          # Extract the section for the current version
+          # Get content between ## [VERSION] and the next ## (or end of file)
+          CHANGELOG_CONTENT=$(sed -n "/^## \[$VERSION\]/,/^## \[/p" "$CHANGELOG_FILE" | sed '$d')
+
+          # If it's the last version in the file, get everything until end
+          if [ -z "$CHANGELOG_CONTENT" ]; then
+            CHANGELOG_CONTENT=$(sed -n "/^## \[$VERSION\]/,\$p" "$CHANGELOG_FILE")
+          fi
+
+          # Remove the version header line (## [X.Y.Z] - DATE)
+          CHANGELOG_CONTENT=$(echo "$CHANGELOG_CONTENT" | tail -n +2)
+
+          # Save to file for multiline output
+          echo "$CHANGELOG_CONTENT" > changelog_body.txt
+          echo "✅ Extracted CHANGELOG for version $VERSION"
+
+      - name: Create Git tag
+        run: |
+          VERSION="${{ steps.project-version.outputs.version }}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git tag -a "$VERSION" -m "Release $VERSION"
+          git push origin "$VERSION"
+
+          echo "✅ Created and pushed tag $VERSION"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 #v2.2.0
+        with:
+          tag_name: ${{ steps.project-version.outputs.version }}
+          name: ${{ steps.project-version.outputs.version }}
+          body_path: changelog_body.txt
+          files: |
+            ${{ steps.artifacts.outputs.jar_file }}
+            ${{ steps.artifacts.outputs.graal_file }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
