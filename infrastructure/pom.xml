@@ -104,6 +104,7 @@
     </dependencies>
 
     <build>
+        <finalName>sanjy-server-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -141,7 +142,7 @@
                 <groupId>org.graalvm.buildtools</groupId>
                 <artifactId>native-maven-plugin</artifactId>
                 <configuration>
-                    <imageName>sanjy-server</imageName>
+                    <imageName>sanjy-server-${project.version}.graal</imageName>
                     <buildArgs>
                         <buildArg>-H:+ReportExceptionStackTraces</buildArg>
                     </buildArgs>

@@ -126,6 +126,96 @@ jobs:
           echo "After updating the version, commit and push the changes."
           exit 1
 
+      - name: Validate CHANGELOG.md entry
+        id: changelog-validation
+        run: |
+          CURRENT_VERSION="${{ steps.project-version.outputs.version }}"
+          CHANGELOG_FILE="CHANGELOG.md"
+
+          # Check if CHANGELOG.md exists
+          if [ ! -f "$CHANGELOG_FILE" ]; then
+            echo "changelog_valid=false" >> $GITHUB_OUTPUT
+            echo "changelog_error=missing_file" >> $GITHUB_OUTPUT
+            echo "::error::CHANGELOG.md file not found!"
+            exit 0
+          fi
+
+          # Check if version header exists (## [X.Y.Z])
+          if ! grep -q "^## \[$CURRENT_VERSION\]" "$CHANGELOG_FILE"; then
+            echo "changelog_valid=false" >> $GITHUB_OUTPUT
+            echo "changelog_error=missing_version_header" >> $GITHUB_OUTPUT
+            echo "::error::Version $CURRENT_VERSION not found in CHANGELOG.md!"
+            exit 0
+          fi
+
+          # Extract the section for the current version
+          # Get content between ## [CURRENT_VERSION] and the next ## (or end of file)
+          VERSION_SECTION=$(sed -n "/^## \[$CURRENT_VERSION\]/,/^## \[/p" "$CHANGELOG_FILE" | sed '$d')
+
+          # If it's the last version in the file, get everything until end
+          if [ -z "$VERSION_SECTION" ]; then
+            VERSION_SECTION=$(sed -n "/^## \[$CURRENT_VERSION\]/,\$p" "$CHANGELOG_FILE")
+          fi
+
+          # Check if there's at least one #### header within the version section
+          if ! echo "$VERSION_SECTION" | grep -q "^####"; then
+            echo "changelog_valid=false" >> $GITHUB_OUTPUT
+            echo "changelog_error=missing_changes" >> $GITHUB_OUTPUT
+            echo "::error::No changes documented for version $CURRENT_VERSION in CHANGELOG.md!"
+            exit 0
+          fi
+
+          # Validation passed
+          echo "changelog_valid=true" >> $GITHUB_OUTPUT
+          echo "✅ CHANGELOG.md properly documented for version $CURRENT_VERSION"
+
+      - name: Fail if CHANGELOG.md is not properly documented
+        if: steps.changelog-validation.outputs.changelog_valid != 'true'
+        run: |
+          CURRENT_VERSION="${{ steps.project-version.outputs.version }}"
+          ERROR_TYPE="${{ steps.changelog-validation.outputs.changelog_error }}"
+
+          echo "::error::CHANGELOG validation failed!"
+          echo ""
+
+          if [ "$ERROR_TYPE" = "missing_file" ]; then
+            echo "❌ CHANGELOG.md file does not exist in the repository."
+            echo ""
+            echo "💡 Create a CHANGELOG.md file in the root of the project."
+          elif [ "$ERROR_TYPE" = "missing_version_header" ]; then
+            echo "❌ Version $CURRENT_VERSION is not documented in CHANGELOG.md."
+            echo ""
+            echo "💡 Add a version header to CHANGELOG.md:"
+            echo "   ## [$CURRENT_VERSION] - $(date +%Y-%m-%d)"
+            echo ""
+            echo "Example structure:"
+            echo "   ## [$CURRENT_VERSION] - $(date +%Y-%m-%d)"
+            echo "   "
+            echo "   ### Added"
+            echo "   "
+            echo "   #### Feature Name"
+            echo "   - Description of changes"
+          elif [ "$ERROR_TYPE" = "missing_changes" ]; then
+            echo "❌ Version $CURRENT_VERSION exists in CHANGELOG.md but has no documented changes."
+            echo ""
+            echo "💡 Add at least one change description using #### headers:"
+            echo ""
+            echo "Example:"
+            echo "   ## [$CURRENT_VERSION] - $(date +%Y-%m-%d)"
+            echo "   "
+            echo "   ### Added"
+            echo "   "
+            echo "   #### New Feature API"
+            echo "   - \`POST /new-endpoint\` - Description of the endpoint"
+            echo "   - \`GET /another-endpoint\` - Description of the endpoint"
+          fi
+
+          echo ""
+          echo "📖 Follow the Keep a Changelog format: https://keepachangelog.com/"
+          echo ""
+          echo "After updating CHANGELOG.md, commit and push the changes."
+          exit 1
+
   coding-style:
     name: Coding Style
     runs-on: ubuntu-latest
