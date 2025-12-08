@@ -205,6 +205,33 @@ sonar:
 
 
 # ==================================================================================== #
+## ===== VERSION =====
+# ==================================================================================== #
+## version: Display current project version from pom.xml
+.PHONY: version
+version:
+	@echo "$(POM_VERSION)"
+
+## version/set: Set new project version (usage: make version/set 1.0.23)
+.PHONY: version/set
+version/set:
+	@if [ -z "$(filter-out version/set,$(MAKECMDGOALS))" ]; then \
+		echo "ERROR: Version number is required"; \
+		echo "Usage: make version/set 1.0.23"; \
+		exit 1; \
+	fi
+	@echo ">>> Setting project version to $(filter-out version/set,$(MAKECMDGOALS))..."
+	@./mvnw -B -ntp versions:set -DnewVersion=$(filter-out version/set,$(MAKECMDGOALS)) -DgenerateBackupPoms=false
+	@echo ">>> Project version updated to $(filter-out version/set,$(MAKECMDGOALS))"
+
+# Prevent make from treating version number as a target
+%:
+	@:
+
+
+
+
+# ==================================================================================== #
 ## ===== CODING STYLE =====
 # ==================================================================================== #
 ## fmt: Format all source code files using Spotless

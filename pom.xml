@@ -12,7 +12,7 @@
 
     <groupId>br.com.gorillaroxo</groupId>
     <artifactId>sanJy-server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
     <name>sanJy-server</name>
     <description>Backend server application for diet and meal management, enabling nutritionists to create diet plans and users to track meal consumption records</description>
