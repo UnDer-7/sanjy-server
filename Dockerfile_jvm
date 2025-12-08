@@ -1,8 +1,8 @@
 ##################
-# BUILD STEP
+# BUILD STEP (FULL MODE)
 ##################
 
-FROM eclipse-temurin:25.0.1_8-jdk-alpine-3.22 AS build
+FROM eclipse-temurin:25.0.1_8-jdk-alpine-3.22 AS build-full
 
 WORKDIR /app
 
@@ -24,14 +24,29 @@ COPY .mvn .mvn
 RUN make build/jvm
 
 ##################
+# BUILD STEP (LOCAL MODE)
+##################
+
+FROM eclipse-temurin:25.0.1_8-jdk-alpine-3.22 AS build-local
+
+WORKDIR /app
+
+# Copy pre-built jar from local build
+COPY infrastructure/target/*.jar ./app.jar
+
+##################
 # RELEASE STEP
 ##################
+
+ARG BUILD_MODE=full
+FROM build-${BUILD_MODE} AS build-selected
+
 FROM eclipse-temurin:25.0.1_8-jdk-alpine-3.22 AS release
 
 WORKDIR /app
 
-# Copy the built jar from the build stage
-COPY --from=build /app/infrastructure/target/*.jar ./app.jar
+# Copy the jar (either from build-full or build-local)
+COPY --from=build-selected /app/*.jar ./app.jar
 
 # ToDo: Colocar healthcheck e observabilidade
 # Copy healthcheck script

@@ -1,7 +1,7 @@
 ##################
-# BUILD STEP
+# BUILD STEP (FULL MODE)
 ##################
-FROM container-registry.oracle.com/graalvm/native-image:25 AS builder
+FROM container-registry.oracle.com/graalvm/native-image:25 AS build-full
 
 # Install build dependencies
 RUN microdnf install -y findutils && \
@@ -25,13 +25,28 @@ COPY .env .env
 RUN make build/graalvm
 
 ##################
+# BUILD STEP (LOCAL MODE)
+##################
+FROM alpine:3.22.2 AS build-local
+
+WORKDIR /build
+
+# Copy pre-built GraalVM native binary from local build
+COPY infrastructure/target/*.graal ./app.graal
+
+##################
 # RELEASE STEP
 ##################
+
+ARG BUILD_MODE=full
+FROM build-${BUILD_MODE} AS build-selected
+
 FROM alpine:3.22.2 AS release
 
 WORKDIR /app
 
-COPY --from=builder /build/infrastructure/target/*.graal ./app.graal
+# Copy the native binary (either from build-full or build-local)
+COPY --from=build-selected /build/*.graal ./app.graal
 
 # Update busybox to fix CVE-2025-46394 and install glibc compatibility
 RUN apk upgrade --no-cache busybox busybox-binsh ssl_client && \
