@@ -5,12 +5,134 @@ on:
     types: [opened, labeled, synchronize, reopened]
 
 jobs:
-  coding-style:
-    name: Coding Style
+  version-validation:
+    name: Version Validation
     runs-on: ubuntu-latest
 
     # Only run if PR has 'run-pipe' label
     if: contains(github.event.pull_request.labels.*.name, 'run-pipe')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 #v6.0.0
+
+      - name: Setup GraalVM 25 (Oracle)
+        uses: graalvm/setup-graalvm@eec48106e0bf45f2976c2ff0c3e22395cced8243 #v1.4.2
+        with:
+          java-version: '25'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: 'maven'
+
+      - name: Get current project version
+        id: project-version
+        run: |
+          VERSION=$(make version)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Current project version: $VERSION"
+
+      - name: Get latest version tag
+        id: latest-tag
+        run: |
+          # Fetch all version tags and get the latest one following semantic versioning
+          LATEST_TAG=$(git ls-remote --tags https://github.com/UnDer-7/sanjy-server.git | \
+            grep -oP 'refs/tags/\K[0-9]+\.[0-9]+\.[0-9]+$' | \
+            sort -V | \
+            tail -n 1)
+
+          if [ -z "$LATEST_TAG" ]; then
+            echo "latest_version=0.0.0" >> $GITHUB_OUTPUT
+            echo "No existing version tags found. Starting from 0.0.0"
+          else
+            echo "latest_version=$LATEST_TAG" >> $GITHUB_OUTPUT
+            echo "Latest published version: $LATEST_TAG"
+          fi
+
+      - name: Compare versions (Semantic Versioning)
+        id: compare-versions
+        run: |
+          CURRENT_VERSION="${{ steps.project-version.outputs.version }}"
+          LATEST_VERSION="${{ steps.latest-tag.outputs.latest_version }}"
+
+          # Function to compare semantic versions
+          compare_versions() {
+            if [ "$1" = "$2" ]; then
+              echo "equal"
+              return
+            fi
+
+            # Split versions into major.minor.patch
+            IFS='.' read -r -a current <<< "$1"
+            IFS='.' read -r -a latest <<< "$2"
+
+            # Compare major version
+            if [ "${current[0]}" -gt "${latest[0]}" ]; then
+              echo "greater"
+              return
+            elif [ "${current[0]}" -lt "${latest[0]}" ]; then
+              echo "less"
+              return
+            fi
+
+            # Compare minor version
+            if [ "${current[1]}" -gt "${latest[1]}" ]; then
+              echo "greater"
+              return
+            elif [ "${current[1]}" -lt "${latest[1]}" ]; then
+              echo "less"
+              return
+            fi
+
+            # Compare patch version
+            if [ "${current[2]}" -gt "${latest[2]}" ]; then
+              echo "greater"
+              return
+            elif [ "${current[2]}" -lt "${latest[2]}" ]; then
+              echo "less"
+              return
+            fi
+
+            echo "equal"
+          }
+
+          COMPARISON=$(compare_versions "$CURRENT_VERSION" "$LATEST_VERSION")
+          echo "comparison=$COMPARISON" >> $GITHUB_OUTPUT
+          echo "Version comparison: $CURRENT_VERSION vs $LATEST_VERSION = $COMPARISON"
+
+      - name: Fail if version is not greater than latest
+        if: steps.compare-versions.outputs.comparison != 'greater'
+        run: |
+          CURRENT_VERSION="${{ steps.project-version.outputs.version }}"
+          LATEST_VERSION="${{ steps.latest-tag.outputs.latest_version }}"
+          COMPARISON="${{ steps.compare-versions.outputs.comparison }}"
+
+          echo "::error::Version validation failed!"
+          echo ""
+
+          if [ "$COMPARISON" = "equal" ]; then
+            echo "❌ Current version $CURRENT_VERSION is equal to the latest published version."
+          else
+            echo "❌ Current version $CURRENT_VERSION is LESS than the latest published version $LATEST_VERSION."
+          fi
+
+          echo ""
+          echo "💡 You must bump the version to be greater than $LATEST_VERSION"
+          echo ""
+          echo "Following Semantic Versioning:"
+          echo "  - Patch release (bug fixes): make version/set $LATEST_VERSION → increment patch (e.g., 1.0.0 → 1.0.1)"
+          echo "  - Minor release (new features): make version/set → increment minor (e.g., 1.0.0 → 1.1.0)"
+          echo "  - Major release (breaking changes): make version/set → increment major (e.g., 1.0.0 → 2.0.0)"
+          echo ""
+          echo "After updating the version, commit and push the changes."
+          exit 1
+
+  coding-style:
+    name: Coding Style
+    runs-on: ubuntu-latest
+
+    # Only run if version-validation job succeeded
+    needs: version-validation
+    if: success()
 
     steps:
       - name: Checkout code
