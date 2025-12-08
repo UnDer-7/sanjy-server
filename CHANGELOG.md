@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 #### Diet Plan API
+
 - `POST /diet-plan` - Create new diet plan with nutritional targets (daily calories, protein, carbs, fat)
   - Define multiple meal types (breakfast, lunch, dinner, snacks)
   - Add standard meal options with predefined nutritional values
@@ -17,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `GET /diet-plan/active` - Retrieve currently active diet plan with complete structure
 
 #### Meal Record API
+
 - `POST /meal-record` - Register meal consumption
   - Support for standard meals (pre-defined options)
   - Support for free meals (custom entries with description)
@@ -28,8 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Sort by consumption date
 
 #### Additional Features
+
 - Interactive Swagger UI documentation at root path (`/`)
 - Spring AI MCP Server integration for Claude AI tool usage
 - Single active diet plan enforcement (only one plan can be active at a time)
 
 [1.0.0]: https://github.com/UnDer-7/sanjy-server/releases/tag/1.0.0
+
