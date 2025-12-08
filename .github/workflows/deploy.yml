@@ -64,7 +64,8 @@ jobs:
         run: |
           # Load .env file variables into GitHub environment
           if [ -f .env ]; then
-            cat .env >> $GITHUB_ENV
+            # Filter out comments and empty lines, then export to GITHUB_ENV
+            grep -v '^#' .env | grep -v '^$' >> $GITHUB_ENV
           else
             echo "::error::.env file not found!"
             exit 1
