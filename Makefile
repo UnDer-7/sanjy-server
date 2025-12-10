@@ -18,9 +18,9 @@ help:
 	@echo 'Usage: make <target>'
 	@sed -n 's/^##//p' $(MAKEFILE_LIST) | column -t -s ':' | \
 	awk 'BEGIN {first=1} \
-	     /^ *=====/ { if (!first) print ""; print "   " $$0; first=0; next } \
-	     /^ *-----/ { print ""; print "   " $$0; next } \
-	     { print "   " $$0 }'
+						/^ *=====/ { if (!first) print ""; print "   " $$0; first=0; next } \
+						/^ *-----/ { print ""; print "   " $$0; next } \
+						{ print "   " $$0 }'
 
 # Hidden
 .PHONY: all

@@ -32,11 +32,13 @@ make build/graalvm
 **⚠️ Important:** Docker image builds require **BuildKit** (Docker 19.03+). BuildKit is automatically enabled via Makefile targets.
 
 **Verify BuildKit availability:**
+
 ```bash
 docker buildx version
 ```
 
 **JVM Docker Images:**
+
 ```bash
 # Full build (compiles inside Docker - slow)
 make build/jvm/docker
@@ -50,6 +52,7 @@ make build/jvm/docker/force
 ```
 
 **GraalVM Docker Images:**
+
 ```bash
 # Full build (compiles inside Docker - very slow)
 make build/graalvm/docker
@@ -63,7 +66,9 @@ make build/graalvm/docker/force
 ```
 
 **Available commands:**
+
 ```bash
 # See all available make targets
 make help
 ```
+
