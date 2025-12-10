@@ -142,3 +142,107 @@ jobs:
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload build artifacts for Docker
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 #v5.0.0
+        with:
+          name: build-artifacts
+          path: |
+            ${{ steps.artifacts.outputs.jar_file }}
+            ${{ steps.artifacts.outputs.graal_file }}
+          retention-days: 1
+
+  deploy-image:
+    name: Build and Push Docker Images
+    runs-on: ubuntu-latest
+    needs: tag-and-release
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 #v6.0.0
+
+      - name: Get project version
+        id: project-version
+        run: |
+          VERSION=$(make version)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Project version: $VERSION"
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 #v6.0.0
+        with:
+          name: build-artifacts
+          path: infrastructure/target/
+
+      - name: Verify downloaded artifacts
+        run: |
+          echo "Downloaded artifacts:"
+          ls -lh infrastructure/target/
+
+          JAR_FILE=$(find infrastructure/target -name "*.jar" -type f | head -n 1)
+          GRAAL_FILE=$(find infrastructure/target -name "*.graal" -type f | head -n 1)
+
+          if [ -z "$JAR_FILE" ]; then
+            echo "::error::JAR file not found!"
+            exit 1
+          fi
+
+          if [ -z "$GRAAL_FILE" ]; then
+            echo "::error::GraalVM binary not found!"
+            exit 1
+          fi
+
+          echo "✅ JAR file: $JAR_FILE"
+          echo "✅ GraalVM binary: $GRAAL_FILE"
+
+      - name: Build JVM Docker image
+        run: |
+          echo "Building JVM Docker image..."
+          make build/jvm/docker/local
+          echo "✅ JVM image built: under7/sanjy-server:${{ steps.project-version.outputs.version }}-jvm"
+
+      - name: Build GraalVM Docker image
+        run: |
+          echo "Building GraalVM Docker image..."
+          make build/graalvm/docker/local
+          echo "✅ GraalVM image built: under7/sanjy-server:${{ steps.project-version.outputs.version }}-graalvm"
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef #v3.6.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push JVM image to Docker Hub
+        run: |
+          IMAGE_NAME="under7/sanjy-server:${{ steps.project-version.outputs.version }}-jvm"
+          echo "Pushing $IMAGE_NAME..."
+          docker push $IMAGE_NAME
+          echo "✅ JVM image pushed successfully"
+
+      - name: Push GraalVM image to Docker Hub
+        run: |
+          IMAGE_NAME="under7/sanjy-server:${{ steps.project-version.outputs.version }}-graalvm"
+          echo "Pushing $IMAGE_NAME..."
+          docker push $IMAGE_NAME
+          echo "✅ GraalVM image pushed successfully"
+
+      - name: Tag and push latest images
+        run: |
+          JVM_IMAGE="under7/sanjy-server:${{ steps.project-version.outputs.version }}-jvm"
+          GRAALVM_IMAGE="under7/sanjy-server:${{ steps.project-version.outputs.version }}-graalvm"
+
+          # Tag and push latest-jvm
+          docker tag $JVM_IMAGE under7/sanjy-server:latest-jvm
+          docker push under7/sanjy-server:latest-jvm
+          echo "✅ Tagged and pushed under7/sanjy-server:latest-jvm"
+
+          # Tag and push latest-graalvm
+          docker tag $GRAALVM_IMAGE under7/sanjy-server:latest-graalvm
+          docker push under7/sanjy-server:latest-graalvm
+          echo "✅ Tagged and pushed under7/sanjy-server:latest-graalvm"
+
+          # Tag and push latest (pointing to GraalVM)
+          docker tag $GRAALVM_IMAGE under7/sanjy-server:latest
+          docker push under7/sanjy-server:latest
+          echo "✅ Tagged and pushed under7/sanjy-server:latest"
