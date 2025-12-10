@@ -13,6 +13,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Java 21 (or GraalVM Java 25 for native image builds)
 - Maven 3.x (or use included Maven wrapper)
 - Docker (for PostgreSQL database)
+- For Docker Image builds:
+  - Docker with BuildKit support (Docker 19.03+)
+  - BuildKit is automatically enabled via Makefile targets
+  - Verify BuildKit availability: `docker buildx version`
 - For GraalVM Native Image builds:
   - GraalVM JDK 25 or later
   - Native development tools: `build-essential`, `zlib1g-dev`
@@ -40,6 +44,53 @@ docker compose -f local/docker-compose.yml up -d
 # Package as JAR
 ./mvnw package
 ```
+
+### Building Docker Images
+
+**⚠️ IMPORTANT:** All Docker image build targets require **BuildKit** support (Docker 19.03+). BuildKit is automatically enabled via `DOCKER_BUILDKIT=1` in all Makefile targets, so no manual configuration is needed.
+
+#### Verify BuildKit Availability
+
+```bash
+# Check if BuildKit is available
+docker buildx version
+
+# If not available, update Docker to version 19.03 or later
+```
+
+#### JVM Docker Builds
+
+```bash
+# Option 1: Full build (compiles everything inside Docker - slow but self-contained)
+make build/jvm/docker
+
+# Option 2: Local build (uses pre-built JAR - FAST, requires local build first)
+make build/jvm          # First, build the JAR locally
+make build/jvm/docker/local  # Then, build Docker image using the JAR
+
+# Option 3: Force build without cache (for debugging)
+make build/jvm/docker/force
+```
+
+#### GraalVM Docker Builds
+
+```bash
+# Option 1: Full build (compiles native image inside Docker - VERY slow but self-contained)
+make build/graalvm/docker
+
+# Option 2: Local build (uses pre-built native binary - FAST, requires local build first)
+make build/graalvm      # First, build the native binary locally (takes 2-5 min)
+make build/graalvm/docker/local  # Then, build Docker image using the binary
+
+# Option 3: Force build without cache (for debugging)
+make build/graalvm/docker/force
+```
+
+#### Why BuildKit?
+
+The Dockerfiles use multi-stage builds with conditional stages (`build-full` vs `build-local`). Without BuildKit, Docker would build **all stages** even when not needed, resulting in unnecessary compilation. BuildKit intelligently skips unused stages, making local builds much faster.
+
+**Example:** When running `make build/jvm/docker/local`, BuildKit only builds the `build-local` and `release` stages, skipping the expensive `build-full` stage entirely.
 
 ### Building GraalVM Native Image
 

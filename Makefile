@@ -103,7 +103,7 @@ build/jvm:
 build/jvm/docker:
 	@START=$$(date +%s); \
 	echo 'Building docker image for JVM (full mode)...'; \
-	docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-jvm' -f Dockerfile_jvm .; \
+	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-jvm' -f Dockerfile_jvm .; \
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "Docker JVM image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
@@ -113,7 +113,7 @@ build/jvm/docker:
 build/jvm/docker/local:
 	@START=$$(date +%s); \
 	echo 'Building docker image for JVM (local mode - using pre-built JAR)...'; \
-	docker build --build-arg BUILD_MODE=local --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-jvm' -f Dockerfile_jvm .; \
+	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=local --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-jvm' -f Dockerfile_jvm .; \
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "Docker JVM image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
@@ -123,7 +123,7 @@ build/jvm/docker/local:
 build/jvm/docker/force:
 	@START=$$(date +%s); \
 	echo 'Building docker image for JVM without caching layers'; \
-	docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-jvm' -f Dockerfile_jvm . --progress=plain --no-cache; \
+	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-jvm' -f Dockerfile_jvm . --progress=plain --no-cache; \
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "Docker JVM force image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
@@ -150,7 +150,7 @@ build/graalvm:
 build/graalvm/docker:
 	@START=$$(date +%s); \
 	echo 'Building docker image for GraalVM (full mode)...'; \
-	docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-graalvm' -f Dockerfile_graalvm .; \
+	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-graalvm' -f Dockerfile_graalvm .; \
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "Docker GraalVM image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
@@ -160,7 +160,7 @@ build/graalvm/docker:
 build/graalvm/docker/local:
 	@START=$$(date +%s); \
 	echo 'Building docker image for GraalVM (local mode - using pre-built native binary)...'; \
-	docker build --build-arg BUILD_MODE=local --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-graalvm' -f Dockerfile_graalvm .; \
+	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=local --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-graalvm' -f Dockerfile_graalvm .; \
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "Docker GraalVM image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
@@ -170,7 +170,7 @@ build/graalvm/docker/local:
 build/graalvm/docker/force:
 	@START=$$(date +%s); \
 	echo 'Building docker image for GraalVM without caching layers'; \
-	docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-graalvm' -f Dockerfile_graalvm . --progress=plain --no-cache; \
+	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-graalvm' -f Dockerfile_graalvm . --progress=plain --no-cache; \
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "Docker GraalVM force image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"

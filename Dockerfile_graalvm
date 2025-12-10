@@ -1,7 +1,18 @@
 ##################
+# BUILD ARGUMENTS
+##################
+
+# Define BUILD_MODE at global scope to be used in FROM instructions
+ARG BUILD_MODE=full
+
+##################
 # BUILD STEP (FULL MODE)
 ##################
 FROM container-registry.oracle.com/graalvm/native-image:25 AS build-full
+
+RUN echo "========================================" && \
+    echo "STAGE: build-full (GraalVM native compilation)" && \
+    echo "========================================"
 
 # Install build dependencies
 RUN microdnf install -y findutils && \
@@ -21,13 +32,18 @@ COPY mvnw .
 COPY .mvn .mvn
 COPY .env .env
 
-# Build native image with environment variables loaded
-RUN make build/graalvm
+# Build native image with environment variables loaded and move to standard location
+RUN make build/graalvm && \
+    mv infrastructure/target/*.graal /build/app.graal
 
 ##################
 # BUILD STEP (LOCAL MODE)
 ##################
 FROM alpine:3.22.2 AS build-local
+
+RUN echo "========================================" && \
+    echo "STAGE: build-local (using pre-built native binary)" && \
+    echo "========================================"
 
 WORKDIR /build
 
@@ -37,11 +53,13 @@ COPY infrastructure/target/*.graal ./app.graal
 ##################
 # RELEASE STEP
 ##################
-
-ARG BUILD_MODE=full
 FROM build-${BUILD_MODE} AS build-selected
 
 FROM alpine:3.22.2 AS release
+
+RUN echo "========================================" && \
+    echo "STAGE: release (final image)" && \
+    echo "========================================"
 
 WORKDIR /app
 
