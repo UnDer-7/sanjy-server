@@ -1,8 +1,18 @@
 ##################
-# BUILD STEP
+# BUILD ARGUMENTS
 ##################
 
-FROM eclipse-temurin:25.0.1_8-jdk-alpine-3.22 AS build
+# Define BUILD_MODE at global scope to be used in FROM instructions
+ARG BUILD_MODE=full
+
+##################
+# BUILD STEP (FULL MODE)
+##################
+FROM eclipse-temurin:25.0.1_8-jdk-alpine-3.22 AS build-full
+
+RUN echo "========================================" && \
+    echo "STAGE: build-full (JVM full compilation)" && \
+    echo "========================================"
 
 WORKDIR /app
 
@@ -20,18 +30,39 @@ COPY pom.xml .
 COPY mvnw .
 COPY .mvn .mvn
 
-# Build
-RUN make build/jvm
+# Build and move JAR to standard location
+RUN make build/jvm && \
+    mv infrastructure/target/*.jar /app/app.jar
+
+##################
+# BUILD STEP (LOCAL MODE)
+##################
+FROM eclipse-temurin:25.0.1_8-jdk-alpine-3.22 AS build-local
+
+RUN echo "========================================" && \
+    echo "STAGE: build-local (using pre-built JAR)" && \
+    echo "========================================"
+
+WORKDIR /app
+
+# Copy pre-built jar from local build
+COPY infrastructure/target/*.jar ./app.jar
 
 ##################
 # RELEASE STEP
 ##################
+FROM build-${BUILD_MODE} AS build-selected
+
 FROM eclipse-temurin:25.0.1_8-jdk-alpine-3.22 AS release
+
+RUN echo "========================================" && \
+    echo "STAGE: release (final image)" && \
+    echo "========================================"
 
 WORKDIR /app
 
-# Copy the built jar from the build stage
-COPY --from=build /app/infrastructure/target/*.jar ./app.jar
+# Copy the jar (either from build-full or build-local)
+COPY --from=build-selected /app/*.jar ./app.jar
 
 # ToDo: Colocar healthcheck e observabilidade
 # Copy healthcheck script

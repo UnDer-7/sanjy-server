@@ -7,12 +7,6 @@ Dockerfile*
 docker-compose*.yml
 .dockerignore
 
-# Build artifacts
-target/
-**/target/
-*.jar
-*.war
-
 # IDE
 .idea/
 .vscode/

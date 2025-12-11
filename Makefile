@@ -17,7 +17,10 @@ POM_VERSION := $(shell ./mvnw help:evaluate -Dexpression=project.version -q -Dfo
 help:
 	@echo 'Usage: make <target>'
 	@sed -n 's/^##//p' $(MAKEFILE_LIST) | column -t -s ':' | \
-	awk 'BEGIN {first=1} /^ *=====/ { if (!first) print ""; print "   " $$0; first=0; next } { print "   " $$0 }'
+	awk 'BEGIN {first=1} \
+						/^ *=====/ { if (!first) print ""; print "   " $$0; first=0; next } \
+						/^ *-----/ { print ""; print "   " $$0; next } \
+						{ print "   " $$0 }'
 
 # Hidden
 .PHONY: all
@@ -49,7 +52,7 @@ test:
 	echo ">>> Running all tests…" && \
 	./mvnw -B -ntp clean compile verify
 
-## test/native: Run all the application test
+## test/native: Run all tests in GraalVM native mode (slower, requires GraalVM)
 .PHONY: test/native
 test/native:
 	echo ">>> Running all tests…" && \
@@ -82,6 +85,7 @@ db/seed:
 # ==================================================================================== #
 ## ===== BUILD =====
 # ==================================================================================== #
+## ----- JVM -----
 ## build/jvm: Build the project to be run on a JVM environment
 .PHONY: build/jvm
 build/jvm:
@@ -94,26 +98,37 @@ build/jvm:
 	ELAPSED=$$((END-START)); \
 	echo "JVM build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
 
-## build/jvm/docker: Build a Docker image with jvm
+## build/jvm/docker: Build a Docker image with jvm (full build from scratch)
 .PHONY: build/jvm/docker
 build/jvm/docker:
 	@START=$$(date +%s); \
-	echo 'Building docker image for JVM...'; \
-	docker build --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-jvm' -f Dockerfile_jvm .; \
+	echo 'Building docker image for JVM (full mode)...'; \
+	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-jvm' -f Dockerfile_jvm .; \
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "Docker JVM image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
 
-## build/jvm/docker/force: Build a Docker image with jvm without caching layers
+## build/jvm/docker/local: Build a Docker image with jvm using pre-built artifacts (fast)
+.PHONY: build/jvm/docker/local
+build/jvm/docker/local:
+	@START=$$(date +%s); \
+	echo 'Building docker image for JVM (local mode - using pre-built JAR)...'; \
+	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=local --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-jvm' -f Dockerfile_jvm .; \
+	END=$$(date +%s); \
+	ELAPSED=$$((END-START)); \
+	echo "Docker JVM image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
+
+## build/jvm/docker/force: Build a Docker image with jvm without caching layers (For debugging)
 .PHONY: build/jvm/docker/force
 build/jvm/docker/force:
 	@START=$$(date +%s); \
 	echo 'Building docker image for JVM without caching layers'; \
-	docker build --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-jvm' -f Dockerfile_jvm . --progress=plain --no-cache; \
+	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-jvm' -f Dockerfile_jvm . --progress=plain --no-cache; \
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "Docker JVM force image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
 
+## ----- GRAALVM -----
 ## build/graalvm: Build an executable to be run without JVM
 .PHONY: build/graalvm
 build/graalvm:
@@ -130,22 +145,32 @@ build/graalvm:
 	ELAPSED=$$((END-START)) && \
 	echo "GraalVM build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
 
-## build/graalvm/docker: Build a Docker image with GraalVM
+## build/graalvm/docker: Build a Docker image with GraalVM (full build from scratch)
 .PHONY: build/graalvm/docker
 build/graalvm/docker:
 	@START=$$(date +%s); \
-	echo 'Building docker image for GraalVM...'; \
-	docker build --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-graalvm' -f Dockerfile_graalvm .; \
+	echo 'Building docker image for GraalVM (full mode)...'; \
+	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-graalvm' -f Dockerfile_graalvm .; \
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "Docker GraalVM image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
 
-## build/graalvm/docker/force: Build a Docker image with GraalVM without caching layers
+## build/graalvm/docker/local: Build a Docker image with GraalVM using pre-built artifacts (fast)
+.PHONY: build/graalvm/docker/local
+build/graalvm/docker/local:
+	@START=$$(date +%s); \
+	echo 'Building docker image for GraalVM (local mode - using pre-built native binary)...'; \
+	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=local --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-graalvm' -f Dockerfile_graalvm .; \
+	END=$$(date +%s); \
+	ELAPSED=$$((END-START)); \
+	echo "Docker GraalVM image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
+
+## build/graalvm/docker/force: Build a Docker image with GraalVM without caching layers (For debugging)
 .PHONY: build/graalvm/docker/force
 build/graalvm/docker/force:
 	@START=$$(date +%s); \
 	echo 'Building docker image for GraalVM without caching layers'; \
-	docker build --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-graalvm' -f Dockerfile_graalvm . --progress=plain --no-cache; \
+	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-graalvm' -f Dockerfile_graalvm . --progress=plain --no-cache; \
 	END=$$(date +%s); \
 	ELAPSED=$$((END-START)); \
 	echo "Docker GraalVM force image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
@@ -212,7 +237,7 @@ sonar:
 version:
 	@echo "$(POM_VERSION)"
 
-## version/set: Set new project version (usage: make version/set 1.0.23)
+## version/set: Set new project version (usage; make version/set 1.0.23)
 .PHONY: version/set
 version/set:
 	@if [ -z "$(filter-out version/set,$(MAKECMDGOALS))" ]; then \
