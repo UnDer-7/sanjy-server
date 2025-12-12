@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class GetMealRecordStatisticsUseCaseImpl implements GetMealRecordStatisticsUseCase {
+class GetMealRecordStatisticsUseCaseImpl implements GetMealRecordStatisticsUseCase {
 
     private final MealRecordGateway mealRecordGateway;
 

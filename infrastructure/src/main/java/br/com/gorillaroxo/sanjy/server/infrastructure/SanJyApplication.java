@@ -12,14 +12,19 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseMealRe
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.projection.MealRecordStatisticsProjection;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "br.com.gorillaroxo.sanjy")
 @EntityScan(basePackages = "br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity")
+@EnableFeignClients(basePackages = "br.com.gorillaroxo.sanjy.server.infrastructure.client.rest")
+@ImportAutoConfiguration({FeignAutoConfiguration.class})
 @ConfigurationPropertiesScan(basePackages = "br.com.gorillaroxo.sanjy.server.infrastructure.config")
 @RegisterReflectionForBinding({
     MealRecordStatisticsProjection.class,

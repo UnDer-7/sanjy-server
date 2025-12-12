@@ -1,0 +1,33 @@
+package br.com.gorillaroxo.sanjy.server.infrastructure.client.rest.cofig;
+
+import br.com.gorillaroxo.sanjy.server.core.ports.driven.SanjyServerProps;
+import br.com.gorillaroxo.sanjy.server.infrastructure.client.rest.cofig.handler.FeignErrorHandler;
+import feign.Retryer;
+import feign.codec.ErrorDecoder;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.Set;
+
+@Slf4j
+@Configuration
+@RequiredArgsConstructor
+public class FeignConfig {
+
+    private final SanjyServerProps sanjyServerProps;
+    private final Set<FeignErrorHandler> errorHandlers;
+
+    @Bean
+    public ErrorDecoder errorDecoder() {
+        return new FeignErrorDecoder(errorHandlers);
+    }
+
+    @Bean
+    public Retryer retryer() {
+        final var httpRetryProp = sanjyServerProps.externalHttpClients().retryConfig();
+
+        return new FeignRetryer(httpRetryProp);
+    }
+}

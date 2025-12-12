@@ -410,7 +410,6 @@ Database schema is initialized via SQL script:
 - **Spring Data JPA + Hibernate** - ORM with lazy loading enhancement
 - **PostgreSQL** - Primary database
 - **SpringDoc OpenAPI 2.6.0** - API documentation (Swagger UI at `/`)
-- **Apache PDFBox 2.0.29** - PDF processing capabilities
 - **Logstash Logback Encoder** - Structured logging
 - **JUnit 5 + Mockito** - Testing framework
 

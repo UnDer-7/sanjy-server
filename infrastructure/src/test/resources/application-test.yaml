@@ -14,6 +14,13 @@ sanjy-server:
     documentation:
       url: https://google.com #ToDo: Put real site
       description: ToDo-put-documentation-description #ToDo: Put real doc
+  external-http-clients:
+    retry-config:
+      max-attempt: 3
+      interval: 1
+      backoff-multiplier: 1
+    github:
+      url: https://api.github.com
 
 spring:
   application:

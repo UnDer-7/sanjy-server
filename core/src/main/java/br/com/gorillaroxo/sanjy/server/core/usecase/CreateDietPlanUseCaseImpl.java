@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CreateDietPlanUseCaseImpl implements CreateDietPlanUseCase {
+class CreateDietPlanUseCaseImpl implements CreateDietPlanUseCase {
 
     private final DietPlanService dietPlanService;
 

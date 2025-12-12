@@ -13,7 +13,8 @@ public enum ExceptionCode {
     INVALID_MEAL_RECORD("005", "Meal record has invalid values"),
     REPEATED_MEAL_TYPE_NAMES("006", "Meal type names has repeated values"),
     MEAL_TYPE_NOT_FOUND("007", "Meal Type was not found"),
-    STANDARD_OPTION_NOT_FOUND("008", "Standard Option was not found");
+    STANDARD_OPTION_NOT_FOUND("008", "Standard Option was not found"),
+    UNHANDLED_CLIENT_HTTP("009", "A service integration error has occurred.");
 
     private final String code;
     private final String message;
