@@ -47,6 +47,7 @@
         <springdoc.version>2.8.14</springdoc.version>
         <mapstruct.version>1.6.3</mapstruct.version>
         <projectlombok.version>1.18.34</projectlombok.version>
+        <spring-cloud.version>2025.0.0</spring-cloud.version>
 
         <spring-ai.version>1.0.3</spring-ai.version>
 
@@ -67,15 +68,7 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- Security Fix -->
-            <!-- Override vulnerable commons-lang3 version -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>3.20.0</version>
-            </dependency>
-            <!-- ####################### -->
-
+            <!-- BOMs -->
             <dependency>
                 <groupId>org.springframework.ai</groupId>
                 <artifactId>spring-ai-bom</artifactId>
@@ -83,6 +76,14 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- ####################### -->
 
             <!-- Modules -->
             <dependency>
@@ -99,6 +100,15 @@
                 <groupId>br.com.gorillaroxo</groupId>
                 <artifactId>infrastructure</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <!-- ####################### -->
+
+            <!-- Security Fix -->
+            <!-- Override vulnerable commons-lang3 version -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.20.0</version>
             </dependency>
             <!-- ####################### -->
         </dependencies>
@@ -134,6 +144,11 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.21.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>33.5.0-jre</version>
         </dependency>
         <!-- ####################### -->
 

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class GetActiveDietPlanUseCaseImpl implements GetActiveDietPlanUseCase {
+class GetActiveDietPlanUseCaseImpl implements GetActiveDietPlanUseCase {
 
     private final DietPlanGateway dietPlanGateway;
 

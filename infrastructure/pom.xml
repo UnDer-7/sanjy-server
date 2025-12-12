@@ -23,6 +23,13 @@
         </dependency>
         <!-- ####################### -->
 
+        <!-- HTTP -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <!-- ####################### -->
+
         <!-- Swagger -->
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -60,14 +67,6 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
-        </dependency>
-        <!-- ####################### -->
-
-        <!-- PDF Processing -->
-        <dependency>
-            <groupId>org.apache.pdfbox</groupId>
-            <artifactId>pdfbox</artifactId>
-            <version>2.0.35</version>
         </dependency>
         <!-- ####################### -->
 
