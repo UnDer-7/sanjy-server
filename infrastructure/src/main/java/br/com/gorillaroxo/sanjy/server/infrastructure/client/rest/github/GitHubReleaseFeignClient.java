@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(
-    value = "br.com.gorillaroxo.sanjy.server.infrastructure.client.rest.github.GitHubReposFeignClient",
+    value = "GitHubReposFeignClient",
     url = "${sanjy-server.external-http-clients.github.url}",
     path = "/repos/UnDer-7"
 )
