@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2025-12-16
+
+### Added
+
+#### Integration & External Services
+
+- GitHub integration for retrieving latest project releases
+- Spring Cloud OpenFeign for REST client management
+- External HTTP client with configurable retry logic (max attempts, interval, backoff multiplier)
+- Enhanced error handling for HTTP client operations with detailed request/response logging
+
+#### Infrastructure & DevOps
+
+- GraalVM 25 support in deployment workflow
+- Improved error tracking with new exception types for service integrations
+
+### Changed
+
+- Enhanced logging fields for HTTP requests/responses and versioning
+- Improved visibility modifiers for use case implementations (package-private)
+
 ## [1.1.0] - 2025-12-10
 
 ### Added
@@ -54,6 +75,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Spring AI MCP Server integration for Claude AI tool usage
 - Single active diet plan enforcement (only one plan can be active at a time)
 
+[1.2.0]: https://github.com/UnDer-7/sanjy-server/releases/tag/1.2.0
 [1.1.0]: https://github.com/UnDer-7/sanjy-server/releases/tag/1.1.0
 [1.0.0]: https://github.com/UnDer-7/sanjy-server/releases/tag/1.0.0
 
