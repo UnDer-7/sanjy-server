@@ -110,6 +110,12 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>3.20.0</version>
             </dependency>
+            <!-- Override vulnerable commons-fileupload version (CVE-2025-48976) -->
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>1.6.0</version>
+            </dependency>
             <!-- ####################### -->
         </dependencies>
     </dependencyManagement>
