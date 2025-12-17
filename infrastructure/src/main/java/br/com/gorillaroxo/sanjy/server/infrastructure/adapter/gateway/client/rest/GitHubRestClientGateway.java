@@ -22,5 +22,4 @@ public class GitHubRestClientGateway implements GitHubGateway {
         final GitHubReleaseResponseDTO latestRelease = gitHubReleaseFeignClient.getLatestRelease(repository);
         return gitHubMapper.toDomain(latestRelease);
     }
-
 }

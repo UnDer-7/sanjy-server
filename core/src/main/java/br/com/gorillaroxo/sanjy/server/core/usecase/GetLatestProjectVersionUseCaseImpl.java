@@ -20,17 +20,18 @@ class GetLatestProjectVersionUseCaseImpl implements GetLatestProjectVersionUseCa
     @Override
     public String execute() {
         log.info(
-            LogField.Placeholders.ONE.getPlaceholder(),
-            StructuredArguments.kv(LogField.MSG.label(), "Getting project latest release version"));
+                LogField.Placeholders.ONE.getPlaceholder(),
+                StructuredArguments.kv(LogField.MSG.label(), "Getting project latest release version"));
 
-        final String latestVersion = gitHubGateway.getLatestRelease(sanjyServerProps.application().name()).tagName();
+        final String latestVersion = gitHubGateway
+                .getLatestRelease(sanjyServerProps.application().name())
+                .tagName();
 
         log.info(
-            LogField.Placeholders.TWO.getPlaceholder(),
-            StructuredArguments.kv(LogField.MSG.label(), "Successfully got project latest release version"),
-            StructuredArguments.kv(LogField.PROJECT_LATEST_VERSION.label(), latestVersion));
+                LogField.Placeholders.TWO.getPlaceholder(),
+                StructuredArguments.kv(LogField.MSG.label(), "Successfully got project latest release version"),
+                StructuredArguments.kv(LogField.PROJECT_LATEST_VERSION.label(), latestVersion));
 
         return latestVersion;
     }
-
 }

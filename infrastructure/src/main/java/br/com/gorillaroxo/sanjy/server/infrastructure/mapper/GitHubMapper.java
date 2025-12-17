@@ -7,9 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(
-    componentModel = ConstantsInfrastructure.MAPSTRUCT_COMPONENT_MODEL,
-    unmappedTargetPolicy = ReportingPolicy.ERROR
-)
+        componentModel = ConstantsInfrastructure.MAPSTRUCT_COMPONENT_MODEL,
+        unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface GitHubMapper {
 
     // Domains

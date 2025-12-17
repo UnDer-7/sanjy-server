@@ -15,8 +15,8 @@ import org.springframework.validation.annotation.Validated;
 record SanjyServerPropsConfig(
         @NotNull @Valid LoggingPropImpl logging,
         @NotNull @Valid ApplicationPropImpl application,
-        @NotNull @Valid ExternalHttpClientsPropImpl  externalHttpClients
-) implements SanjyServerProps {
+        @NotNull @Valid ExternalHttpClientsPropImpl externalHttpClients)
+        implements SanjyServerProps {
 
     record LoggingPropImpl(
             @NotBlank String level,
@@ -41,18 +41,15 @@ record SanjyServerPropsConfig(
             implements SanjyServerProps.ApplicationDocumentationProp {}
 
     record ExternalHttpClientsPropImpl(
-        @NotNull @Valid ExternalHttpClientsRetryConfigPropImpl retryConfig,
-        @NotNull @Valid GenericHttpClientsPropImpl github
-    ) implements SanjyServerProps.ExternalHttpClientsProp {}
+            @NotNull @Valid ExternalHttpClientsRetryConfigPropImpl retryConfig,
+            @NotNull @Valid GenericHttpClientsPropImpl github)
+            implements SanjyServerProps.ExternalHttpClientsProp {}
 
-    record GenericHttpClientsPropImpl(
-        @NotBlank @URL String url
-    ) implements  SanjyServerProps.GenericHttpClientsProp {}
+    record GenericHttpClientsPropImpl(@NotBlank @URL String url) implements SanjyServerProps.GenericHttpClientsProp {}
 
     record ExternalHttpClientsRetryConfigPropImpl(
-        @NotNull @PositiveOrZero Integer maxAttempt,
-        @NotNull @PositiveOrZero Integer interval,
-        @NotNull @PositiveOrZero Integer backoffMultiplier
-    ) implements SanjyServerProps.ExternalHttpClientsRetryConfigProp {
-    }
+            @NotNull @PositiveOrZero Integer maxAttempt,
+            @NotNull @PositiveOrZero Integer interval,
+            @NotNull @PositiveOrZero Integer backoffMultiplier)
+            implements SanjyServerProps.ExternalHttpClientsRetryConfigProp {}
 }

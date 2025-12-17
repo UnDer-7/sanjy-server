@@ -4,23 +4,12 @@ import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
 import br.com.gorillaroxo.sanjy.server.core.ports.driven.SanjyServerProps;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.GetLatestProjectVersionUseCase;
 import br.com.gorillaroxo.sanjy.server.core.util.ThreadUtils;
-import br.com.gorillaroxo.sanjy.server.core.util.function.RunnableWrapper;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.Duration;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.argument.StructuredArguments;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
@@ -37,22 +26,27 @@ public class ProjectInfoLoggerConfig implements ApplicationListener<ApplicationR
 
     @Qualifier("applicationTaskExecutor")
     private final TaskExecutor taskExecutor;
-    private final SanjyServerProps  sanjyServerProps;
+
+    private final SanjyServerProps sanjyServerProps;
     private final GetLatestProjectVersionUseCase getLatestProjectVersionUseCase;
 
     @Override
     public void onApplicationEvent(final ApplicationReadyEvent ignored) {
-        ThreadUtils.runAsyncWithMDC(() -> {
-            final String runtimeMode = detectRuntimeMode();
-            final String latestVersion = fetchLatestVersionFromGitHub();
+        ThreadUtils.runAsyncWithMDC(
+                () -> {
+                    final String runtimeMode = detectRuntimeMode();
+                    final String latestVersion = fetchLatestVersionFromGitHub();
 
-            log.info(
-                LogField.Placeholders.FOUR.getPlaceholder(),
-                StructuredArguments.kv(LogField.MSG.label(), "Project information"),
-                StructuredArguments.kv(LogField.PROJECT_CURRENT_VERSION.label(), sanjyServerProps.application().version()),
-                StructuredArguments.kv(LogField.PROJECT_LATEST_VERSION.label(), latestVersion),
-                StructuredArguments.kv(LogField.RUNTIME_MODE.label(), runtimeMode));
-        }, taskExecutor);
+                    log.info(
+                            LogField.Placeholders.FOUR.getPlaceholder(),
+                            StructuredArguments.kv(LogField.MSG.label(), "Project information"),
+                            StructuredArguments.kv(
+                                    LogField.PROJECT_CURRENT_VERSION.label(),
+                                    sanjyServerProps.application().version()),
+                            StructuredArguments.kv(LogField.PROJECT_LATEST_VERSION.label(), latestVersion),
+                            StructuredArguments.kv(LogField.RUNTIME_MODE.label(), runtimeMode));
+                },
+                taskExecutor);
     }
 
     private static String detectRuntimeMode() {
@@ -65,14 +59,14 @@ public class ProjectInfoLoggerConfig implements ApplicationListener<ApplicationR
 
         try {
             return Optional.ofNullable(getLatestProjectVersionUseCase.execute())
-                .filter(Predicate.not(String::isBlank))
-                .orElse(unknown);
+                    .filter(Predicate.not(String::isBlank))
+                    .orElse(unknown);
         } catch (final Exception e) {
             log.warn(
                     LogField.Placeholders.TWO.getPlaceholder(),
                     StructuredArguments.kv(LogField.MSG.label(), "Error fetching latest version from GitHub"),
                     StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), e.getMessage()),
-                e);
+                    e);
             return unknown;
         }
     }
