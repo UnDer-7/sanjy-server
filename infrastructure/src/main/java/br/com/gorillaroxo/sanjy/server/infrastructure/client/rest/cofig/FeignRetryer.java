@@ -16,15 +16,15 @@ public class FeignRetryer implements Retryer {
     private final SanjyServerProps.ExternalHttpClientsRetryConfigProp retryConfigProp;
 
     @Override
-    public void continueOrPropagate(final RetryableException e) {
+    public void continueOrPropagate(final RetryableException exception) {
         log.info(
                 LogField.Placeholders.THREE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Feign HTTP client retry attempt"),
-                StructuredArguments.kv(LogField.FEIGN_RETRY_ENDPOINT.label(), e.getMessage()),
+                StructuredArguments.kv(LogField.FEIGN_RETRY_ENDPOINT.label(), exception.getMessage()),
                 StructuredArguments.kv(LogField.FEIGN_RETRY_COUNT.label(), attempt));
 
         if (attempt == retryConfigProp.maxAttempt()) {
-            throw e;
+            throw exception;
         }
 
         attempt++;
@@ -46,6 +46,7 @@ public class FeignRetryer implements Retryer {
     }
 
     @Override
+    @SuppressWarnings({"checkstyle:NoClone", "checkstyle:SuperClone"})
     public Retryer clone() {
         return new FeignRetryer(retryConfigProp);
     }

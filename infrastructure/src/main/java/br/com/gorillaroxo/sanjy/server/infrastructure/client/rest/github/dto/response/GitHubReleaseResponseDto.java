@@ -8,4 +8,4 @@ import lombok.Builder;
 @Builder(toBuilder = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record GitHubReleaseResponseDTO(String url, String assetsUrl, String uploadUrl, Long id, String tagName) {}
+public record GitHubReleaseResponseDto(String url, String assetsUrl, String uploadUrl, Long id, String tagName) {}

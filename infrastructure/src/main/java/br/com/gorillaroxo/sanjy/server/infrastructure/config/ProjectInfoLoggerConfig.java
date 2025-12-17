@@ -32,7 +32,7 @@ public class ProjectInfoLoggerConfig implements ApplicationListener<ApplicationR
 
     @Override
     public void onApplicationEvent(final ApplicationReadyEvent ignored) {
-        ThreadUtils.runAsyncWithMDC(
+        ThreadUtils.runAsyncWithMdc(
                 () -> {
                     final String runtimeMode = detectRuntimeMode();
                     final String latestVersion = fetchLatestVersionFromGitHub();

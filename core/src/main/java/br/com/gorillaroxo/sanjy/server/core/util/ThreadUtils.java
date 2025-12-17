@@ -14,7 +14,7 @@ public final class ThreadUtils {
         throw new IllegalStateException("Utility class");
     }
 
-    public static void runAsyncWithMDC(final Runnable runnable, final Executor executor) {
+    public static void runAsyncWithMdc(final Runnable runnable, final Executor executor) {
         Objects.requireNonNull(runnable);
         Objects.requireNonNull(executor);
 
@@ -32,7 +32,7 @@ public final class ThreadUtils {
                 executor);
     }
 
-    public static void runAsyncWithMDC(final Runnable runnable) {
+    public static void runAsyncWithMdc(final Runnable runnable) {
         Objects.requireNonNull(runnable);
 
         final Map<String, String> mdcCtx = Objects.requireNonNullElseGet(MDC.getCopyOfContextMap(), HashMap::new);
@@ -47,7 +47,7 @@ public final class ThreadUtils {
         });
     }
 
-    public static <T> CompletableFuture<T> supplyAsyncWithMDC(final Supplier<T> supplier, final Executor executor) {
+    public static <T> CompletableFuture<T> supplyAsyncWithMdc(final Supplier<T> supplier, final Executor executor) {
         Objects.requireNonNull(supplier);
         Objects.requireNonNull(executor);
 
@@ -65,7 +65,7 @@ public final class ThreadUtils {
                 executor);
     }
 
-    public static <T> CompletableFuture<T> supplyAsyncWithMDC(final Supplier<T> supplier) {
+    public static <T> CompletableFuture<T> supplyAsyncWithMdc(final Supplier<T> supplier) {
         Objects.requireNonNull(supplier);
 
         final Map<String, String> mdcCtx = Objects.requireNonNullElseGet(MDC.getCopyOfContextMap(), HashMap::new);

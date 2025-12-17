@@ -15,5 +15,5 @@ public interface ConsumerWrapper<T, E extends Exception> {
         };
     }
 
-    void accept(T t) throws E;
+    void accept(T argument) throws E;
 }

@@ -24,7 +24,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = "br.com.gorillaroxo.sanjy")
 @EntityScan(basePackages = "br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity")
 @EnableFeignClients(basePackages = "br.com.gorillaroxo.sanjy.server.infrastructure.client.rest")
-@ImportAutoConfiguration({FeignAutoConfiguration.class})
+@ImportAutoConfiguration(FeignAutoConfiguration.class)
 @ConfigurationPropertiesScan(basePackages = "br.com.gorillaroxo.sanjy.server.infrastructure.config")
 @RegisterReflectionForBinding({
     MealRecordStatisticsProjection.class,

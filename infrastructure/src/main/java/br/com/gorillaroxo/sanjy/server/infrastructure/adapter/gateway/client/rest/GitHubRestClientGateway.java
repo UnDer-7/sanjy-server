@@ -3,7 +3,7 @@ package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.gateway.client.re
 import br.com.gorillaroxo.sanjy.server.core.domain.github.GitHubReleaseDomain;
 import br.com.gorillaroxo.sanjy.server.core.ports.driven.GitHubGateway;
 import br.com.gorillaroxo.sanjy.server.infrastructure.client.rest.github.GitHubReleaseFeignClient;
-import br.com.gorillaroxo.sanjy.server.infrastructure.client.rest.github.dto.response.GitHubReleaseResponseDTO;
+import br.com.gorillaroxo.sanjy.server.infrastructure.client.rest.github.dto.response.GitHubReleaseResponseDto;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.GitHubMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ public class GitHubRestClientGateway implements GitHubGateway {
 
     @Override
     public GitHubReleaseDomain getLatestRelease(final String repository) {
-        final GitHubReleaseResponseDTO latestRelease = gitHubReleaseFeignClient.getLatestRelease(repository);
+        final GitHubReleaseResponseDto latestRelease = gitHubReleaseFeignClient.getLatestRelease(repository);
         return gitHubMapper.toDomain(latestRelease);
     }
 }
