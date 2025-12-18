@@ -28,8 +28,7 @@ class ProjectInfoLoggerConfigTest {
         when(applicationProp.version()).thenReturn("1.0.0");
         when(getLatestProjectVersionUseCase.execute()).thenReturn("1.2.0");
 
-        final var config =
-                new ProjectInfoLoggerConfig(taskExecutor, sanjyServerProps, getLatestProjectVersionUseCase);
+        final var config = new ProjectInfoLoggerConfig(taskExecutor, sanjyServerProps, getLatestProjectVersionUseCase);
         final var event = mock(ApplicationReadyEvent.class);
 
         // When & Then
@@ -50,8 +49,7 @@ class ProjectInfoLoggerConfigTest {
         when(applicationProp.version()).thenReturn("1.0.0");
         when(getLatestProjectVersionUseCase.execute()).thenReturn(null);
 
-        final var config =
-                new ProjectInfoLoggerConfig(taskExecutor, sanjyServerProps, getLatestProjectVersionUseCase);
+        final var config = new ProjectInfoLoggerConfig(taskExecutor, sanjyServerProps, getLatestProjectVersionUseCase);
         final var event = mock(ApplicationReadyEvent.class);
 
         // When & Then
@@ -70,8 +68,7 @@ class ProjectInfoLoggerConfigTest {
         when(applicationProp.version()).thenReturn("1.0.0");
         when(getLatestProjectVersionUseCase.execute()).thenReturn("   ");
 
-        final var config =
-                new ProjectInfoLoggerConfig(taskExecutor, sanjyServerProps, getLatestProjectVersionUseCase);
+        final var config = new ProjectInfoLoggerConfig(taskExecutor, sanjyServerProps, getLatestProjectVersionUseCase);
         final var event = mock(ApplicationReadyEvent.class);
 
         // When & Then
@@ -90,8 +87,7 @@ class ProjectInfoLoggerConfigTest {
         when(applicationProp.version()).thenReturn("1.0.0");
         when(getLatestProjectVersionUseCase.execute()).thenThrow(new RuntimeException("GitHub API error"));
 
-        final var config =
-                new ProjectInfoLoggerConfig(taskExecutor, sanjyServerProps, getLatestProjectVersionUseCase);
+        final var config = new ProjectInfoLoggerConfig(taskExecutor, sanjyServerProps, getLatestProjectVersionUseCase);
         final var event = mock(ApplicationReadyEvent.class);
 
         // When & Then
@@ -112,8 +108,7 @@ class ProjectInfoLoggerConfigTest {
         when(applicationProp.version()).thenReturn("1.0.0");
         when(getLatestProjectVersionUseCase.execute()).thenReturn("1.2.0");
 
-        final var config =
-                new ProjectInfoLoggerConfig(taskExecutor, sanjyServerProps, getLatestProjectVersionUseCase);
+        final var config = new ProjectInfoLoggerConfig(taskExecutor, sanjyServerProps, getLatestProjectVersionUseCase);
         final var event = mock(ApplicationReadyEvent.class);
 
         // When & Then
@@ -134,8 +129,7 @@ class ProjectInfoLoggerConfigTest {
         when(applicationProp.version()).thenReturn("1.0.0");
         when(getLatestProjectVersionUseCase.execute()).thenReturn("1.2.0");
 
-        final var config =
-                new ProjectInfoLoggerConfig(taskExecutor, sanjyServerProps, getLatestProjectVersionUseCase);
+        final var config = new ProjectInfoLoggerConfig(taskExecutor, sanjyServerProps, getLatestProjectVersionUseCase);
         final var event = mock(ApplicationReadyEvent.class);
 
         try {
@@ -159,8 +153,7 @@ class ProjectInfoLoggerConfigTest {
         when(applicationProp.version()).thenReturn("2.1.0");
         when(getLatestProjectVersionUseCase.execute()).thenReturn("2.2.0");
 
-        final var config =
-                new ProjectInfoLoggerConfig(taskExecutor, sanjyServerProps, getLatestProjectVersionUseCase);
+        final var config = new ProjectInfoLoggerConfig(taskExecutor, sanjyServerProps, getLatestProjectVersionUseCase);
         final var event = mock(ApplicationReadyEvent.class);
 
         // When
@@ -184,8 +177,7 @@ class ProjectInfoLoggerConfigTest {
         when(applicationProp.version()).thenReturn("1.0.0");
         when(getLatestProjectVersionUseCase.execute()).thenReturn("");
 
-        final var config =
-                new ProjectInfoLoggerConfig(taskExecutor, sanjyServerProps, getLatestProjectVersionUseCase);
+        final var config = new ProjectInfoLoggerConfig(taskExecutor, sanjyServerProps, getLatestProjectVersionUseCase);
         final var event = mock(ApplicationReadyEvent.class);
 
         // When & Then
@@ -204,8 +196,7 @@ class ProjectInfoLoggerConfigTest {
         when(applicationProp.version()).thenReturn("3.0.0-SNAPSHOT");
         when(getLatestProjectVersionUseCase.execute()).thenReturn("2.9.5");
 
-        final var config =
-                new ProjectInfoLoggerConfig(taskExecutor, sanjyServerProps, getLatestProjectVersionUseCase);
+        final var config = new ProjectInfoLoggerConfig(taskExecutor, sanjyServerProps, getLatestProjectVersionUseCase);
         final var event = mock(ApplicationReadyEvent.class);
 
         // When

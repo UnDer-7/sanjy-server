@@ -38,10 +38,7 @@ class ThreadUtilsTest {
         });
 
         // Then
-        throwableAssert
-                .hasCauseInstanceOf(IllegalStateException.class)
-                .cause()
-                .hasMessage("Utility class");
+        throwableAssert.hasCauseInstanceOf(IllegalStateException.class).cause().hasMessage("Utility class");
     }
 
     @Nested
@@ -234,8 +231,7 @@ class ThreadUtilsTest {
             final Executor executor = mock(Executor.class);
 
             // When
-            final var throwableAssert =
-                    assertThatThrownBy(() -> ThreadUtils.supplyAsyncWithMdc(null, executor));
+            final var throwableAssert = assertThatThrownBy(() -> ThreadUtils.supplyAsyncWithMdc(null, executor));
 
             // Then
             throwableAssert.isInstanceOf(NullPointerException.class);
@@ -273,8 +269,7 @@ class ThreadUtilsTest {
             final Executor executor = Runnable::run;
 
             // When
-            final CompletableFuture<String> future =
-                    ThreadUtils.supplyAsyncWithMdc(() -> MDC.get(mdcKey), executor);
+            final CompletableFuture<String> future = ThreadUtils.supplyAsyncWithMdc(() -> MDC.get(mdcKey), executor);
 
             // Then
             assertThat(future.get()).isEqualTo(mdcValue);
@@ -326,8 +321,7 @@ class ThreadUtilsTest {
             final Executor executor = Runnable::run;
 
             // When
-            final CompletableFuture<String> future =
-                    ThreadUtils.supplyAsyncWithMdc(() -> expectedResult, executor);
+            final CompletableFuture<String> future = ThreadUtils.supplyAsyncWithMdc(() -> expectedResult, executor);
 
             // Then
             assertThat(future).isNotNull().isCompleted();

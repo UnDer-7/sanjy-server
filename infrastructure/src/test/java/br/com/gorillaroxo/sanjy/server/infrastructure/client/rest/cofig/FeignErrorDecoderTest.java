@@ -197,9 +197,7 @@ class FeignErrorDecoderTest {
                 .isInstanceOf(UnhandledClientHttpException.class)
                 .extracting(ex -> ((UnhandledClientHttpException) ex).getRequestInformation())
                 .satisfies(info -> {
-                    assertThat(info.getResponseHeaders())
-                            .isNotNull()
-                            .containsKeys("Content-Type", "X-Custom-Header");
+                    assertThat(info.getResponseHeaders()).isNotNull().containsKeys("Content-Type", "X-Custom-Header");
                 });
     }
 
@@ -223,12 +221,12 @@ class FeignErrorDecoderTest {
     }
 
     private Response createMockResponse(final int status, final String body) {
-        final var request = Request.create(HttpMethod.GET, "http://test.com/api", Map.of(), null, Charset.defaultCharset(), null);
+        final var request =
+                Request.create(HttpMethod.GET, "http://test.com/api", Map.of(), null, Charset.defaultCharset(), null);
 
         final var responseBody = mock(Response.Body.class);
         try {
-            when(responseBody.asReader(Charset.defaultCharset()))
-                    .thenReturn(new java.io.StringReader(body));
+            when(responseBody.asReader(Charset.defaultCharset())).thenReturn(new java.io.StringReader(body));
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }
@@ -243,7 +241,8 @@ class FeignErrorDecoderTest {
     }
 
     private Response createMockResponseWithNullBody(final int status) {
-        final var request = Request.create(HttpMethod.GET, "http://test.com/api", Map.of(), null, Charset.defaultCharset(), null);
+        final var request =
+                Request.create(HttpMethod.GET, "http://test.com/api", Map.of(), null, Charset.defaultCharset(), null);
 
         return Response.builder()
                 .status(status)
@@ -255,12 +254,12 @@ class FeignErrorDecoderTest {
 
     private Response createMockResponseWithHeaders(
             final int status, final String body, final Map<String, Collection<String>> requestHeaders) {
-        final var request = Request.create(HttpMethod.POST, "http://test.com/api", requestHeaders, null, Charset.defaultCharset(), null);
+        final var request = Request.create(
+                HttpMethod.POST, "http://test.com/api", requestHeaders, null, Charset.defaultCharset(), null);
 
         final var responseBody = mock(Response.Body.class);
         try {
-            when(responseBody.asReader(Charset.defaultCharset()))
-                    .thenReturn(new java.io.StringReader(body));
+            when(responseBody.asReader(Charset.defaultCharset())).thenReturn(new java.io.StringReader(body));
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }
@@ -276,12 +275,12 @@ class FeignErrorDecoderTest {
 
     private Response createMockResponseWithResponseHeaders(
             final int status, final String body, final Map<String, Collection<String>> responseHeaders) {
-        final var request = Request.create(HttpMethod.GET, "http://test.com/api", Map.of(), null, Charset.defaultCharset(), null);
+        final var request =
+                Request.create(HttpMethod.GET, "http://test.com/api", Map.of(), null, Charset.defaultCharset(), null);
 
         final var responseBody = mock(Response.Body.class);
         try {
-            when(responseBody.asReader(Charset.defaultCharset()))
-                    .thenReturn(new java.io.StringReader(body));
+            when(responseBody.asReader(Charset.defaultCharset())).thenReturn(new java.io.StringReader(body));
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }
@@ -296,7 +295,8 @@ class FeignErrorDecoderTest {
     }
 
     private Response createMockResponseWithBrokenBody(final int status) {
-        final var request = Request.create(HttpMethod.GET, "http://test.com/api", Map.of(), null, Charset.defaultCharset(), null);
+        final var request =
+                Request.create(HttpMethod.GET, "http://test.com/api", Map.of(), null, Charset.defaultCharset(), null);
 
         final var brokenBody = mock(Response.Body.class);
         try {
