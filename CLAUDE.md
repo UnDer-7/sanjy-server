@@ -208,6 +208,26 @@ Common issues:
      public record YourProjection(String field1, Long field2) { }
      ```
    - **Why:** GraalVM removes unused code at compile time; reflection metadata must be explicit
+6. **Spring Cloud OpenFeign AOT compilation error:** `DefaultFeignBuilderConfiguration has protected access`
+   - **Symptoms:** Build fails during AOT phase with error: `org.springframework.cloud.openfeign.FeignClientsConfiguration.DefaultFeignBuilderConfiguration has protected access in org.springframework.cloud.openfeign.FeignClientsConfiguration`
+   - **Cause:** Using package-qualified names in `@FeignClient` `value` or `contextId` attributes (e.g., `value = "br.com.gorillaroxo.sanjy.server.infrastructure.client.rest.github.GitHubReposFeignClient"`)
+   - **Solution:** Use simple bean names instead of package-qualified names:
+
+     ```java
+     // ❌ WRONG - Will cause AOT compilation error
+     @FeignClient(
+         value = "br.com.gorillaroxo.sanjy.server.infrastructure.client.rest.github.GitHubReposFeignClient",
+         url = "${api.url}"
+     )
+
+     // ✅ CORRECT - Use simple bean name
+     @FeignClient(
+         value = "GitHubReposFeignClient",
+         url = "${api.url}"
+     )
+     ```
+   - **Why:** AOT code generation cannot properly handle package-qualified bean names and generates code that attempts to access protected classes
+   - **Reference:** [Spring Cloud OpenFeign Issue #796](https://github.com/spring-cloud/spring-cloud-openfeign/issues/796)
 
 ### Environment Configuration
 
@@ -410,7 +430,6 @@ Database schema is initialized via SQL script:
 - **Spring Data JPA + Hibernate** - ORM with lazy loading enhancement
 - **PostgreSQL** - Primary database
 - **SpringDoc OpenAPI 2.6.0** - API documentation (Swagger UI at `/`)
-- **Apache PDFBox 2.0.29** - PDF processing capabilities
 - **Logstash Logback Encoder** - Structured logging
 - **JUnit 5 + Mockito** - Testing framework
 

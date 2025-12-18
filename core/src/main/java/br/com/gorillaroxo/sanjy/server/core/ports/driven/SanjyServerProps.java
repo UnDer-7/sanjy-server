@@ -5,6 +5,8 @@ public interface SanjyServerProps {
 
     ApplicationProp application();
 
+    ExternalHttpClientsProp externalHttpClients();
+
     interface LoggingProp {
         String level();
 
@@ -37,5 +39,23 @@ public interface SanjyServerProps {
         String url();
 
         String description();
+    }
+
+    interface ExternalHttpClientsProp {
+        ExternalHttpClientsRetryConfigProp retryConfig();
+
+        GenericHttpClientsProp github();
+    }
+
+    interface GenericHttpClientsProp {
+        String url();
+    }
+
+    interface ExternalHttpClientsRetryConfigProp {
+        Integer maxAttempt();
+
+        Integer interval();
+
+        Integer backoffMultiplier();
     }
 }

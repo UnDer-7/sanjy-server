@@ -5,7 +5,7 @@
     <parent>
         <groupId>br.com.gorillaroxo</groupId>
         <artifactId>sanJy-server</artifactId>
-        <version>1.1.0</version>
+        <version>1.2.0</version>
     </parent>
 
     <artifactId>infrastructure</artifactId>
@@ -20,6 +20,13 @@
         <dependency>
             <groupId>br.com.gorillaroxo</groupId>
             <artifactId>entrypoint</artifactId>
+        </dependency>
+        <!-- ####################### -->
+
+        <!-- HTTP -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <!-- ####################### -->
 
@@ -60,14 +67,6 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
-        </dependency>
-        <!-- ####################### -->
-
-        <!-- PDF Processing -->
-        <dependency>
-            <groupId>org.apache.pdfbox</groupId>
-            <artifactId>pdfbox</artifactId>
-            <version>2.0.35</version>
         </dependency>
         <!-- ####################### -->
 
