@@ -207,6 +207,18 @@
                         </execution>
                     </executions>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.14</version>
+                    <configuration>
+                        <excludes>
+                            <!-- Exclude exception classes from coverage -->
+                            <exclude>**/br/com/gorillaroxo/sanjy/server/core/exception/**</exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -274,7 +286,6 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.14</version>
                 <executions>
                     <execution>
                         <goals>
@@ -440,5 +451,33 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!--
+            Native Test Profile
+            GraalVM Native Image does not support Mockito due to reflection/bytecode manipulation.
+            This profile excludes unit tests (*Test.java) which use Mockito.
+            Only integration tests (*IT.java) are executed in native mode.
+        -->
+        <profile>
+            <id>nativeTest</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <includes>
+                                <include>**/*IT.java</include>
+                            </includes>
+                            <excludes>
+                                <exclude>**/*Test.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
