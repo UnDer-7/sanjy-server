@@ -4,8 +4,12 @@ import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
 import br.com.gorillaroxo.sanjy.server.core.ports.driven.SanjyServerProps;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.GetLatestProjectVersionUseCase;
 import br.com.gorillaroxo.sanjy.server.core.util.ThreadUtils;
+
+import java.time.ZoneId;
 import java.util.Optional;
 import java.util.function.Predicate;
+
+import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.repository.GetDatabaseTimeZoneRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.argument.StructuredArguments;
@@ -29,6 +33,7 @@ public class ProjectInfoLoggerConfig implements ApplicationListener<ApplicationR
 
     private final SanjyServerProps sanjyServerProps;
     private final GetLatestProjectVersionUseCase getLatestProjectVersionUseCase;
+    private final GetDatabaseTimeZoneRepository getDatabaseTimeZoneRepository;
 
     @Override
     public void onApplicationEvent(final ApplicationReadyEvent ignored) {
@@ -36,15 +41,16 @@ public class ProjectInfoLoggerConfig implements ApplicationListener<ApplicationR
                 () -> {
                     final String runtimeMode = detectRuntimeMode();
                     final String latestVersion = fetchLatestVersionFromGitHub();
-
                     log.info(
-                            LogField.Placeholders.FOUR.getPlaceholder(),
+                            LogField.Placeholders.SIX.getPlaceholder(),
                             StructuredArguments.kv(LogField.MSG.label(), "Project information"),
                             StructuredArguments.kv(
                                     LogField.PROJECT_CURRENT_VERSION.label(),
                                     sanjyServerProps.application().version()),
                             StructuredArguments.kv(LogField.PROJECT_LATEST_VERSION.label(), latestVersion),
-                            StructuredArguments.kv(LogField.RUNTIME_MODE.label(), runtimeMode));
+                            StructuredArguments.kv(LogField.RUNTIME_MODE.label(), runtimeMode),
+                            StructuredArguments.kv(LogField.APPLICATION_TIMEZONE.label(), ZoneId.systemDefault()),
+                            StructuredArguments.kv(LogField.DATABASE_TIMEZONE.label(), getDatabaseTimeZoneRepository.getDatabaseTimeZone()));
                 },
                 taskExecutor);
     }

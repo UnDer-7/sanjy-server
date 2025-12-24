@@ -66,6 +66,9 @@ WORKDIR /app
 # Copy the native binary (either from build-full or build-local)
 COPY --from=build-selected /build/*.graal ./app.graal
 
+# Add executable permission to the binary
+RUN chmod +x /app/app.graal
+
 # Update busybox to fix CVE-2025-46394 and install glibc compatibility
 RUN apk upgrade --no-cache busybox busybox-binsh ssl_client && \
     apk add --no-cache gcompat
