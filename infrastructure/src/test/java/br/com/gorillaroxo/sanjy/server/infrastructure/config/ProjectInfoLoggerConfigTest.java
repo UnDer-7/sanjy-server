@@ -61,7 +61,8 @@ class ProjectInfoLoggerConfigTest {
         when(getDatabaseTimeZoneRepository.getDatabaseTimeZone()).thenReturn("Asia/Kolkata");
 
         // When & Then
-        assertThatCode(() -> projectInfoLoggerConfig.onApplicationEvent(applicationReadyEvent)).doesNotThrowAnyException();
+        assertThatCode(() -> projectInfoLoggerConfig.onApplicationEvent(applicationReadyEvent))
+                .doesNotThrowAnyException();
 
         verify(getLatestProjectVersionUseCase, times(1)).execute();
         verify(getDatabaseTimeZoneRepository, times(1)).getDatabaseTimeZone();
@@ -81,7 +82,8 @@ class ProjectInfoLoggerConfigTest {
             when(getDatabaseTimeZoneRepository.getDatabaseTimeZone()).thenReturn(databaseTimezone);
 
             // When & Then
-            assertThatCode(() -> projectInfoLoggerConfig.onApplicationEvent(applicationReadyEvent)).doesNotThrowAnyException();
+            assertThatCode(() -> projectInfoLoggerConfig.onApplicationEvent(applicationReadyEvent))
+                    .doesNotThrowAnyException();
         }
 
         @Test
@@ -92,7 +94,8 @@ class ProjectInfoLoggerConfigTest {
             when(getDatabaseTimeZoneRepository.getDatabaseTimeZone()).thenThrow(new RuntimeException("Database error"));
 
             // When & Then
-            assertThatCode(() -> projectInfoLoggerConfig.onApplicationEvent(applicationReadyEvent)).doesNotThrowAnyException();
+            assertThatCode(() -> projectInfoLoggerConfig.onApplicationEvent(applicationReadyEvent))
+                    .doesNotThrowAnyException();
         }
     }
 
@@ -110,7 +113,8 @@ class ProjectInfoLoggerConfigTest {
             when(getDatabaseTimeZoneRepository.getDatabaseTimeZone()).thenReturn("Asia/Kolkata");
 
             // When & Then
-            assertThatCode(() -> projectInfoLoggerConfig.onApplicationEvent(applicationReadyEvent)).doesNotThrowAnyException();
+            assertThatCode(() -> projectInfoLoggerConfig.onApplicationEvent(applicationReadyEvent))
+                    .doesNotThrowAnyException();
         }
 
         @Test
@@ -121,7 +125,8 @@ class ProjectInfoLoggerConfigTest {
             when(getDatabaseTimeZoneRepository.getDatabaseTimeZone()).thenReturn("Asia/Kolkata");
 
             // When & Then
-            assertThatCode(() -> projectInfoLoggerConfig.onApplicationEvent(applicationReadyEvent)).doesNotThrowAnyException();
+            assertThatCode(() -> projectInfoLoggerConfig.onApplicationEvent(applicationReadyEvent))
+                    .doesNotThrowAnyException();
         }
     }
 
@@ -138,7 +143,8 @@ class ProjectInfoLoggerConfigTest {
             when(getDatabaseTimeZoneRepository.getDatabaseTimeZone()).thenReturn("Asia/Kolkata");
 
             // When & Then
-            assertThatCode(() -> projectInfoLoggerConfig.onApplicationEvent(applicationReadyEvent)).doesNotThrowAnyException();
+            assertThatCode(() -> projectInfoLoggerConfig.onApplicationEvent(applicationReadyEvent))
+                    .doesNotThrowAnyException();
         }
 
         @Test
@@ -153,12 +159,12 @@ class ProjectInfoLoggerConfigTest {
 
             try {
                 // When & Then
-                assertThatCode(() -> projectInfoLoggerConfig.onApplicationEvent(applicationReadyEvent)).doesNotThrowAnyException();
+                assertThatCode(() -> projectInfoLoggerConfig.onApplicationEvent(applicationReadyEvent))
+                        .doesNotThrowAnyException();
             } finally {
                 // Cleanup
                 System.clearProperty("org.graalvm.nativeimage.imagecode");
             }
         }
     }
-
 }

@@ -1,31 +1,32 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.config;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
+import java.time.ZoneId;
+import java.time.zone.ZoneRulesException;
+import java.util.TimeZone;
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.argument.StructuredArguments;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.time.ZoneId;
-import java.time.zone.ZoneRulesException;
-import java.util.TimeZone;
-
 /**
  * Initializes the application timezone before the ApplicationContext is fully created.
- * <p>
- * This initializer sets the JVM default timezone based on the following priority:
+ *
+ * <p>This initializer sets the JVM default timezone based on the following priority:
+ *
  * <ol>
- *   <li>SANJY_SERVER_TIMEZONE environment variable</li>
- *   <li>TZ environment variable (Linux default timezone)</li>
- *   <li>UTC as fallback (if none of the above are set)</li>
+ *   <li>SANJY_SERVER_TIMEZONE environment variable
+ *   <li>TZ environment variable (Linux default timezone)
+ *   <li>UTC as fallback (if none of the above are set)
  * </ol>
- * <p>
- * <strong>Why this approach:</strong>
+ *
+ * <p><strong>Why this approach:</strong>
+ *
  * <ul>
- *   <li>Executes BEFORE the ApplicationContext is created, ensuring all beans see the correct timezone</li>
- *   <li>Works with both JVM and GraalVM Native Image without modifications</li>
- *   <li>Reads environment variables at runtime (not build time)</li>
- *   <li>More reliable than -Duser.timezone JVM argument for Docker/Native Image deployments</li>
+ *   <li>Executes BEFORE the ApplicationContext is created, ensuring all beans see the correct timezone
+ *   <li>Works with both JVM and GraalVM Native Image without modifications
+ *   <li>Reads environment variables at runtime (not build time)
+ *   <li>More reliable than -Duser.timezone JVM argument for Docker/Native Image deployments
  * </ul>
  *
  * @see TimeZone#setDefault(TimeZone)
@@ -72,9 +73,12 @@ public class TimezoneInitializer implements ApplicationContextInitializer<Config
 
         // Priority 3: Fallback to UTC
         log.warn(
-            LogField.Placeholders.TWO.getPlaceholder(),
-            StructuredArguments.kv(LogField.MSG.label(), "No valid timezone found in environment variables: %s or %s. Using fallback".formatted(ENV_SANJY_TIMEZONE, ENV_SYSTEM_TIMEZONE)),
-            StructuredArguments.kv(LogField.FALLBACK_TIMEZONE_ID.label(), FALLBACK_TIMEZONE));
+                LogField.Placeholders.TWO.getPlaceholder(),
+                StructuredArguments.kv(
+                        LogField.MSG.label(),
+                        "No valid timezone found in environment variables: %s or %s. Using fallback"
+                                .formatted(ENV_SANJY_TIMEZONE, ENV_SYSTEM_TIMEZONE)),
+                StructuredArguments.kv(LogField.FALLBACK_TIMEZONE_ID.label(), FALLBACK_TIMEZONE));
 
         return FALLBACK_TIMEZONE;
     }
