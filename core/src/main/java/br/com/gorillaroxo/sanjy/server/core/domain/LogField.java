@@ -69,8 +69,7 @@ public enum LogField {
     RESPONSE_HEADERS,
     APPLICATION_TIMEZONE,
     DATABASE_TIMEZONE,
-    TIMEZONE_ID,
-    FALLBACK_TIMEZONE_ID;
+    TIMEZONE_ID;
 
     public String label() {
         return this.name().toLowerCase();
