@@ -11,8 +11,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 /**
  * Initializes the application timezone to UTC before the ApplicationContext is fully created.
  *
- * <p>This initializer enforces UTC as the JVM default timezone to ensure consistent date/time
- * handling across all layers of the application (API, database, logs).
+ * <p>This initializer enforces UTC as the JVM default timezone to ensure consistent date/time handling across all
+ * layers of the application (API, database, logs).
  *
  * <p><strong>Why UTC:</strong>
  *
