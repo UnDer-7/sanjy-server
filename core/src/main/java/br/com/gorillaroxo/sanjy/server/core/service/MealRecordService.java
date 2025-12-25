@@ -2,16 +2,15 @@ package br.com.gorillaroxo.sanjy.server.core.service;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
 import br.com.gorillaroxo.sanjy.server.core.domain.MealRecordDomain;
+import br.com.gorillaroxo.sanjy.server.core.domain.StandardOptionDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.pagination.PageResultDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.pagination.SearchMealRecordParamDomain;
-import br.com.gorillaroxo.sanjy.server.core.domain.StandardOptionDomain;
 import br.com.gorillaroxo.sanjy.server.core.exception.InvalidMealRecordException;
 import br.com.gorillaroxo.sanjy.server.core.exception.MealTypeNotFoundException;
 import br.com.gorillaroxo.sanjy.server.core.exception.StandardOptionNotFoundException;
 import br.com.gorillaroxo.sanjy.server.core.ports.driven.MealRecordGateway;
 import br.com.gorillaroxo.sanjy.server.core.ports.driven.MealTypeGateway;
 import br.com.gorillaroxo.sanjy.server.core.ports.driven.StandardOptionGateway;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -74,8 +73,12 @@ public class MealRecordService {
                 LogField.Placeholders.NINE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Successfully inserted new meal record"),
                 StructuredArguments.kv(LogField.MEAL_RECORD_ID.label(), mealRecordCreated.id()),
-                StructuredArguments.kv(LogField.MEAL_RECORD_CREATED_AT.label(), mealRecordCreated.metadata().createdAt()),
-                StructuredArguments.kv(LogField.DIET_PLAN_UPDATED_AT.label(), mealRecordCreated.metadata().updatedAt()),
+                StructuredArguments.kv(
+                        LogField.MEAL_RECORD_CREATED_AT.label(),
+                        mealRecordCreated.metadata().createdAt()),
+                StructuredArguments.kv(
+                        LogField.DIET_PLAN_UPDATED_AT.label(),
+                        mealRecordCreated.metadata().updatedAt()),
                 StructuredArguments.kv(LogField.MEAL_RECORD_CONSUMED_AT.label(), mealRecordCreated.consumedAt()),
                 StructuredArguments.kv(
                         LogField.MEAL_RECORD_MEAL_TYPE_ID.label(),
@@ -93,8 +96,7 @@ public class MealRecordService {
         return mealRecordCreated;
     }
 
-    public List<MealRecordDomain> searchByConsumedAt(
-            final Instant consumedAtAfter, final Instant consumedAtBefore) {
+    public List<MealRecordDomain> searchByConsumedAt(final Instant consumedAtAfter, final Instant consumedAtBefore) {
         log.info(
                 LogField.Placeholders.THREE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Starting to search meal record by consumedAt"),

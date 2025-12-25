@@ -3,7 +3,6 @@ package br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import lombok.Builder;
 
 @Builder

@@ -11,7 +11,6 @@ import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.BusinessExceptionMa
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.validation.ConstraintViolationException;
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -51,26 +50,26 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
                 """;
 
             log.warn(
-                LogField.Placeholders.FIVE.getPlaceholder(),
-                StructuredArguments.kv(LogField.MSG.label(), warnMsg),
-                StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), exception.getMessage()),
-                StructuredArguments.kv(
-                    LogField.EXCEPTION_CLASS.label(),
-                    exception.getClass().getSimpleName()),
-                StructuredArguments.kv(LogField.EXCEPTION_CAUSE.label(), exception.getCause()),
-                StructuredArguments.kv(
-                    LogField.EXCEPTION_CAUSE_MSG.label(),
-                    exception.getCause().getMessage()),
-                exception);
+                    LogField.Placeholders.FIVE.getPlaceholder(),
+                    StructuredArguments.kv(LogField.MSG.label(), warnMsg),
+                    StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), exception.getMessage()),
+                    StructuredArguments.kv(
+                            LogField.EXCEPTION_CLASS.label(),
+                            exception.getClass().getSimpleName()),
+                    StructuredArguments.kv(LogField.EXCEPTION_CAUSE.label(), exception.getCause()),
+                    StructuredArguments.kv(
+                            LogField.EXCEPTION_CAUSE_MSG.label(),
+                            exception.getCause().getMessage()),
+                    exception);
 
             return handleBusinessException(businessException);
         }
 
         log.warn(
-            LogField.Placeholders.TWO.getPlaceholder(),
-            StructuredArguments.kv(LogField.MSG.label(), "An unexpected exception occurred"),
-            StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), exception.getMessage()),
-            exception);
+                LogField.Placeholders.TWO.getPlaceholder(),
+                StructuredArguments.kv(LogField.MSG.label(), "An unexpected exception occurred"),
+                StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), exception.getMessage()),
+                exception);
 
         final var unexpectedException = new UnexpectedErrorException(exception);
         return logExceptionAndBuild(unexpectedException);
@@ -98,17 +97,17 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
     // Handle @NotNull, @NotEmpty, ... errors in request body
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(
-        final MethodArgumentNotValidException ex,
-        @Nullable final HttpHeaders headers,
-        @Nullable final HttpStatusCode status,
-        @Nullable final WebRequest request) {
+            final MethodArgumentNotValidException ex,
+            @Nullable final HttpHeaders headers,
+            @Nullable final HttpStatusCode status,
+            @Nullable final WebRequest request) {
 
         final String invalidValues = ex.getBindingResult().getFieldErrors().stream()
-            .map(fieldError -> buildInvalidAttributeMessage(
-                fieldError.getField(),
-                Objects.requireNonNullElse(fieldError.getDefaultMessage(), "validation failed"),
-                fieldError.getRejectedValue()))
-            .collect(Collectors.joining(" | "));
+                .map(fieldError -> buildInvalidAttributeMessage(
+                        fieldError.getField(),
+                        Objects.requireNonNullElse(fieldError.getDefaultMessage(), "validation failed"),
+                        fieldError.getRejectedValue()))
+                .collect(Collectors.joining(" | "));
 
         return logExceptionAndBuild(new InvalidValuesException(invalidValues));
     }
@@ -133,7 +132,8 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
             return buildInvalidTimeResponse(exception, exception.getName(), exception.getValue());
         }
 
-        return buildInvalidRequestParameters(exception.getName(), exception.getMessage(), exception.getValue(), exception);
+        return buildInvalidRequestParameters(
+                exception.getName(), exception.getMessage(), exception.getValue(), exception);
     }
 
     // Handle invalid formats in request body
@@ -147,11 +147,10 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
         // Check if the cause is an InvalidFormatException (parsing error)
         if (ex.getCause() instanceof InvalidFormatException invalidFormatException) {
             final Class<?> targetType = invalidFormatException.getTargetType();
-            final String fieldName = invalidFormatException.getPath()
-                .stream()
-                .map(JsonMappingException.Reference::getFieldName)
-                .filter(Objects::nonNull)
-                .collect(Collectors.joining("."));
+            final String fieldName = invalidFormatException.getPath().stream()
+                    .map(JsonMappingException.Reference::getFieldName)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.joining("."));
 
             final Object invalidValue = invalidFormatException.getValue();
 
@@ -173,78 +172,57 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
 
             // Handle other format errors generically
             return buildInvalidRequestParameters(
-                    fieldName,
-                    "invalid format for type " + targetType.getSimpleName(),
-                    invalidValue,
-                    ex);
+                    fieldName, "invalid format for type " + targetType.getSimpleName(), invalidValue, ex);
         }
 
         // For other HttpMessageNotReadableException cases, use default handling
-        final var invalidValuesException = new InvalidValuesException(
-                "Failed to read request: " + ex.getMessage(),
-                ex);
+        final var invalidValuesException = new InvalidValuesException("Failed to read request: " + ex.getMessage(), ex);
         return logExceptionAndBuild(invalidValuesException);
     }
 
-    private ResponseEntity<Object> buildInvalidDateResponse(final Exception ex, final String fieldName, final Object invalidValue) {
-        final String description = "date must be in the following format: %s - example: %s".formatted(
-            RequestConstants.DateTimeFormats.DATE_FORMAT,
-            OpenApiConstants.Examples.DATE);
+    private ResponseEntity<Object> buildInvalidDateResponse(
+            final Exception ex, final String fieldName, final Object invalidValue) {
+        final String description = "date must be in the following format: %s - example: %s"
+                .formatted(RequestConstants.DateTimeFormats.DATE_FORMAT, OpenApiConstants.Examples.DATE);
 
-        return buildInvalidRequestParameters(
-            fieldName,
-            "invalid date format",
-            invalidValue,
-            description,
-            ex);
+        return buildInvalidRequestParameters(fieldName, "invalid date format", invalidValue, description, ex);
     }
 
-    private ResponseEntity<Object> buildInvalidTimeResponse(final Exception ex, final String fieldName, final Object invalidValue) {
-        final String description = "time must be in the following format: %s - example: %s".formatted(
-            RequestConstants.DateTimeFormats.TIME_FORMAT,
-            OpenApiConstants.Examples.TIME);
+    private ResponseEntity<Object> buildInvalidTimeResponse(
+            final Exception ex, final String fieldName, final Object invalidValue) {
+        final String description = "time must be in the following format: %s - example: %s"
+                .formatted(RequestConstants.DateTimeFormats.TIME_FORMAT, OpenApiConstants.Examples.TIME);
 
-        return buildInvalidRequestParameters(
-            fieldName,
-            "invalid time format",
-            invalidValue,
-            description,
-            ex);
+        return buildInvalidRequestParameters(fieldName, "invalid time format", invalidValue, description, ex);
     }
 
-    private ResponseEntity<Object> buildInvalidInstantResponse(final Exception ex, final String fieldName, final Object invalidValue) {
-        final String description = "date-time must be in the following format: %s - example: %s".formatted(
-            RequestConstants.DateTimeFormats.DATE_TIME_FORMAT,
-            OpenApiConstants.Examples.DATE_TIME);
+    private ResponseEntity<Object> buildInvalidInstantResponse(
+            final Exception ex, final String fieldName, final Object invalidValue) {
+        final String description = "date-time must be in the following format: %s - example: %s"
+                .formatted(RequestConstants.DateTimeFormats.DATE_TIME_FORMAT, OpenApiConstants.Examples.DATE_TIME);
 
-        return buildInvalidRequestParameters(
-            fieldName,
-            "invalid date-time format",
-            invalidValue,
-            description,
-            ex);
+        return buildInvalidRequestParameters(fieldName, "invalid date-time format", invalidValue, description, ex);
     }
 
-    private ResponseEntity<Object> buildInvalidZoneIdResponse(final Exception ex, final String fieldName, final Object invalidValue) {
+    private ResponseEntity<Object> buildInvalidZoneIdResponse(
+            final Exception ex, final String fieldName, final Object invalidValue) {
         return buildInvalidRequestParameters(
-            fieldName,
-            "invalid timezone id",
-            invalidValue,
-            "timezone must be a valid tz database identifier (e.g., America/Sao_Paulo, UTC, Europe/London)",
-            ex);
+                fieldName,
+                "invalid timezone id",
+                invalidValue,
+                "timezone must be a valid tz database identifier (e.g., America/Sao_Paulo, UTC, Europe/London)",
+                ex);
     }
 
     private static String buildInvalidAttributeMessage(
             final String attributeName, final String errMotive, final Object attributeValue) {
 
         if (errMotive.contains(Instant.class.getName())) {
-            final String errMotiveInstant = "date-time must be in the following format: %s (example: %s)".formatted(
-                RequestConstants.DateTimeFormats.DATE_TIME_FORMAT,
-                OpenApiConstants.Examples.DATE_TIME);
+            final String errMotiveInstant = "date-time must be in the following format: %s (example: %s)"
+                    .formatted(RequestConstants.DateTimeFormats.DATE_TIME_FORMAT, OpenApiConstants.Examples.DATE_TIME);
 
             return "[ propertyPath: %s - errorMotive: %s - valueProvided: %s ]"
-                .formatted(attributeName, errMotiveInstant, attributeValue);
-
+                    .formatted(attributeName, errMotiveInstant, attributeValue);
         }
 
         return "[ propertyPath: %s - errorMotive: %s - valueProvided: %s ]"
@@ -275,17 +253,26 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
         }
     }
 
-    private ResponseEntity<Object> buildInvalidRequestParameters(final String parameterName, final String motive, final Object valueProvided, final String description, final Exception originalException) {
-        var msg = "[ parameter name: %s - errorMotive: %s - valueProvided: %s - description: %s ]".formatted(
-            parameterName, motive, valueProvided, description);
+    private ResponseEntity<Object> buildInvalidRequestParameters(
+            final String parameterName,
+            final String motive,
+            final Object valueProvided,
+            final String description,
+            final Exception originalException) {
+        var msg = "[ parameter name: %s - errorMotive: %s - valueProvided: %s - description: %s ]"
+                .formatted(parameterName, motive, valueProvided, description);
 
         final var invalidValuesException = new InvalidValuesException(msg, originalException);
         return logExceptionAndBuild(invalidValuesException);
     }
 
-    private ResponseEntity<Object> buildInvalidRequestParameters(final String parameterName, final String motive, final Object valueProvided, final Exception originalException) {
-        var msg = "[ parameter name: %s - errorMotive: %s - valueProvided: %s ]".formatted(
-            parameterName, motive, valueProvided);
+    private ResponseEntity<Object> buildInvalidRequestParameters(
+            final String parameterName,
+            final String motive,
+            final Object valueProvided,
+            final Exception originalException) {
+        var msg = "[ parameter name: %s - errorMotive: %s - valueProvided: %s ]"
+                .formatted(parameterName, motive, valueProvided);
 
         final var invalidValuesException = new InvalidValuesException(msg, originalException);
         return logExceptionAndBuild(invalidValuesException);

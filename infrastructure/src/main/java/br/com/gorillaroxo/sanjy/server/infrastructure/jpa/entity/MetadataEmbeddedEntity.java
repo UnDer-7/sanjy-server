@@ -4,14 +4,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.time.Instant;
 
 @Getter
 @Setter
@@ -35,7 +34,7 @@ public class MetadataEmbeddedEntity {
     }
 
     @PreUpdate
-    public void  onUpdate() {
+    public void onUpdate() {
         updatedAt = Instant.now();
     }
 }

@@ -24,13 +24,14 @@ public class JacksonConfig {
     }
 
     private static void dateTimeFormat(final Jackson2ObjectMapperBuilder builder) {
-        final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(RequestConstants.DateTimeFormats.DATE_FORMAT);
+        final DateTimeFormatter dateFormatter =
+                DateTimeFormatter.ofPattern(RequestConstants.DateTimeFormats.DATE_FORMAT);
         builder.serializers(new LocalDateSerializer(dateFormatter));
         builder.deserializers(new LocalDateDeserializer(dateFormatter));
 
-        final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(RequestConstants.DateTimeFormats.TIME_FORMAT);
+        final DateTimeFormatter timeFormatter =
+                DateTimeFormatter.ofPattern(RequestConstants.DateTimeFormats.TIME_FORMAT);
         builder.serializers(new LocalTimeSerializer(timeFormatter));
         builder.deserializers(new LocalTimeDeserializer(timeFormatter));
     }
-
 }

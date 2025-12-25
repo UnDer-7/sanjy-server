@@ -2,8 +2,6 @@ package br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose;
 
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;

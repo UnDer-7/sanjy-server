@@ -43,8 +43,12 @@ public class DietPlanService {
                     StructuredArguments.kv(LogField.DIET_PLAN_ID.label(), dietPlanFound.getId()),
                     StructuredArguments.kv(LogField.DIET_PLAN_NAME.label(), dietPlanFound.getName()),
                     StructuredArguments.kv(LogField.DIET_PLAN_IS_ACTIVE.label(), dietPlanFound.getIsActive()),
-                    StructuredArguments.kv(LogField.DIET_PLAN_CREATED_AT.label(), dietPlanFound.getMetadata().createdAt()),
-                    StructuredArguments.kv(LogField.DIET_PLAN_UPDATED_AT.label(), dietPlanFound.getMetadata().updatedAt()),
+                    StructuredArguments.kv(
+                            LogField.DIET_PLAN_CREATED_AT.label(),
+                            dietPlanFound.getMetadata().createdAt()),
+                    StructuredArguments.kv(
+                            LogField.DIET_PLAN_UPDATED_AT.label(),
+                            dietPlanFound.getMetadata().updatedAt()),
                     StructuredArguments.kv(
                             LogField.DIET_PLAN_MEAL_TYPE_SIZE.label(),
                             dietPlanFound.getMealTypes().size()));
@@ -58,8 +62,12 @@ public class DietPlanService {
                     StructuredArguments.kv(LogField.DIET_PLAN_ID.label(), dietPlanFound.getId()),
                     StructuredArguments.kv(LogField.DIET_PLAN_NAME.label(), dietPlanFound.getName()),
                     StructuredArguments.kv(LogField.DIET_PLAN_IS_ACTIVE.label(), dietPlanFound.getIsActive()),
-                    StructuredArguments.kv(LogField.DIET_PLAN_CREATED_AT.label(), dietPlanFound.getMetadata().createdAt()),
-                    StructuredArguments.kv(LogField.DIET_PLAN_UPDATED_AT.label(), dietPlanFound.getMetadata().updatedAt()),
+                    StructuredArguments.kv(
+                            LogField.DIET_PLAN_CREATED_AT.label(),
+                            dietPlanFound.getMetadata().createdAt()),
+                    StructuredArguments.kv(
+                            LogField.DIET_PLAN_UPDATED_AT.label(),
+                            dietPlanFound.getMetadata().updatedAt()),
                     StructuredArguments.kv(
                             LogField.DIET_PLAN_MEAL_TYPE_SIZE.label(),
                             dietPlanFound.getMealTypes().size()));
@@ -75,8 +83,12 @@ public class DietPlanService {
                 StructuredArguments.kv(LogField.DIET_PLAN_ID.label(), dietPlanCreated.getId()),
                 StructuredArguments.kv(LogField.DIET_PLAN_NAME.label(), dietPlanCreated.getName()),
                 StructuredArguments.kv(LogField.DIET_PLAN_IS_ACTIVE.label(), dietPlanCreated.getIsActive()),
-                StructuredArguments.kv(LogField.DIET_PLAN_CREATED_AT.label(), dietPlanCreated.getMetadata().createdAt()),
-                StructuredArguments.kv(LogField.DIET_PLAN_UPDATED_AT.label(), dietPlanCreated.getMetadata().createdAt()),
+                StructuredArguments.kv(
+                        LogField.DIET_PLAN_CREATED_AT.label(),
+                        dietPlanCreated.getMetadata().createdAt()),
+                StructuredArguments.kv(
+                        LogField.DIET_PLAN_UPDATED_AT.label(),
+                        dietPlanCreated.getMetadata().createdAt()),
                 StructuredArguments.kv(
                         LogField.DIET_PLAN_MEAL_TYPE_SIZE.label(),
                         dietPlanCreated.getMealTypes().size()));

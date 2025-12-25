@@ -1,7 +1,6 @@
 package br.com.gorillaroxo.sanjy.server.core.exception;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
-
 import java.time.Instant;
 import java.util.Optional;
 import java.util.function.Predicate;

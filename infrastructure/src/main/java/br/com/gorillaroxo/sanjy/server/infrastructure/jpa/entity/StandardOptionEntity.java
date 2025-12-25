@@ -53,5 +53,4 @@ public class StandardOptionEntity {
 
     @Embedded
     private MetadataEmbeddedEntity metadata;
-
 }

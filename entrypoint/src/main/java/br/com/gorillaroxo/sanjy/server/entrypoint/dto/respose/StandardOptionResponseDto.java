@@ -28,4 +28,5 @@ public record StandardOptionResponseDto(
                 example = "789",
                 requiredMode = Schema.RequiredMode.REQUIRED)
         Long mealTypeId,
+
         MetadataResponseDto metadata) {}

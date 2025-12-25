@@ -19,16 +19,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.List;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Meal Record", description = "Handles meal record operations")
@@ -67,12 +62,12 @@ public interface MealRecordRestService {
                 and free meals (off-plan). Use this to check daily food intake and diet adherence.
                 """)
     @Parameter(
-        name = RequestConstants.Query.TIMEZONE,
-        description = "timezone using naming convention of the tz database",
-        required = true,
-        example = OpenApiConstants.Examples.TIMEZONE,
-        in = ParameterIn.QUERY,
-        schema = @Schema(implementation = String.class))
+            name = RequestConstants.Query.TIMEZONE,
+            description = "timezone using naming convention of the tz database",
+            required = true,
+            example = OpenApiConstants.Examples.TIMEZONE,
+            in = ParameterIn.QUERY,
+            schema = @Schema(implementation = String.class))
     @ApiResponse(
             responseCode = OpenApiConstants.HttpStatusCodes.OK,
             description = "Today Meal Record",
@@ -120,14 +115,22 @@ public interface MealRecordRestService {
             required = false,
             example = OpenApiConstants.Examples.DATE_TIME,
             in = ParameterIn.QUERY,
-            schema = @Schema(implementation = Instant.class, format = "date-time", defaultValue = "current day at 00:00:00"))
+            schema =
+                    @Schema(
+                            implementation = Instant.class,
+                            format = "date-time",
+                            defaultValue = "current day at 00:00:00"))
     @Parameter(
             name = RequestConstants.Query.CONSUMED_AT_BEFORE,
             description = "Filter meals consumed before this date/time",
             required = false,
             example = OpenApiConstants.Examples.DATE_TIME,
             in = ParameterIn.QUERY,
-            schema = @Schema(implementation = Instant.class, format = "date-time", defaultValue = "current day at 23:59:59"))
+            schema =
+                    @Schema(
+                            implementation = Instant.class,
+                            format = "date-time",
+                            defaultValue = "current day at 23:59:59"))
     @Parameter(
             name = RequestConstants.Query.IS_FREE_MEAL,
             description = """
@@ -173,14 +176,22 @@ public interface MealRecordRestService {
             required = true,
             example = OpenApiConstants.Examples.DATE_TIME,
             in = ParameterIn.QUERY,
-            schema = @Schema(implementation = Instant.class, format = "date-time", defaultValue = "current day at 00:00:00"))
+            schema =
+                    @Schema(
+                            implementation = Instant.class,
+                            format = "date-time",
+                            defaultValue = "current day at 00:00:00"))
     @Parameter(
             name = RequestConstants.Query.CONSUMED_AT_BEFORE,
             description = "Filter meals consumed before this date/time",
             required = true,
             example = OpenApiConstants.Examples.DATE_TIME,
             in = ParameterIn.QUERY,
-            schema = @Schema(implementation = Instant.class, format = "date-time", defaultValue = "current day at 23:59:59"))
+            schema =
+                    @Schema(
+                            implementation = Instant.class,
+                            format = "date-time",
+                            defaultValue = "current day at 23:59:59"))
     @ApiResponse(
             responseCode = OpenApiConstants.HttpStatusCodes.OK,
             description = "Successfully retrieved meal record statistics for the specified date range",
@@ -225,6 +236,8 @@ public interface MealRecordRestService {
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponseDto.class)))
     MealRecordStatisticsResponseDto getMealRecordStatisticsByDateRange(
-            @RequestParam(name = RequestConstants.Query.CONSUMED_AT_AFTER, required = false) @NotNull Instant consumedAtAfter,
-            @RequestParam(name = RequestConstants.Query.CONSUMED_AT_BEFORE, required = false) @NotNull Instant consumedAtBefore);
+            @RequestParam(name = RequestConstants.Query.CONSUMED_AT_AFTER, required = false) @NotNull
+                    Instant consumedAtAfter,
+            @RequestParam(name = RequestConstants.Query.CONSUMED_AT_BEFORE, required = false) @NotNull
+                    Instant consumedAtBefore);
 }

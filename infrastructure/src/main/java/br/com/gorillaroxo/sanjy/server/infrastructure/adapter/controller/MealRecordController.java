@@ -20,15 +20,9 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import br.com.gorillaroxo.sanjy.server.infrastructure.config.McpToolMarker;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.MealRecordMapper;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.PageMapper;
-
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.List;
-
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.argument.StructuredArguments;
@@ -89,7 +83,7 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
             and free meals (off-plan). Use this to check daily food intake and diet adherence.
             """)
     public List<MealRecordResponseDto> getTodayMealRecords(
-        @RequestParam(required = false, name = RequestConstants.Query.TIMEZONE) final ZoneId timezone) {
+            @RequestParam(required = false, name = RequestConstants.Query.TIMEZONE) final ZoneId timezone) {
 
         log.info(
                 LogField.Placeholders.ONE.getPlaceholder(),
@@ -140,7 +134,8 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
             broken down by free meals (off-plan) and planned meals (following the diet plan). Use this to analyze diet adherence, \
             track compliance with the meal plan, or generate summary reports for a specific period.
             """)
-    public MealRecordStatisticsResponseDto getMealRecordStatisticsByDateRange(final Instant consumedAtAfter, final Instant consumedAtBefore) {
+    public MealRecordStatisticsResponseDto getMealRecordStatisticsByDateRange(
+            final Instant consumedAtAfter, final Instant consumedAtBefore) {
         log.info(
                 LogField.Placeholders.ONE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Request to get meal record statistics by date range"));

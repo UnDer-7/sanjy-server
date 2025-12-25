@@ -8,9 +8,7 @@ import br.com.gorillaroxo.sanjy.server.core.ports.driven.MealRecordGateway;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealRecordEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.repository.MealRecordRepository;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.MealRecordMapper;
-
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +35,7 @@ public class MealRecordRepositoryGateway implements MealRecordGateway {
     }
 
     @Override
-    public List<MealRecordDomain> searchByConsumedAt(
-            final Instant consumedAtAfter, final Instant consumedAtBefore) {
+    public List<MealRecordDomain> searchByConsumedAt(final Instant consumedAtAfter, final Instant consumedAtBefore) {
         final List<MealRecordEntity> mealRecords =
                 mealRecordRepository.findByConsumedAtBetweenOrderByConsumedAt(consumedAtAfter, consumedAtBefore);
         return mealRecordMapper.toDomain(mealRecords);

@@ -2,7 +2,6 @@ package br.com.gorillaroxo.sanjy.server.core.domain;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.Builder;
 

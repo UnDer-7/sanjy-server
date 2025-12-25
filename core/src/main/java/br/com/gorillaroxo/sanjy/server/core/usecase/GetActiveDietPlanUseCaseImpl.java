@@ -36,8 +36,12 @@ class GetActiveDietPlanUseCaseImpl implements GetActiveDietPlanUseCase {
                 StructuredArguments.kv(LogField.DIET_PLAN_ID.label(), dietPlan.getId()),
                 StructuredArguments.kv(LogField.DIET_PLAN_NAME.label(), dietPlan.getName()),
                 StructuredArguments.kv(LogField.DIET_PLAN_IS_ACTIVE.label(), dietPlan.getIsActive()),
-                StructuredArguments.kv(LogField.DIET_PLAN_CREATED_AT.label(), dietPlan.getMetadata().createdAt()),
-                StructuredArguments.kv(LogField.DIET_PLAN_UPDATED_AT.label(), dietPlan.getMetadata().updatedAt()),
+                StructuredArguments.kv(
+                        LogField.DIET_PLAN_CREATED_AT.label(),
+                        dietPlan.getMetadata().createdAt()),
+                StructuredArguments.kv(
+                        LogField.DIET_PLAN_UPDATED_AT.label(),
+                        dietPlan.getMetadata().updatedAt()),
                 StructuredArguments.kv(
                         LogField.DIET_PLAN_MEAL_TYPE_SIZE.label(),
                         dietPlan.getMealTypes().size()));
