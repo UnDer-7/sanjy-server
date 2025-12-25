@@ -23,7 +23,8 @@ public interface DietPlanMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "isActive", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "metadata.createdAt", ignore = true)
+    @Mapping(target = "metadata.updatedAt", ignore = true)
     DietPlanDomain toDomain(CreateDietPlanRequestDto request);
 
     // Entities

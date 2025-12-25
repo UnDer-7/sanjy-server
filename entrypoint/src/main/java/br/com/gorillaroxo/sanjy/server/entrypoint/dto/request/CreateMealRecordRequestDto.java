@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.Builder;
@@ -24,11 +25,12 @@ public record CreateMealRecordRequestDto(
                     forgotten to be logged at the time. Must be a past or present date/time (cannot be in the future). \
                     If not provided, defaults to current time.
                     """,
-                example = "2025-10-13T08:30:00",
+                example = "2025-01-15T14:30:00Z",
+                format = "date-time",
                 nullable = true,
                 requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         @PastOrPresent
-        LocalDateTime consumedAt,
+        Instant consumedAt,
 
         @Schema(
                 description =
@@ -81,6 +83,6 @@ public record CreateMealRecordRequestDto(
     public CreateMealRecordRequestDto {
         quantity = Objects.requireNonNullElse(quantity, BigDecimal.ONE);
         unit = Objects.requireNonNullElse(unit, "serving");
-        consumedAt = Objects.requireNonNullElse(consumedAt, LocalDateTime.now());
+        consumedAt = Objects.requireNonNullElse(consumedAt, Instant.now());
     }
 }

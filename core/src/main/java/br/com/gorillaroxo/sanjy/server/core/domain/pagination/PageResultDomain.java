@@ -1,4 +1,4 @@
-package br.com.gorillaroxo.sanjy.server.core.domain;
+package br.com.gorillaroxo.sanjy.server.core.domain.pagination;
 
 import java.util.ArrayList;
 import java.util.List;

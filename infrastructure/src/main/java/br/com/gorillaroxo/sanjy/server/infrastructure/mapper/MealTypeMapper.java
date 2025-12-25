@@ -28,6 +28,8 @@ public interface MealTypeMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "dietPlanId", ignore = true)
+    @Mapping(target = "metadata.createdAt", ignore = true)
+    @Mapping(target = "metadata.updatedAt", ignore = true)
     MealTypeDomain toDomain(CreateMealTypesRequestDto dto);
 
     List<MealTypeDomain> toDomainListFromMealTypeEntity(List<MealTypeEntity> dto);

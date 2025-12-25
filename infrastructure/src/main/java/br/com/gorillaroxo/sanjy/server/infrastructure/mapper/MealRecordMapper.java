@@ -34,7 +34,8 @@ public interface MealRecordMapper {
     // Domains
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "mealType", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "metadata.createdAt", ignore = true)
+    @Mapping(target = "metadata.updatedAt", ignore = true)
     @Mapping(target = "standardOption", ignore = true)
     MealRecordDomain toDomain(CreateMealRecordRequestDto dto);
 
@@ -47,9 +48,11 @@ public interface MealRecordMapper {
     @Mapping(target = "mealType.dietPlanId", ignore = true)
     @Mapping(target = "mealType.observation", ignore = true)
     @Mapping(target = "mealType.standardOptions", ignore = true)
+    @Mapping(target = "mealType.metadata", ignore = true)
     @Mapping(target = "standardOption.optionNumber", ignore = true)
     @Mapping(target = "standardOption.description", ignore = true)
     @Mapping(target = "standardOption.mealTypeId", ignore = true)
+    @Mapping(target = "standardOption.metadata", ignore = true)
     MealRecordDomain toDomain(MealRecordResponseDto dto);
 
     MealRecordStatisticsDomain toDomain(MealRecordStatisticsProjection projection);

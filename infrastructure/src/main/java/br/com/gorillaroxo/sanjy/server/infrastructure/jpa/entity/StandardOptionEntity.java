@@ -1,6 +1,7 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
@@ -50,8 +51,7 @@ public class StandardOptionEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
-    //    @Builder.Default
-    //    @OneToMany(mappedBy = "standardOption")
-    //    private List<MealRecordEntity> mealRecords = new ArrayList<>();
+    @Embedded
+    private MetadataEmbeddedEntity metadata;
 
 }

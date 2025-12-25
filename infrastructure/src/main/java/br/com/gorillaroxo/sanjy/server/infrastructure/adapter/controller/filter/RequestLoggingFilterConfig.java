@@ -1,4 +1,4 @@
-package br.com.gorillaroxo.sanjy.server.infrastructure.config.requestfilter;
+package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller.filter;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;

@@ -2,12 +2,14 @@ package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.gateway.repositor
 
 import br.com.gorillaroxo.sanjy.server.core.domain.MealRecordDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.MealRecordStatisticsDomain;
-import br.com.gorillaroxo.sanjy.server.core.domain.PageResultDomain;
-import br.com.gorillaroxo.sanjy.server.core.domain.SearchMealRecordParamDomain;
+import br.com.gorillaroxo.sanjy.server.core.domain.pagination.PageResultDomain;
+import br.com.gorillaroxo.sanjy.server.core.domain.pagination.SearchMealRecordParamDomain;
 import br.com.gorillaroxo.sanjy.server.core.ports.driven.MealRecordGateway;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealRecordEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.repository.MealRecordRepository;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.MealRecordMapper;
+
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +38,7 @@ public class MealRecordRepositoryGateway implements MealRecordGateway {
 
     @Override
     public List<MealRecordDomain> searchByConsumedAt(
-            final LocalDateTime consumedAtAfter, final LocalDateTime consumedAtBefore) {
+            final Instant consumedAtAfter, final Instant consumedAtBefore) {
         final List<MealRecordEntity> mealRecords =
                 mealRecordRepository.findByConsumedAtBetweenOrderByConsumedAt(consumedAtAfter, consumedAtBefore);
         return mealRecordMapper.toDomain(mealRecords);
@@ -86,7 +88,7 @@ public class MealRecordRepositoryGateway implements MealRecordGateway {
 
     @Override
     public Optional<MealRecordStatisticsDomain> getMealRecordStatisticsByDateRange(
-            final LocalDateTime consumedAtAfter, final LocalDateTime consumedAtBefore) {
+            final Instant consumedAtAfter, final Instant consumedAtBefore) {
         return mealRecordRepository
                 .getMealRecordStatisticsByDateRange(consumedAtAfter, consumedAtBefore)
                 .map(mealRecordMapper::toDomain);

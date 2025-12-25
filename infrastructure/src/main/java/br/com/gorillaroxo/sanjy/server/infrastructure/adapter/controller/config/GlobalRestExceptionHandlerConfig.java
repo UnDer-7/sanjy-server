@@ -1,13 +1,22 @@
-package br.com.gorillaroxo.sanjy.server.infrastructure.config;
+package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller.config;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
 import br.com.gorillaroxo.sanjy.server.core.exception.BusinessException;
 import br.com.gorillaroxo.sanjy.server.core.exception.InvalidValuesException;
 import br.com.gorillaroxo.sanjy.server.core.exception.UnexpectedErrorException;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.BusinessExceptionMapper;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.validation.ConstraintViolationException;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +25,12 @@ import org.slf4j.MDC;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @Slf4j
@@ -28,6 +39,42 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHandler {
 
     private final BusinessExceptionMapper businessExceptionMapper;
+
+
+    // Handle invalid formats in request parameters
+    // like: @RequestHeader, @RequestParam, @PathVariable
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Object> handleInvalidRequestParameters(MethodArgumentTypeMismatchException exception) {
+        if (Objects.equals(exception.getRequiredType(), ZoneId.class)) {
+            return buildInvalidRequestParameters(exception.getName(), "invalid timezone id", exception.getValue(), "timezone must be in convention of the tz database", exception);
+        }
+
+        if (Objects.equals(exception.getRequiredType(), Instant.class)) {
+            final String description = "date-time must be in the following format: %s - example: %s".formatted(
+                RequestConstants.DateTimeFormats.DATE_TIME_FORMAT,
+                OpenApiConstants.Examples.DATE_TIME);
+
+            return buildInvalidRequestParameters(exception.getName(), "invalid date-time format", exception.getValue(), description, exception);
+        }
+
+        if (Objects.equals(exception.getRequiredType(), LocalDate.class)) {
+            final String description = "date must be in the following format: %s - example: %s".formatted(
+                RequestConstants.DateTimeFormats.DATE_FORMAT,
+                OpenApiConstants.Examples.DATE);
+
+            return buildInvalidRequestParameters(exception.getName(), "invalid date format", exception.getValue(), description, exception);
+        }
+
+        if (Objects.equals(exception.getRequiredType(), LocalTime.class)) {
+            final String description = "time must be in the following format: %s - example: %s".formatted(
+                RequestConstants.DateTimeFormats.TIME_FORMAT,
+                OpenApiConstants.Examples.TIME);
+
+            return buildInvalidRequestParameters(exception.getName(), "invalid time format", exception.getValue(), description, exception);
+        }
+
+        return buildInvalidRequestParameters(exception.getName(), exception.getMessage(), exception.getValue(), exception);
+    }
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<Object> handleBusinessException(final BusinessException exception) {
@@ -97,6 +144,17 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
 
     private static String buildInvalidAttributeMessage(
             final String attributeName, final String errMotive, final Object attributeValue) {
+
+        if (errMotive.contains(Instant.class.getName())) {
+            final String errMotiveInstant = "date-time must be in the following format: %s (example: %s)".formatted(
+                RequestConstants.DateTimeFormats.DATE_TIME_FORMAT,
+                OpenApiConstants.Examples.DATE_TIME);
+
+            return "[ propertyPath: %s - errorMotive: %s - valueProvided: %s ]"
+                .formatted(attributeName, errMotiveInstant, attributeValue);
+
+        }
+
         return "[ propertyPath: %s - errorMotive: %s - valueProvided: %s ]"
                 .formatted(attributeName, errMotive, attributeValue);
     }
@@ -104,7 +162,7 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
     private ResponseEntity<Object> logExceptionAndBuild(final BusinessException exception) {
         try {
             MDC.put(LogField.ERROR_CODE.label(), exception.getExceptionCode().getCode());
-            MDC.put(LogField.ERROR_TIMESTAMP.label(), exception.getTimestamp());
+            MDC.put(LogField.ERROR_TIMESTAMP.label(), exception.getTimestamp().toString());
             MDC.put(LogField.ERROR_MESSAGE.label(), exception.getExceptionCode().getMessage());
             MDC.put(LogField.HTTP_STATUS_CODE.label(), Integer.toString(exception.getHttpStatusCode()));
             MDC.put(
@@ -123,5 +181,21 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
         } finally {
             MDC.clear();
         }
+    }
+
+    private ResponseEntity<Object> buildInvalidRequestParameters(final String parameterName, final String motive, final Object valueProvided, final String description, final Exception originalException) {
+        var msg = "[ parameter name: %s - errorMotive: %s - valueProvided: %s - description: %s ]".formatted(
+            parameterName, motive, valueProvided, description);
+
+        final var invalidValuesException = new InvalidValuesException(msg, originalException);
+        return logExceptionAndBuild(invalidValuesException);
+    }
+
+    private ResponseEntity<Object> buildInvalidRequestParameters(final String parameterName, final String motive, final Object valueProvided, final Exception originalException) {
+        var msg = "[ parameter name: %s - errorMotive: %s - valueProvided: %s ]".formatted(
+            parameterName, motive, valueProvided);
+
+        final var invalidValuesException = new InvalidValuesException(msg, originalException);
+        return logExceptionAndBuild(invalidValuesException);
     }
 }

@@ -26,6 +26,8 @@ public interface StandardOptionMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "mealTypeId", ignore = true)
+    @Mapping(target = "metadata.createdAt", ignore = true)
+    @Mapping(target = "metadata.updatedAt", ignore = true)
     StandardOptionDomain toDomain(CreateStandardOptionRequestDto dto);
 
     List<StandardOptionDomain> toDomainListFromStandardOptionEntity(List<StandardOptionEntity> entity);

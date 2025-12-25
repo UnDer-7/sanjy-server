@@ -1,8 +1,8 @@
 package br.com.gorillaroxo.sanjy.server.core.usecase;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.MealRecordDomain;
-import br.com.gorillaroxo.sanjy.server.core.domain.PageResultDomain;
-import br.com.gorillaroxo.sanjy.server.core.domain.SearchMealRecordParamDomain;
+import br.com.gorillaroxo.sanjy.server.core.domain.pagination.PageResultDomain;
+import br.com.gorillaroxo.sanjy.server.core.domain.pagination.SearchMealRecordParamDomain;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.SearchMealRecordUseCase;
 import br.com.gorillaroxo.sanjy.server.core.service.MealRecordService;
 import lombok.RequiredArgsConstructor;

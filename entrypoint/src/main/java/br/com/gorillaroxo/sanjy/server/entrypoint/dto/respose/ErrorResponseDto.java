@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
+import java.time.Instant;
+
 @Builder(toBuilder = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Schema(description = """
@@ -19,10 +21,11 @@ public record ErrorResponseDto(
         String code,
 
         @Schema(
-                description = "ISO 8601 zoned timestamp indicating exactly when the error occurred on the server",
-                example = "2025-10-13T12:31:45-03:00",
+                description = "ISO 8601 zoned time indicating exactly when the error occurred on the server",
+                example = "2025-01-15T14:30:00Z",
+                format = "date-time",
                 requiredMode = Schema.RequiredMode.REQUIRED)
-        String timestamp,
+        Instant timestamp,
 
         @Schema(
                 description = "Standard human-readable error message describing the error type",

@@ -2,6 +2,7 @@ package br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import lombok.Builder;
 
@@ -16,9 +17,10 @@ public record MealRecordResponseDto(
 
         @Schema(
                 description = "Exact date and time when the item was consumed",
-                example = "2025-10-13T12:30:00",
+                example = "2025-01-15T14:30:00Z",
+                format = "date-time",
                 requiredMode = Schema.RequiredMode.REQUIRED)
-        LocalDateTime consumedAt,
+        Instant consumedAt,
 
         @Schema(
                 description = "Meal type information (breakfast, lunch, snack, dinner, etc...)",
@@ -66,8 +68,4 @@ public record MealRecordResponseDto(
                 nullable = true)
         String notes,
 
-        @Schema(
-                description = "System timestamp when the record was created",
-                example = "2025-10-13T12:31:45",
-                requiredMode = Schema.RequiredMode.REQUIRED)
-        LocalDateTime createdAt) {}
+        MetadataResponseDto metadata) {}

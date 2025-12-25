@@ -49,7 +49,9 @@ public record MealTypeResponseDto(
         @Schema(
                 description = "Set of standard food options for this meal type",
                 requiredMode = Schema.RequiredMode.REQUIRED)
-        List<StandardOptionResponseDto> standardOptions) {
+        List<StandardOptionResponseDto> standardOptions,
+
+        MetadataResponseDto metadata) {
 
     public MealTypeResponseDto {
         standardOptions = Objects.requireNonNullElse(standardOptions, Collections.emptyList());

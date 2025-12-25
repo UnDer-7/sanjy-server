@@ -1,4 +1,4 @@
-package br.com.gorillaroxo.sanjy.server.core.domain;
+package br.com.gorillaroxo.sanjy.server.core.domain.pagination;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,7 +1,8 @@
 package br.com.gorillaroxo.sanjy.server.entrypoint.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDateTime;
+
+import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,15 +23,17 @@ public class SearchMealRecordParamRequestDto extends PageRequestDto {
             description = "Filter meals consumed after this date/time",
             requiredMode = Schema.RequiredMode.NOT_REQUIRED,
             nullable = true,
-            example = "2024-01-01T00:00:00")
-    private LocalDateTime consumedAtAfter;
+            format = "date-time",
+            example = "2025-01-15T14:30:00Z")
+    private Instant consumedAtAfter;
 
     @Schema(
             description = "Filter meals consumed before this date/time",
             requiredMode = Schema.RequiredMode.NOT_REQUIRED,
             nullable = true,
-            example = "2024-12-31T23:59:59")
-    private LocalDateTime consumedAtBefore;
+            format = "date-time",
+            example = "2025-01-15T14:30:00Z")
+    private Instant consumedAtBefore;
 
     @Schema(description = """
                 Filter by meal type. True returns only free meals (off-plan), false returns only standard meals (following the diet plan). \

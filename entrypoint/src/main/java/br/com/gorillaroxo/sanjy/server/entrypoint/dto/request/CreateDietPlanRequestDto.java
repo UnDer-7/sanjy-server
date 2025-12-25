@@ -1,5 +1,6 @@
 package br.com.gorillaroxo.sanjy.server.entrypoint.dto.request;
 
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Future;
@@ -26,7 +27,7 @@ public record CreateDietPlanRequestDto(
         @Schema(
                 description = "Date when this diet plan starts. If not provided, defaults to current date",
                 example = "2025-01-15",
-                format = "yyyy-MM-dd",
+                format = RequestConstants.DateTimeFormats.DATE_FORMAT,
                 nullable = true,
                 requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         LocalDate startDate,
@@ -36,6 +37,7 @@ public record CreateDietPlanRequestDto(
                     Date when this diet plan ends. If not provided, defaults to current date + 2 months. If provided, must be a future date
                     """,
                 example = "2025-04-15",
+                format = RequestConstants.DateTimeFormats.DATE_FORMAT,
                 nullable = true,
                 requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         @Future

@@ -12,6 +12,7 @@ public final class RequestConstants {
         public static final String IS_FREE_MEAL = "isFreeMeal";
         public static final String PAGE_SIZE = "pageSize";
         public static final String PAGE_NUMBER = "pageNumber";
+        public static final String TIMEZONE = "timezone";
 
         private Query() {
             throw new IllegalStateException("Utility class");
@@ -27,4 +28,15 @@ public final class RequestConstants {
             throw new IllegalStateException("Utility class");
         }
     }
+
+    public static final class DateTimeFormats {
+        private DateTimeFormats() {
+            throw new IllegalStateException("Utility class");
+        }
+
+        public static final String DATE_FORMAT = "yyyy-MM-dd";
+        public static final String TIME_FORMAT = "HH:mm:ss";
+        public static final String DATE_TIME_FORMAT = "yyyy-MM-ddThh:mm:ssZ";
+    }
+
 }

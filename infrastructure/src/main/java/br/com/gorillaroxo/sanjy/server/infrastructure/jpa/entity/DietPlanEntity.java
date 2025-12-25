@@ -2,16 +2,16 @@ package br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;
@@ -66,16 +66,11 @@ public class DietPlanEntity {
     @Column(name = "nutritionist_notes", columnDefinition = "TEXT")
     private String nutritionistNotes;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
     @Builder.Default
     @OrderBy("scheduledTime ASC NULLS LAST")
     @OneToMany(mappedBy = "dietPlan", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<MealTypeEntity> mealTypes = new LinkedHashSet<>();
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
+    @Embedded
+    private MetadataEmbeddedEntity metadata;
 }

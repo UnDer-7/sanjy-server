@@ -2,6 +2,8 @@ package br.com.gorillaroxo.sanjy.server.infrastructure.jpa.repository;
 
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealRecordEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.projection.MealRecordStatisticsProjection;
+
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +25,7 @@ public interface MealRecordRepository
             ORDER BY mr.consumedAt
             """)
     List<MealRecordEntity> findByConsumedAtBetweenOrderByConsumedAt(
-            LocalDateTime consumedAtAfter, LocalDateTime consumedAtBefore);
+            Instant consumedAtAfter, Instant consumedAtBefore);
 
     @Query("""
             SELECT new br.com.gorillaroxo.sanjy.server.infrastructure.jpa.projection.MealRecordStatisticsProjection(
@@ -35,5 +37,5 @@ public interface MealRecordRepository
             WHERE mr.consumedAt BETWEEN :startDate AND :endDate
             """)
     Optional<MealRecordStatisticsProjection> getMealRecordStatisticsByDateRange(
-            LocalDateTime startDate, LocalDateTime endDate);
+            Instant startDate, Instant endDate);
 }

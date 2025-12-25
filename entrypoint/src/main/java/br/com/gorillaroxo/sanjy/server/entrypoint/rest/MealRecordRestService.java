@@ -6,6 +6,7 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisticsResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseMealRecordDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -18,10 +19,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.List;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Meal Record", description = "Handles meal record operations")
@@ -33,21 +40,21 @@ public interface MealRecordRestService {
                 Standard meals must have standardOptionId, while free meals must have isFreeMeal=true and freeMealDescription.
                 """)
     @ApiResponse(
-            responseCode = "201",
+            responseCode = OpenApiConstants.HttpStatusCodes.CREATED,
             description = "Meal Record successfully created",
             content =
                     @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = MealRecordResponseDto.class)))
     @ApiResponse(
-            responseCode = "400",
+            responseCode = OpenApiConstants.HttpStatusCodes.BAD_REQUEST,
             description = "client error",
             content =
                     @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponseDto.class)))
     @ApiResponse(
-            responseCode = "500",
+            responseCode = OpenApiConstants.HttpStatusCodes.INTERNAL_SERVER_ERROR,
             description = "unexpected error occurred",
             content =
                     @Content(
@@ -59,28 +66,35 @@ public interface MealRecordRestService {
                 Retrieves all meals consumed today, ordered by consumption time. Includes both standard meals (following the diet plan) \
                 and free meals (off-plan). Use this to check daily food intake and diet adherence.
                 """)
+    @Parameter(
+        name = RequestConstants.Query.TIMEZONE,
+        description = "timezone using naming convention of the tz database",
+        required = true,
+        example = OpenApiConstants.Examples.TIMEZONE,
+        in = ParameterIn.QUERY,
+        schema = @Schema(implementation = String.class))
     @ApiResponse(
-            responseCode = "200",
+            responseCode = OpenApiConstants.HttpStatusCodes.OK,
             description = "Today Meal Record",
             content =
                     @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             array = @ArraySchema(schema = @Schema(implementation = MealRecordResponseDto.class))))
     @ApiResponse(
-            responseCode = "400",
+            responseCode = OpenApiConstants.HttpStatusCodes.BAD_REQUEST,
             description = "client error",
             content =
                     @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponseDto.class)))
     @ApiResponse(
-            responseCode = "500",
+            responseCode = OpenApiConstants.HttpStatusCodes.INTERNAL_SERVER_ERROR,
             description = "unexpected error occurred",
             content =
                     @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponseDto.class)))
-    List<MealRecordResponseDto> getTodayMealRecords();
+    List<MealRecordResponseDto> getTodayMealRecords(@NotNull ZoneId timezone);
 
     @Operation(summary = "Search meal records with filters and pagination", description = """
                 Searches meal records with pagination and optional filters (date range via consumedAtAfter/consumedAtBefore, and meal type via isFreeMeal). \
@@ -90,30 +104,30 @@ public interface MealRecordRestService {
             name = RequestConstants.Query.PAGE_NUMBER,
             description = "Page number to retrieve (zero-based, where 0 is the first page)",
             required = true,
-            example = "0",
+            example = OpenApiConstants.Examples.ZERO,
             in = ParameterIn.QUERY,
-            schema = @Schema(type = "integer"))
+            schema = @Schema(implementation = Integer.class))
     @Parameter(
             name = RequestConstants.Query.PAGE_SIZE,
             description = "Number of items per page. If not specified, returns 10 items per page",
             required = false,
-            example = "10",
+            example = OpenApiConstants.Examples.TEN,
             in = ParameterIn.QUERY,
-            schema = @Schema(type = "integer", defaultValue = "10"))
+            schema = @Schema(implementation = Integer.class, defaultValue = "10"))
     @Parameter(
             name = RequestConstants.Query.CONSUMED_AT_AFTER,
             description = "Filter meals consumed after this date/time",
             required = false,
-            example = "2024-01-01T00:00:00",
+            example = OpenApiConstants.Examples.DATE_TIME,
             in = ParameterIn.QUERY,
-            schema = @Schema(type = "string", format = "date-time", defaultValue = "current day at 00:00:00"))
+            schema = @Schema(implementation = Instant.class, format = "date-time", defaultValue = "current day at 00:00:00"))
     @Parameter(
             name = RequestConstants.Query.CONSUMED_AT_BEFORE,
             description = "Filter meals consumed before this date/time",
             required = false,
-            example = "2024-12-31T23:59:59",
+            example = OpenApiConstants.Examples.DATE_TIME,
             in = ParameterIn.QUERY,
-            schema = @Schema(type = "string", format = "date-time", defaultValue = "current day at 23:59:59"))
+            schema = @Schema(implementation = Instant.class, format = "date-time", defaultValue = "current day at 23:59:59"))
     @Parameter(
             name = RequestConstants.Query.IS_FREE_MEAL,
             description = """
@@ -121,25 +135,25 @@ public interface MealRecordRestService {
                 If not specified, returns both types
                 """,
             required = false,
-            example = "false",
+            example = OpenApiConstants.Examples.FALSE,
             in = ParameterIn.QUERY,
-            schema = @Schema(type = "boolean"))
+            schema = @Schema(implementation = Boolean.class))
     @ApiResponse(
-            responseCode = "200",
+            responseCode = OpenApiConstants.HttpStatusCodes.OK,
             description = "Today Meal Record",
             content =
                     @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = PageResponseMealRecordDto.class)))
     @ApiResponse(
-            responseCode = "400",
+            responseCode = OpenApiConstants.HttpStatusCodes.BAD_REQUEST,
             description = "client error",
             content =
                     @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponseDto.class)))
     @ApiResponse(
-            responseCode = "500",
+            responseCode = OpenApiConstants.HttpStatusCodes.INTERNAL_SERVER_ERROR,
             description = "unexpected error occurred",
             content =
                     @Content(
@@ -157,18 +171,18 @@ public interface MealRecordRestService {
             name = RequestConstants.Query.CONSUMED_AT_AFTER,
             description = "Filter meals consumed after this date/time",
             required = true,
-            example = "2024-01-01T00:00:00",
+            example = OpenApiConstants.Examples.DATE_TIME,
             in = ParameterIn.QUERY,
-            schema = @Schema(type = "string", format = "date-time", defaultValue = "current day at 00:00:00"))
+            schema = @Schema(implementation = Instant.class, format = "date-time", defaultValue = "current day at 00:00:00"))
     @Parameter(
             name = RequestConstants.Query.CONSUMED_AT_BEFORE,
             description = "Filter meals consumed before this date/time",
             required = true,
-            example = "2024-12-31T23:59:59",
+            example = OpenApiConstants.Examples.DATE_TIME,
             in = ParameterIn.QUERY,
-            schema = @Schema(type = "string", format = "date-time", defaultValue = "current day at 23:59:59"))
+            schema = @Schema(implementation = Instant.class, format = "date-time", defaultValue = "current day at 23:59:59"))
     @ApiResponse(
-            responseCode = "200",
+            responseCode = OpenApiConstants.HttpStatusCodes.OK,
             description = "Successfully retrieved meal record statistics for the specified date range",
             content =
                     @Content(
@@ -197,22 +211,20 @@ public interface MealRecordRestService {
                         """)
                             }))
     @ApiResponse(
-            responseCode = "400",
+            responseCode = OpenApiConstants.HttpStatusCodes.BAD_REQUEST,
             description = "client error",
             content =
                     @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponseDto.class)))
     @ApiResponse(
-            responseCode = "500",
+            responseCode = OpenApiConstants.HttpStatusCodes.INTERNAL_SERVER_ERROR,
             description = "unexpected error occurred",
             content =
                     @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponseDto.class)))
     MealRecordStatisticsResponseDto getMealRecordStatisticsByDateRange(
-            @RequestParam(name = RequestConstants.Query.CONSUMED_AT_AFTER, required = false) @NotNull
-                    LocalDateTime consumedAtAfter,
-            @RequestParam(name = RequestConstants.Query.CONSUMED_AT_BEFORE, required = false) @NotNull
-                    LocalDateTime consumedAtBefore);
+            @RequestParam(name = RequestConstants.Query.CONSUMED_AT_AFTER, required = false) @NotNull Instant consumedAtAfter,
+            @RequestParam(name = RequestConstants.Query.CONSUMED_AT_BEFORE, required = false) @NotNull Instant consumedAtBefore);
 }
