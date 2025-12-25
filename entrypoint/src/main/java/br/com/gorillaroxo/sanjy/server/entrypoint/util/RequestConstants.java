@@ -36,7 +36,7 @@ public final class RequestConstants {
 
         public static final String DATE_FORMAT = "yyyy-MM-dd";
         public static final String TIME_FORMAT = "HH:mm:ss";
-        public static final String DATE_TIME_FORMAT = "yyyy-MM-ddThh:mm:ssZ";
+        public static final String DATE_TIME_FORMAT = "yyyy-MM-ddTHH:mm:ssZ";
     }
 
 }
