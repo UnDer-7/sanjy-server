@@ -87,7 +87,7 @@ class DietPlanControllerIT extends IntegrationTestController {
                 .value(response -> {
                     final var expectedExCode = ExceptionCode.REPEATED_MEAL_TYPE_NAMES;
                     assertThat(response.code()).isNotBlank().isEqualTo(expectedExCode.getCode());
-                    assertThat(response.timestamp()).isNotBlank();
+                    assertThat(response.timestamp()).isNotNull();
                     assertThat(response.message()).isNotEmpty().isEqualTo(expectedExCode.getMessage());
                     assertThat(response.customMessage()).isNotEmpty().containsIgnoringCase(repeatedName);
                     assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -172,7 +172,7 @@ class DietPlanControllerIT extends IntegrationTestController {
                 .value(response -> {
                     final var expectedExCode = ExceptionCode.DIET_PLAN_NOT_FOUND;
                     assertThat(response.code()).isNotBlank().isEqualTo(expectedExCode.getCode());
-                    assertThat(response.timestamp()).isNotBlank();
+                    assertThat(response.timestamp()).isNotNull();
                     assertThat(response.message()).isNotEmpty().isEqualTo(expectedExCode.getMessage());
                     assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
                 });

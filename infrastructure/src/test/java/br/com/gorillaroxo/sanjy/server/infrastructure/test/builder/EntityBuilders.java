@@ -2,9 +2,11 @@ package br.com.gorillaroxo.sanjy.server.infrastructure.test.builder;
 
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.DietPlanEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealTypeEntity;
+import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MetadataEmbeddedEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.StandardOptionEntity;
+
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public final class EntityBuilders {
@@ -26,7 +28,13 @@ public final class EntityBuilders {
                 .dailyFatInG(30)
                 .goal("Body fat reduction with muscle mass preservation")
                 .nutritionistNotes("Patient has lactose intolerance. Avoid dairy products.")
-                .createdAt(LocalDateTime.now());
+                .metadata(buildMetadataEmbeddedEntity().build());
+    }
+
+    public static MetadataEmbeddedEntity.MetadataEmbeddedEntityBuilder buildMetadataEmbeddedEntity() {
+        return MetadataEmbeddedEntity.builder()
+            .createdAt(Instant.now())
+            .updatedAt(Instant.now());
     }
 
     public static MealTypeEntity.MealTypeEntityBuilder buildMealTypeEntity() {
@@ -35,7 +43,8 @@ public final class EntityBuilders {
                 .dietPlan(DietPlanEntity.builder().build())
                 .name("Breakfast")
                 .scheduledTime(LocalTime.now())
-                .observation("45 g proteína | 35 g carbo | 6 g gordura | 380 kcal");
+                .observation("45 g proteína | 35 g carbo | 6 g gordura | 380 kcal")
+                .metadata(buildMetadataEmbeddedEntity().build());
     }
 
     public static StandardOptionEntity.StandardOptionEntityBuilder buildStandardOptionEntity() {
@@ -43,6 +52,7 @@ public final class EntityBuilders {
                 .id(4L)
                 .optionNumber(1)
                 .description(
-                        "Pão francês sem miolo -- 45g | Ovos mexidos -- 3 ovos (150g) | Queijo minas frescal zero lactose -- 25g");
+                        "Pão francês sem miolo -- 45g | Ovos mexidos -- 3 ovos (150g) | Queijo minas frescal zero lactose -- 25g")
+                .metadata(buildMetadataEmbeddedEntity().build());
     }
 }

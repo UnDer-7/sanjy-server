@@ -5,9 +5,10 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRe
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealTypesRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateStandardOptionRequestDto;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public final class DtoBuilders {
@@ -50,7 +51,7 @@ public final class DtoBuilders {
             buildCreateMealRecordRequestDtoFreeMeal() {
         return CreateMealRecordRequestDto.builder()
                 .mealTypeId(100L)
-                .consumedAt(LocalDateTime.now().minusMinutes(2))
+                .consumedAt(Instant.now().minus(2, ChronoUnit.MINUTES))
                 .isFreeMeal(true)
                 .standardOptionId(null)
                 .freeMealDescription("BigMac")
@@ -63,7 +64,7 @@ public final class DtoBuilders {
             buildCreateMealRecordRequestDtoPlannedMeal() {
         return CreateMealRecordRequestDto.builder()
                 .mealTypeId(100L)
-                .consumedAt(LocalDateTime.now().minusMinutes(2))
+                .consumedAt(Instant.now().minus(2, ChronoUnit.MINUTES))
                 .isFreeMeal(false)
                 .standardOptionId(34L)
                 .freeMealDescription(null)

@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import org.junit.jupiter.api.Test;
@@ -134,13 +134,13 @@ class SupplierWrapperTest {
     @Test
     void should_work_with_complex_object_types() {
         // Given
-        final SupplierWrapper<LocalDateTime, Exception> supplierWrapper = LocalDateTime::now;
-        final Supplier<LocalDateTime> wrappedSupplier = SupplierWrapper.wrap(supplierWrapper);
+        final SupplierWrapper<Instant, Exception> supplierWrapper = Instant::now;
+        final Supplier<Instant> wrappedSupplier = SupplierWrapper.wrap(supplierWrapper);
 
         // When
-        final LocalDateTime result = wrappedSupplier.get();
+        final Instant result = wrappedSupplier.get();
 
         // Then
-        assertThat(result).isNotNull().isInstanceOf(LocalDateTime.class);
+        assertThat(result).isNotNull().isInstanceOf(Instant.class);
     }
 }

@@ -14,9 +14,12 @@ import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealTypeEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.StandardOptionEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.test.IntegrationTestController;
 import br.com.gorillaroxo.sanjy.server.infrastructure.test.builder.DtoBuilders;
+
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.function.Predicate;
 import org.junit.jupiter.api.BeforeAll;
@@ -75,7 +78,8 @@ class MealRecordControllerIT extends IntegrationTestController {
                     assertThat(response.quantity()).isEqualTo(request.quantity());
                     assertThat(response.unit()).isEqualTo(request.unit());
                     assertThat(response.notes()).isEqualTo(request.notes());
-                    assertThat(response.createdAt()).isNotNull();
+                    assertThat(response.metadata().createdAt()).isNotNull();
+                    assertThat(response.metadata().updatedAt()).isNotNull();
                 });
     }
 
@@ -99,7 +103,7 @@ class MealRecordControllerIT extends IntegrationTestController {
                 .value(response -> {
                     final var expectedExCode = ExceptionCode.INVALID_VALUES;
                     assertThat(response.code()).isNotBlank().isEqualTo(expectedExCode.getCode());
-                    assertThat(response.timestamp()).isNotBlank();
+                    assertThat(response.timestamp()).isNotNull();
                     assertThat(response.message()).isNotEmpty().isEqualTo(expectedExCode.getMessage());
                     assertThat(response.customMessage()).isNotEmpty().containsIgnoringCase("mealTypeId");
                     assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -196,7 +200,7 @@ class MealRecordControllerIT extends IntegrationTestController {
         final var requestPlannedMealRecord0 = DtoBuilders.buildCreateMealRecordRequestDtoPlannedMeal()
                 .mealTypeId(mealType.getId())
                 .standardOptionId(standardOption.getId())
-                .consumedAt(LocalDateTime.now().minusDays(3))
+                .consumedAt(Instant.now().minus(3, ChronoUnit.DAYS))
                 .build();
 
         final var requestPlannedMealRecord1 = DtoBuilders.buildCreateMealRecordRequestDtoPlannedMeal()
@@ -294,7 +298,7 @@ class MealRecordControllerIT extends IntegrationTestController {
         final var requestPlannedMealRecord0 = DtoBuilders.buildCreateMealRecordRequestDtoPlannedMeal()
                 .mealTypeId(mealType.getId())
                 .standardOptionId(standardOption.getId())
-                .consumedAt(LocalDateTime.now().minusDays(3))
+                .consumedAt(Instant.now().minus(3, ChronoUnit.DAYS))
                 .build();
 
         final var requestPlannedMealRecord1 = DtoBuilders.buildCreateMealRecordRequestDtoPlannedMeal()
@@ -340,7 +344,7 @@ class MealRecordControllerIT extends IntegrationTestController {
                         .pathSegment("statistics")
                         .queryParam(RequestConstants.Query.CONSUMED_AT_AFTER, currentDate.atStartOfDay())
                         .queryParam(
-                                RequestConstants.Query.CONSUMED_AT_BEFORE, LocalDateTime.of(currentDate, LocalTime.MAX))
+                                RequestConstants.Query.CONSUMED_AT_BEFORE, currentDate.atTime(LocalTime.MIN).atZone(ZoneId.systemDefault()).toInstant())
                         .build())
                 .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
                 .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
@@ -368,7 +372,7 @@ class MealRecordControllerIT extends IntegrationTestController {
                         .pathSegment("statistics")
                         .queryParam(RequestConstants.Query.CONSUMED_AT_AFTER, currentDate.atStartOfDay())
                         .queryParam(
-                                RequestConstants.Query.CONSUMED_AT_BEFORE, LocalDateTime.of(currentDate, LocalTime.MAX))
+                                RequestConstants.Query.CONSUMED_AT_BEFORE, currentDate.atTime(LocalTime.MAX).atZone(ZoneId.systemDefault()).toInstant())
                         .build())
                 .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
                 .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
