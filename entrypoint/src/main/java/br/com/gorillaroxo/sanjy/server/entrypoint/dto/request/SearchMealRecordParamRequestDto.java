@@ -1,5 +1,7 @@
 package br.com.gorillaroxo.sanjy.server.entrypoint.dto.request;
 
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.Instant;
 import lombok.AllArgsConstructor;
@@ -22,16 +24,16 @@ public class SearchMealRecordParamRequestDto extends PageRequestDto {
             description = "Filter meals consumed after this date/time",
             requiredMode = Schema.RequiredMode.NOT_REQUIRED,
             nullable = true,
-            format = "date-time",
-            example = "2025-01-15T14:30:00Z")
+            format = RequestConstants.DateTimeFormats.DATE_TIME_FORMAT,
+            example = OpenApiConstants.Examples.DATE_TIME)
     private Instant consumedAtAfter;
 
     @Schema(
             description = "Filter meals consumed before this date/time",
             requiredMode = Schema.RequiredMode.NOT_REQUIRED,
             nullable = true,
-            format = "date-time",
-            example = "2025-01-15T14:30:00Z")
+            format = RequestConstants.DateTimeFormats.DATE_TIME_FORMAT,
+            example = OpenApiConstants.Examples.DATE_TIME)
     private Instant consumedAtBefore;
 
     @Schema(description = """

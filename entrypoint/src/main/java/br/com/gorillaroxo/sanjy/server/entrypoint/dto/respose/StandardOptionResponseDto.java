@@ -29,4 +29,7 @@ public record StandardOptionResponseDto(
                 requiredMode = Schema.RequiredMode.REQUIRED)
         Long mealTypeId,
 
+        @Schema(
+                description = "Metadata information containing creation and last update timestamps, along with other contextual data",
+                requiredMode = Schema.RequiredMode.REQUIRED)
         MetadataResponseDto metadata) {}

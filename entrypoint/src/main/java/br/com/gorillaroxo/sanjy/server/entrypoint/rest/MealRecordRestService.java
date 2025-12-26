@@ -111,25 +111,25 @@ public interface MealRecordRestService {
             schema = @Schema(implementation = Integer.class, defaultValue = "10"))
     @Parameter(
             name = RequestConstants.Query.CONSUMED_AT_AFTER,
-            description = "Filter meals consumed after this date/time",
+            description = "Filter meals consumed after this date/time in UTC timezone (ISO 8601 format)",
             required = false,
             example = OpenApiConstants.Examples.DATE_TIME,
             in = ParameterIn.QUERY,
             schema =
                     @Schema(
                             implementation = Instant.class,
-                            format = "date-time",
+                            format = RequestConstants.DateTimeFormats.DATE_TIME_FORMAT,
                             defaultValue = "current day at 00:00:00"))
     @Parameter(
             name = RequestConstants.Query.CONSUMED_AT_BEFORE,
-            description = "Filter meals consumed before this date/time",
+            description = "Filter meals consumed before this date/time in UTC timezone (ISO 8601 format)",
             required = false,
             example = OpenApiConstants.Examples.DATE_TIME,
             in = ParameterIn.QUERY,
             schema =
                     @Schema(
                             implementation = Instant.class,
-                            format = "date-time",
+                            format = RequestConstants.DateTimeFormats.DATE_TIME_FORMAT,
                             defaultValue = "current day at 23:59:59"))
     @Parameter(
             name = RequestConstants.Query.IS_FREE_MEAL,
@@ -172,25 +172,25 @@ public interface MealRecordRestService {
                 """)
     @Parameter(
             name = RequestConstants.Query.CONSUMED_AT_AFTER,
-            description = "Filter meals consumed after this date/time",
+            description = "Filter meals consumed after this date/time in UTC timezone (ISO 8601 format)",
             required = true,
             example = OpenApiConstants.Examples.DATE_TIME,
             in = ParameterIn.QUERY,
             schema =
                     @Schema(
                             implementation = Instant.class,
-                            format = "date-time",
+                            format = RequestConstants.DateTimeFormats.DATE_TIME_FORMAT,
                             defaultValue = "current day at 00:00:00"))
     @Parameter(
             name = RequestConstants.Query.CONSUMED_AT_BEFORE,
-            description = "Filter meals consumed before this date/time",
+            description = "Filter meals consumed before this date/time in UTC timezone (ISO 8601 format)",
             required = true,
             example = OpenApiConstants.Examples.DATE_TIME,
             in = ParameterIn.QUERY,
             schema =
                     @Schema(
                             implementation = Instant.class,
-                            format = "date-time",
+                            format = RequestConstants.DateTimeFormats.DATE_TIME_FORMAT,
                             defaultValue = "current day at 23:59:59"))
     @ApiResponse(
             responseCode = OpenApiConstants.HttpStatusCodes.OK,

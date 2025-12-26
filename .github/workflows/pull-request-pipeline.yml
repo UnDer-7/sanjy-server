@@ -24,6 +24,68 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           cache: 'maven'
 
+      - name: Validate POM versions consistency
+        id: pom-validation
+        run: |
+          echo "Validating that all sub-modules reference the correct parent version..."
+
+          # Get root pom.xml version
+          ROOT_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "Root project version: $ROOT_VERSION"
+
+          # List of sub-modules to validate
+          MODULES=("core" "entrypoint" "infrastructure" "aggregate-report")
+
+          # Flag to track if validation fails
+          VALIDATION_FAILED=false
+          FAILED_MODULES=""
+
+          # Validate each sub-module
+          for MODULE in "${MODULES[@]}"; do
+            echo ""
+            echo "Checking module: $MODULE"
+
+            # Get parent version from sub-module pom.xml
+            PARENT_VERSION=$(./mvnw help:evaluate -Dexpression=project.parent.version -q -DforceStdout -pl $MODULE)
+
+            echo "  Parent version in $MODULE/pom.xml: $PARENT_VERSION"
+
+            if [ "$PARENT_VERSION" != "$ROOT_VERSION" ]; then
+              echo "  ❌ MISMATCH: Expected $ROOT_VERSION but found $PARENT_VERSION"
+              VALIDATION_FAILED=true
+              FAILED_MODULES="$FAILED_MODULES $MODULE"
+            else
+              echo "  ✅ OK: Parent version matches root version"
+            fi
+          done
+
+          echo ""
+          echo "========================================="
+
+          if [ "$VALIDATION_FAILED" = true ]; then
+            echo "::error::POM version validation failed!"
+            echo ""
+            echo "❌ The following modules have mismatched parent versions:$FAILED_MODULES"
+            echo ""
+            echo "Root pom.xml version: $ROOT_VERSION"
+            echo ""
+            echo "💡 To fix this issue, use the version management command:"
+            echo ""
+            echo "   make version/set $ROOT_VERSION"
+            echo ""
+            echo "This command will automatically update all modules (root and sub-modules) to version $ROOT_VERSION."
+            echo ""
+            echo "Example:"
+            echo "   make version/set 1.0.0"
+            echo ""
+            echo "After running the command, commit and push the updated pom.xml files."
+            exit 1
+          else
+            echo "✅ All POM versions are consistent!"
+            echo "   Root version: $ROOT_VERSION"
+            echo "   All sub-modules correctly reference this version"
+          fi
+
       - name: Get current project version
         id: project-version
         run: |

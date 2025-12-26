@@ -1,5 +1,7 @@
 package br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose;
 
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.Instant;
@@ -21,8 +23,8 @@ public record ErrorResponseDto(
 
         @Schema(
                 description = "ISO 8601 zoned time indicating exactly when the error occurred on the server",
-                example = "2025-01-15T14:30:00Z",
-                format = "date-time",
+                example = OpenApiConstants.Examples.DATE_TIME,
+                format = RequestConstants.DateTimeFormats.DATE_TIME_FORMAT,
                 requiredMode = Schema.RequiredMode.REQUIRED)
         Instant timestamp,
 

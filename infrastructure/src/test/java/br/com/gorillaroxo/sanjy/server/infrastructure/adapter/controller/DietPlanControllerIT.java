@@ -179,6 +179,234 @@ class DietPlanControllerIT extends IntegrationTestController {
     }
 
     @Nested
+    @DisplayName("Test invalid date formats")
+    class InvalidDateFormats {
+
+        @Test
+        void newDietPlan__should_fail_with_invalid_startDate_format() {
+            webTestClient
+                    .post()
+                    .uri(getBaseUrl())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue("""
+                            {
+                              "name": "Test Diet Plan",
+                              "startDate": "2025-13-45",
+                              "endDate": "2025-12-31",
+                              "mealTypes": [
+                                {
+                                  "name": "Breakfast",
+                                  "standardOptions": [
+                                    {
+                                      "optionNumber": 1,
+                                      "description": "Oatmeal"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                            """)
+                    .exchange()
+                    .expectStatus()
+                    .isBadRequest()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.code()).isEqualTo(ExceptionCode.INVALID_VALUES.getCode());
+                        assertThat(response.message()).isEqualTo(ExceptionCode.INVALID_VALUES.getMessage());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                        assertThat(response.customMessage()).containsIgnoringCase("startDate");
+                        assertThat(response.customMessage()).containsIgnoringCase("errorMotive");
+                    });
+        }
+
+        @Test
+        void newDietPlan__should_fail_with_invalid_endDate_format() {
+            webTestClient
+                    .post()
+                    .uri(getBaseUrl())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue("""
+                            {
+                              "name": "Test Diet Plan",
+                              "startDate": "2025-01-01",
+                              "endDate": "not-a-date",
+                              "mealTypes": [
+                                {
+                                  "name": "Breakfast",
+                                  "standardOptions": [
+                                    {
+                                      "optionNumber": 1,
+                                      "description": "Oatmeal"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                            """)
+                    .exchange()
+                    .expectStatus()
+                    .isBadRequest()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.code()).isEqualTo(ExceptionCode.INVALID_VALUES.getCode());
+                        assertThat(response.message()).isEqualTo(ExceptionCode.INVALID_VALUES.getMessage());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                        assertThat(response.customMessage()).containsIgnoringCase("endDate");
+                        assertThat(response.customMessage()).containsIgnoringCase("errorMotive");
+                    });
+        }
+    }
+
+    @Nested
+    @DisplayName("Test invalid JSON payloads")
+    class InvalidJsonPayloads {
+
+        @Test
+        void newDietPlan__should_fail_with_malformed_json() {
+            webTestClient
+                    .post()
+                    .uri(getBaseUrl())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue("""
+                            {
+                              "name": "Test Diet Plan",
+                              "mealTypes": [
+                                {
+                                  "name": "Breakfast",
+                                  "standardOptions": [
+                            """)
+                    .exchange()
+                    .expectStatus()
+                    .isBadRequest()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.code()).isEqualTo(ExceptionCode.INVALID_VALUES.getCode());
+                        assertThat(response.message()).isEqualTo(ExceptionCode.INVALID_VALUES.getMessage());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                    });
+        }
+    }
+
+    @Nested
+    @DisplayName("Test invalid field types")
+    class InvalidFieldTypes {
+
+        @Test
+        void newDietPlan__should_fail_with_number_instead_of_string_for_name() {
+            webTestClient
+                    .post()
+                    .uri(getBaseUrl())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue("""
+                            {
+                              "name": 12345,
+                              "mealTypes": [
+                                {
+                                  "name": "Breakfast",
+                                  "standardOptions": [
+                                    {
+                                      "optionNumber": 1,
+                                      "description": "Oatmeal"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                            """)
+                    .exchange()
+                    .expectStatus()
+                    .is5xxServerError()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.code()).isEqualTo(ExceptionCode.UNEXPECTED_ERROR.getCode());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                    });
+        }
+
+        @Test
+        void newDietPlan__should_fail_with_string_instead_of_integer_for_dailyCalories() {
+            webTestClient
+                    .post()
+                    .uri(getBaseUrl())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue("""
+                            {
+                              "name": "Test Diet Plan",
+                              "dailyCalories": "not-a-number",
+                              "mealTypes": [
+                                {
+                                  "name": "Breakfast",
+                                  "standardOptions": [
+                                    {
+                                      "optionNumber": 1,
+                                      "description": "Oatmeal"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                            """)
+                    .exchange()
+                    .expectStatus()
+                    .isBadRequest()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.code()).isEqualTo(ExceptionCode.INVALID_VALUES.getCode());
+                        assertThat(response.message()).isEqualTo(ExceptionCode.INVALID_VALUES.getMessage());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                        assertThat(response.customMessage()).containsIgnoringCase("dailyCalories");
+                        assertThat(response.customMessage()).containsIgnoringCase("invalid format");
+                    });
+        }
+
+        @Test
+        void newDietPlan__should_fail_with_boolean_instead_of_integer_for_optionNumber() {
+            webTestClient
+                    .post()
+                    .uri(getBaseUrl())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue("""
+                            {
+                              "name": "Test Diet Plan",
+                              "mealTypes": [
+                                {
+                                  "name": "Breakfast",
+                                  "standardOptions": [
+                                    {
+                                      "optionNumber": true,
+                                      "description": "Oatmeal"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                            """)
+                    .exchange()
+                    .expectStatus()
+                    .isBadRequest()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.code()).isEqualTo(ExceptionCode.INVALID_VALUES.getCode());
+                        assertThat(response.message()).isEqualTo(ExceptionCode.INVALID_VALUES.getMessage());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                        assertThat(response.customMessage()).containsIgnoringCase("JSON parse error");
+                    });
+        }
+    }
+
+    @Nested
     @DisplayName("Test default required headers")
     class InvalidHeaders {
 

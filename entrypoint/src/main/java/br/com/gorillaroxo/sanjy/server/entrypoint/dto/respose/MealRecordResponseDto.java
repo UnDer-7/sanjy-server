@@ -1,5 +1,7 @@
 package br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose;
 
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -16,8 +18,8 @@ public record MealRecordResponseDto(
 
         @Schema(
                 description = "Exact date and time when the item was consumed",
-                example = "2025-01-15T14:30:00Z",
-                format = "date-time",
+                example = OpenApiConstants.Examples.DATE_TIME,
+                format = RequestConstants.DateTimeFormats.DATE_TIME_FORMAT,
                 requiredMode = Schema.RequiredMode.REQUIRED)
         Instant consumedAt,
 
@@ -67,4 +69,7 @@ public record MealRecordResponseDto(
                 nullable = true)
         String notes,
 
+        @Schema(
+                description = "Metadata information containing creation and last update timestamps, along with other contextual data",
+                requiredMode = Schema.RequiredMode.REQUIRED)
         MetadataResponseDto metadata) {}

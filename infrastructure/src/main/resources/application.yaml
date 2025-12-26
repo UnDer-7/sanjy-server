@@ -39,6 +39,15 @@ spring:
 #        show_sql: true
 #        format_sql: true
 #        highlight_sql: true
+        # Timezone configuration
+        jdbc:
+          time_zone: UTC
+
+  jackson:
+    time-zone: UTC
+    serialization:
+      write-dates-as-timestamps: false
+
   ai:
     mcp:
       server:
