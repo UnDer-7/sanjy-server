@@ -1,0 +1,73 @@
+meta {
+  name: 3-newMealRecord
+  type: http
+  seq: 3
+}
+
+script:pre-request {
+  bru.setVar("currentTimestamp", new Date().toISOString());
+}
+
+post {
+  url: {{SERVER_URL}}/v1/meal-record
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "mealTypeId": {{breakfastMealTypeId}},
+    "consumedAt": "{{currentTimestamp}}",
+    "isFreeMeal": false,
+    "standardOptionId": {{standardOptionId}},
+    "freeMealDescription": null,
+    "quantity": 1,
+    "unit": "portion",
+    "notes": "Automated test meal record"
+  }
+}
+
+tests {
+  test("should return status 201", function() {
+    expect(res.getStatus()).to.equal(201);
+  });
+
+  test("should return meal record with id", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("id");
+    expect(body.id).to.be.a("number");
+  });
+
+  test("should save meal record id for next tests", function() {
+    const body = res.getBody();
+    bru.setVar("mealRecordId", body.id);
+  });
+
+  test("should return correct meal type id", function() {
+    const body = res.getBody();
+    const expectedMealTypeId = bru.getVar("breakfastMealTypeId");
+    expect(body).to.have.property("mealType");
+    expect(body.mealType).to.have.property("id");
+    expect(body.mealType.id).to.equal(expectedMealTypeId);
+  });
+
+  test("should have consumed at timestamp", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("consumedAt");
+    expect(body.consumedAt).to.be.a("string");
+  });
+
+  test("should save consumed at for statistics test", function() {
+    const body = res.getBody();
+    bru.setVar("mealRecordConsumedAt", body.consumedAt);
+  });
+}
+
+settings {
+  encodeUrl: false
+  timeout: 0
+}
