@@ -1,0 +1,125 @@
+meta {
+  name: 1-newDietPlan
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{SERVER_URL}}/v1/diet-plan
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Automated Test Diet Plan",
+    "startDate": "2025-12-26",
+    "endDate": "2026-12-26",
+    "dailyCalories": 2000,
+    "dailyProteinInG": 150,
+    "dailyCarbsInG": 200,
+    "dailyFatInG": 50,
+    "goal": "Automated testing of happy path flow",
+    "nutritionistNotes": "This is an automated test diet plan",
+    "mealTypes": [
+      {
+        "name": "Breakfast",
+        "scheduledTime": "08:00:00",
+        "observation": "Morning meal",
+        "standardOptions": [
+          {
+            "optionNumber": 1,
+            "description": "Oatmeal with fruits and nuts"
+          },
+          {
+            "optionNumber": 2,
+            "description": "Scrambled eggs with whole wheat toast"
+          }
+        ]
+      },
+      {
+        "name": "Lunch",
+        "scheduledTime": "12:00:00",
+        "observation": "Midday meal",
+        "standardOptions": [
+          {
+            "optionNumber": 1,
+            "description": "Grilled chicken with rice and vegetables"
+          },
+          {
+            "optionNumber": 2,
+            "description": "Fish with quinoa and salad"
+          }
+        ]
+      },
+      {
+        "name": "Dinner",
+        "scheduledTime": "19:00:00",
+        "observation": "Evening meal",
+        "standardOptions": [
+          {
+            "optionNumber": 1,
+            "description": "Lean beef with sweet potato"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+tests {
+  test("should return status 201", function() {
+    expect(res.getStatus()).to.equal(201);
+  });
+
+  test("should return diet plan with id", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("id");
+    expect(body.id).to.be.a("number");
+  });
+
+  test("should save diet plan id for next tests", function() {
+    const body = res.getBody();
+    bru.setVar("dietPlanId", body.id);
+  });
+
+  test("should return meal types with ids", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("mealTypes");
+    expect(body.mealTypes).to.be.an("array");
+    expect(body.mealTypes).to.have.lengthOf(3);
+  });
+
+  test("should save meal type ids for next tests", function() {
+    const body = res.getBody();
+    const breakfastMealType = body.mealTypes.find(mt => mt.name === "Breakfast");
+    const lunchMealType = body.mealTypes.find(mt => mt.name === "Lunch");
+    const dinnerMealType = body.mealTypes.find(mt => mt.name === "Dinner");
+
+    expect(breakfastMealType).to.have.property("id");
+    expect(lunchMealType).to.have.property("id");
+    expect(dinnerMealType).to.have.property("id");
+
+    bru.setVar("breakfastMealTypeId", breakfastMealType.id);
+    bru.setVar("lunchMealTypeId", lunchMealType.id);
+    bru.setVar("dinnerMealTypeId", dinnerMealType.id);
+  });
+
+  test("should save standard option ids", function() {
+    const body = res.getBody();
+    const breakfastMealType = body.mealTypes.find(mt => mt.name === "Breakfast");
+    const standardOption = breakfastMealType.standardOptions[0];
+
+    expect(standardOption).to.have.property("id");
+    bru.setVar("standardOptionId", standardOption.id);
+  });
+}
+
+settings {
+  encodeUrl: false
+  timeout: 0
+}

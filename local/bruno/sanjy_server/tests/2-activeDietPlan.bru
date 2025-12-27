@@ -1,0 +1,56 @@
+meta {
+  name: 2-activeDietPlan
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{SERVER_URL}}/v1/diet-plan/active
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+tests {
+  test("should return status 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should return the active diet plan", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("id");
+    expect(body).to.have.property("name");
+    expect(body).to.have.property("isActive");
+    expect(body.isActive).to.be.true;
+  });
+
+  test("should return the diet plan created in previous test", function() {
+    const body = res.getBody();
+    const expectedId = bru.getVar("dietPlanId");
+    expect(body.id).to.equal(expectedId);
+  });
+
+  test("should contain meal types", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("mealTypes");
+    expect(body.mealTypes).to.be.an("array");
+    expect(body.mealTypes.length).to.be.greaterThan(0);
+  });
+
+  test("should have valid meal type structure", function() {
+    const body = res.getBody();
+    const mealType = body.mealTypes[0];
+    expect(mealType).to.have.property("id");
+    expect(mealType).to.have.property("name");
+    expect(mealType).to.have.property("scheduledTime");
+    expect(mealType).to.have.property("standardOptions");
+  });
+}
+
+settings {
+  encodeUrl: false
+  timeout: 0
+}

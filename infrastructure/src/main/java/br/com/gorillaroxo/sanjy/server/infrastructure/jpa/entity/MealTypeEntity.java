@@ -2,6 +2,7 @@ package br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
@@ -64,7 +65,6 @@ public class MealTypeEntity {
     @OneToMany(mappedBy = "mealType", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<StandardOptionEntity> standardOptions = new LinkedHashSet<>();
 
-    //    @Builder.Default
-    //    @OneToMany(mappedBy = "mealType")
-    //    private List<MealRecordEntity> mealRecords = new ArrayList<>();
+    @Embedded
+    private MetadataEmbeddedEntity metadata;
 }

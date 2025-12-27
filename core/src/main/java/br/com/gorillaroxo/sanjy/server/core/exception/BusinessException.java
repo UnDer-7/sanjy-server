@@ -1,9 +1,7 @@
 package br.com.gorillaroxo.sanjy.server.core.exception;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import java.time.Instant;
 import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.AccessLevel;
@@ -16,7 +14,7 @@ import org.slf4j.Logger;
 @Getter
 public abstract class BusinessException extends RuntimeException {
 
-    private final String timestamp;
+    private final Instant timestamp;
     private final int httpStatusCode;
     private final Throwable originalCause;
     private final ExceptionCode exceptionCode;
@@ -33,8 +31,7 @@ public abstract class BusinessException extends RuntimeException {
         super(getExceptionMessage(exceptionCode, customMessage, originalCause), originalCause);
 
         this.exceptionCode = exceptionCode;
-        this.timestamp =
-                LocalDateTime.now().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
+        this.timestamp = Instant.now();
         this.customMessage = customMessage;
         this.httpStatusCode = httpStatus.getValue();
         this.originalCause = originalCause;
@@ -45,8 +42,7 @@ public abstract class BusinessException extends RuntimeException {
         super(getExceptionMessage(exceptionCode));
 
         this.exceptionCode = exceptionCode;
-        this.timestamp =
-                LocalDateTime.now().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
+        this.timestamp = Instant.now();
         this.customMessage = null;
         this.httpStatusCode = httpStatus.getValue();
         this.originalCause = null;
@@ -58,8 +54,7 @@ public abstract class BusinessException extends RuntimeException {
         super(getExceptionMessage(exceptionCode, originalCause), originalCause);
 
         this.exceptionCode = exceptionCode;
-        this.timestamp =
-                LocalDateTime.now().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
+        this.timestamp = Instant.now();
         this.customMessage = null;
         this.httpStatusCode = httpStatus.getValue();
         this.originalCause = originalCause;
@@ -71,8 +66,7 @@ public abstract class BusinessException extends RuntimeException {
         super(getExceptionMessage(exceptionCode, customMessage));
 
         this.exceptionCode = exceptionCode;
-        this.timestamp =
-                LocalDateTime.now().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
+        this.timestamp = Instant.now();
         this.customMessage = customMessage;
         this.httpStatusCode = httpStatus.getValue();
         this.originalCause = null;

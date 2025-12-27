@@ -11,4 +11,5 @@ public record MealTypeDomain(
         LocalTime scheduledTime,
         Long dietPlanId,
         String observation,
-        List<StandardOptionDomain> standardOptions) {}
+        List<StandardOptionDomain> standardOptions,
+        MetadataDomain metadata) {}

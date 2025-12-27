@@ -5,9 +5,13 @@ meta {
 }
 
 get {
-  url: {{SERVER_URL}}/v1/meal-record/today
+  url: {{SERVER_URL}}/v1/meal-record/today?timezone=America/Sao_Paulo
   body: json
   auth: inherit
+}
+
+params:query {
+  timezone: America/Sao_Paulo
 }
 
 headers {

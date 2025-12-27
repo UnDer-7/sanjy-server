@@ -22,7 +22,8 @@ CREATE
             daily_fat_g INTEGER,
             goal TEXT,
             nutritionist_notes TEXT,
-            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
         );
 
 COMMENT ON
@@ -65,6 +66,9 @@ COLUMN diet_plan.nutritionist_notes IS 'Additional notes or observations from nu
 COMMENT ON
 COLUMN diet_plan.created_at IS 'System timestamp when the plan was created';
 
+COMMENT ON
+COLUMN diet_plan.updated_at IS 'System timestamp when the plan was last modified - initially set to the same value as created_at on insert, then updated on subsequent modifications';
+
 -- Table 2: meal_type
 CREATE
     TABLE
@@ -73,7 +77,9 @@ CREATE
             diet_plan_id INTEGER NOT NULL,
             name VARCHAR(50) NOT NULL,
             observation TEXT,
-            scheduled_time TIME NOT NULL
+            scheduled_time TIME NOT NULL,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
         );
 
 COMMENT ON
@@ -95,6 +101,12 @@ COLUMN meal_type.observation IS 'Additional observations about the meal type, su
 COMMENT ON
 COLUMN meal_type.scheduled_time IS 'Scheduled time for this meal (e.g., 06:20 for pre-workout)';
 
+COMMENT ON
+COLUMN meal_type.created_at IS 'System timestamp when the meal type was created';
+
+COMMENT ON
+COLUMN meal_type.updated_at IS 'System timestamp when the meal type was last modified - initially set to the same value as created_at on insert, then updated on subsequent modifications';
+
 -- Table 3: standard_options
 CREATE
     TABLE
@@ -102,7 +114,9 @@ CREATE
             id SERIAL,
             meal_type_id INTEGER NOT NULL,
             option_number INTEGER NOT NULL,
-            description TEXT NOT NULL
+            description TEXT NOT NULL,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
         );
 
 COMMENT ON
@@ -121,12 +135,18 @@ COLUMN standard_options.option_number IS 'Option number (1, 2, 3, etc) within th
 COMMENT ON
 COLUMN standard_options.description IS 'Complete description of foods that compose this meal plan option';
 
+COMMENT ON
+COLUMN standard_options.created_at IS 'System timestamp when the standard option was created';
+
+COMMENT ON
+COLUMN standard_options.updated_at IS 'System timestamp when the standard option was last modified - initially set to the same value as created_at on insert, then updated on subsequent modifications';
+
 -- Table 4: meal_record
 CREATE
     TABLE
         meal_record(
             id SERIAL,
-            consumed_at TIMESTAMP NOT NULL,
+            consumed_at TIMESTAMPTZ NOT NULL,
             meal_type_id INTEGER NOT NULL,
             is_free_meal BOOLEAN NOT NULL DEFAULT FALSE,
             standard_option_id INTEGER,
@@ -137,7 +157,8 @@ CREATE
             ) NOT NULL DEFAULT 1.0,
             unit VARCHAR(50) NOT NULL DEFAULT 'serving',
             notes TEXT,
-            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
         );
 
 COMMENT ON
@@ -173,6 +194,9 @@ COLUMN meal_record.notes IS 'Optional field for additional observations';
 
 COMMENT ON
 COLUMN meal_record.created_at IS 'System timestamp when the record was inserted';
+
+COMMENT ON
+COLUMN meal_record.updated_at IS 'System timestamp when the record was last modified - initially set to the same value as created_at on insert, then updated on subsequent modifications';
 
 -- =============================================
 -- ADD PRIMARY KEY CONSTRAINTS
@@ -349,12 +373,6 @@ CREATE
     INDEX idx_record_free_meal ON
     meal_record(is_free_meal);
 
-CREATE
-    INDEX idx_record_date ON
-    meal_record(
-        DATE(consumed_at) DESC
-    );
-
 COMMENT ON
 INDEX idx_plan_active IS 'Partial index to quickly find the active diet plan';
 
@@ -375,6 +393,3 @@ INDEX idx_record_meal_type IS 'Index to optimize joins and filters by meal type'
 
 COMMENT ON
 INDEX idx_record_free_meal IS 'Index to optimize filtering free meals vs standard meals';
-
-COMMENT ON
-INDEX idx_record_date IS 'Index to optimize queries by date';

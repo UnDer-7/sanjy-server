@@ -1,8 +1,10 @@
 package br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose;
 
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import lombok.Builder;
 
 @Builder
@@ -16,9 +18,10 @@ public record MealRecordResponseDto(
 
         @Schema(
                 description = "Exact date and time when the item was consumed",
-                example = "2025-10-13T12:30:00",
+                example = OpenApiConstants.Examples.DATE_TIME,
+                format = RequestConstants.DateTimeFormats.DATE_TIME_FORMAT,
                 requiredMode = Schema.RequiredMode.REQUIRED)
-        LocalDateTime consumedAt,
+        Instant consumedAt,
 
         @Schema(
                 description = "Meal type information (breakfast, lunch, snack, dinner, etc...)",
@@ -66,8 +69,7 @@ public record MealRecordResponseDto(
                 nullable = true)
         String notes,
 
-        @Schema(
-                description = "System timestamp when the record was created",
-                example = "2025-10-13T12:31:45",
-                requiredMode = Schema.RequiredMode.REQUIRED)
-        LocalDateTime createdAt) {}
+        @Schema(description = """
+                    Metadata information containing creation and last update timestamps, along with other contextual data
+                    """, requiredMode = Schema.RequiredMode.REQUIRED)
+        MetadataResponseDto metadata) {}

@@ -248,6 +248,11 @@
             <property name="illegalClassNames" value="com.google.common.cache.CacheBuilder, com.google.common.cache.Cache, com.google.common.cache.LoadingCache"/>
             <message key="illegal.type" value="Do not use Guava caches, they are outperformed by and harder to use than Caffeine caches"/>
         </module>
+        <module name="IllegalType">
+            <property name="id" value="BanLocalDateTime"/>
+            <property name="illegalClassNames" value="java.time.LocalDateTime"/>
+            <message key="illegal.type" value="Usage of type 'LocalDateTime' is not allowed. Use java.time.Instant instead. LocalDateTime does not carry timezone information and can lead to ambiguous timestamps. Instant represents a point in time in UTC, ensuring consistency across the application."/>
+        </module>
         <module name="CustomImportOrder">
             <property name="sortImportsInGroupAlphabetically" value="true"/>
             <property name="separateLineBetweenGroups" value="true"/>

@@ -1,8 +1,9 @@
 package br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose;
 
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 
@@ -26,14 +27,15 @@ public record DietPlanCompleteResponseDto(
 
         @Schema(
                 description = "Date when this diet plan starts",
-                example = "2025-01-15",
-                format = "yyyy-MM-dd",
+                example = OpenApiConstants.Examples.DATE,
+                format = RequestConstants.DateTimeFormats.DATE_FORMAT,
                 requiredMode = Schema.RequiredMode.REQUIRED)
         LocalDate startDate,
 
         @Schema(
                 description = "Date when this diet plan ends",
-                example = "2025-04-15",
+                example = OpenApiConstants.Examples.DATE,
+                format = RequestConstants.DateTimeFormats.DATE_FORMAT,
                 requiredMode = Schema.RequiredMode.REQUIRED)
         LocalDate endDate,
 
@@ -90,8 +92,7 @@ public record DietPlanCompleteResponseDto(
                 requiredMode = Schema.RequiredMode.REQUIRED)
         Boolean isActive,
 
-        @Schema(
-                description = "Timestamp when this diet plan was created",
-                example = "2025-01-10T14:30:00",
-                requiredMode = Schema.RequiredMode.REQUIRED)
-        LocalDateTime createdAt) {}
+        @Schema(description = """
+                    Metadata information containing creation and last update timestamps, along with other contextual data
+                    """, requiredMode = Schema.RequiredMode.REQUIRED)
+        MetadataResponseDto metadata) {}

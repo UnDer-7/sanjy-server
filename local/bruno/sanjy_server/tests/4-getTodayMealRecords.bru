@@ -1,0 +1,55 @@
+meta {
+  name: 4-getTodayMealRecords
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{SERVER_URL}}/v1/meal-record/today?timezone=America/Sao_Paulo
+  body: json
+  auth: inherit
+}
+
+params:query {
+  timezone: America/Sao_Paulo
+}
+
+headers {
+  Content-Type: application/json
+}
+
+tests {
+  test("should return status 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should return an array", function() {
+    const body = res.getBody();
+    expect(body).to.be.an("array");
+  });
+
+  test("should contain the meal record created in previous test", function() {
+    const body = res.getBody();
+    const expectedMealRecordId = bru.getVar("mealRecordId");
+    const foundMealRecord = body.find(mr => mr.id === expectedMealRecordId);
+
+    expect(foundMealRecord).to.not.be.undefined;
+  });
+
+  test("should have valid meal record structure", function() {
+    const body = res.getBody();
+    if (body.length > 0) {
+      const mealRecord = body[0];
+      expect(mealRecord).to.have.property("id");
+      expect(mealRecord).to.have.property("mealType");
+      expect(mealRecord.mealType).to.have.property("id");
+      expect(mealRecord).to.have.property("consumedAt");
+      expect(mealRecord).to.have.property("isFreeMeal");
+    }
+  });
+}
+
+settings {
+  encodeUrl: false
+  timeout: 0
+}

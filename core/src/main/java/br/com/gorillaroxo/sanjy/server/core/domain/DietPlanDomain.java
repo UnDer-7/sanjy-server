@@ -1,7 +1,6 @@
 package br.com.gorillaroxo.sanjy.server.core.domain;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
@@ -27,7 +26,7 @@ public class DietPlanDomain {
     private String goal;
     private String nutritionistNotes;
     private List<MealTypeDomain> mealTypes;
-    private LocalDateTime createdAt;
+    private MetadataDomain metadata;
 
     public void deactivate() {
         this.isActive = false;

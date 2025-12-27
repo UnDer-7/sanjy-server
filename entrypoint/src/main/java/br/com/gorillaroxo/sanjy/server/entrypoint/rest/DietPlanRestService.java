@@ -3,6 +3,7 @@ package br.com.gorillaroxo.sanjy.server.entrypoint.rest;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.DietPlanCompleteResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,21 +23,21 @@ public interface DietPlanRestService {
                 Each meal type can have multiple standard options for variety.
                 """)
     @ApiResponse(
-            responseCode = "201",
+            responseCode = OpenApiConstants.HttpStatusCodes.CREATED,
             description = "Diet Plan successfully created",
             content =
                     @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = DietPlanCompleteResponseDto.class)))
     @ApiResponse(
-            responseCode = "400",
+            responseCode = OpenApiConstants.HttpStatusCodes.BAD_REQUEST,
             description = "client error",
             content =
                     @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponseDto.class)))
     @ApiResponse(
-            responseCode = "500",
+            responseCode = OpenApiConstants.HttpStatusCodes.INTERNAL_SERVER_ERROR,
             description = "unexpected error occurred",
             content =
                     @Content(
@@ -49,21 +50,21 @@ public interface DietPlanRestService {
                 and goals. Only one diet plan can be active at a time. Use this to check the current diet configuration.
                 """)
     @ApiResponse(
-            responseCode = "200",
+            responseCode = OpenApiConstants.HttpStatusCodes.OK,
             description = "Active Diet Plan",
             content =
                     @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = DietPlanCompleteResponseDto.class)))
     @ApiResponse(
-            responseCode = "400",
+            responseCode = OpenApiConstants.HttpStatusCodes.BAD_REQUEST,
             description = "client error",
             content =
                     @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponseDto.class)))
     @ApiResponse(
-            responseCode = "500",
+            responseCode = OpenApiConstants.HttpStatusCodes.INTERNAL_SERVER_ERROR,
             description = "unexpected error occurred",
             content =
                     @Content(

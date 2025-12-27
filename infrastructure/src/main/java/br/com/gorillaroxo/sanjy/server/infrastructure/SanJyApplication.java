@@ -9,6 +9,7 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.SearchMealRecordPa
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.IdOnlyResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseMealRecordDto;
+import br.com.gorillaroxo.sanjy.server.infrastructure.config.TimezoneInitializer;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.projection.MealRecordStatisticsProjection;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.boot.SpringApplication;
@@ -43,6 +44,8 @@ public class SanJyApplication {
     private SanJyApplication() {}
 
     public static void main(String[] args) {
-        SpringApplication.run(SanJyApplication.class, args);
+        final var application = new SpringApplication(SanJyApplication.class);
+        application.addInitializers(new TimezoneInitializer());
+        application.run(args);
     }
 }

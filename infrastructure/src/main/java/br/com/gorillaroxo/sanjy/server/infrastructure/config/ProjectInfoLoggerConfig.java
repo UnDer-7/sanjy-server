@@ -4,6 +4,8 @@ import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
 import br.com.gorillaroxo.sanjy.server.core.ports.driven.SanjyServerProps;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.GetLatestProjectVersionUseCase;
 import br.com.gorillaroxo.sanjy.server.core.util.ThreadUtils;
+import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.repository.GetDatabaseTimeZoneRepository;
+import java.time.ZoneId;
 import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class ProjectInfoLoggerConfig implements ApplicationListener<ApplicationR
 
     private final SanjyServerProps sanjyServerProps;
     private final GetLatestProjectVersionUseCase getLatestProjectVersionUseCase;
+    private final GetDatabaseTimeZoneRepository getDatabaseTimeZoneRepository;
 
     @Override
     public void onApplicationEvent(final ApplicationReadyEvent ignored) {
@@ -36,15 +39,17 @@ public class ProjectInfoLoggerConfig implements ApplicationListener<ApplicationR
                 () -> {
                     final String runtimeMode = detectRuntimeMode();
                     final String latestVersion = fetchLatestVersionFromGitHub();
+                    final String databaseTimezone = fetchDatabaseTimeZone();
+                    final SanjyServerProps.ApplicationProp application = sanjyServerProps.application();
 
                     log.info(
-                            LogField.Placeholders.FOUR.getPlaceholder(),
+                            LogField.Placeholders.SIX.getPlaceholder(),
                             StructuredArguments.kv(LogField.MSG.label(), "Project information"),
-                            StructuredArguments.kv(
-                                    LogField.PROJECT_CURRENT_VERSION.label(),
-                                    sanjyServerProps.application().version()),
+                            StructuredArguments.kv(LogField.PROJECT_CURRENT_VERSION.label(), application.version()),
                             StructuredArguments.kv(LogField.PROJECT_LATEST_VERSION.label(), latestVersion),
-                            StructuredArguments.kv(LogField.RUNTIME_MODE.label(), runtimeMode));
+                            StructuredArguments.kv(LogField.RUNTIME_MODE.label(), runtimeMode),
+                            StructuredArguments.kv(LogField.APPLICATION_TIMEZONE.label(), ZoneId.systemDefault()),
+                            StructuredArguments.kv(LogField.DATABASE_TIMEZONE.label(), databaseTimezone));
                 },
                 taskExecutor);
     }
@@ -65,6 +70,20 @@ public class ProjectInfoLoggerConfig implements ApplicationListener<ApplicationR
             log.warn(
                     LogField.Placeholders.TWO.getPlaceholder(),
                     StructuredArguments.kv(LogField.MSG.label(), "Error fetching latest version from GitHub"),
+                    StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), e.getMessage()),
+                    e);
+            return unknown;
+        }
+    }
+
+    private String fetchDatabaseTimeZone() {
+        final var unknown = "unknown";
+        try {
+            return getDatabaseTimeZoneRepository.getDatabaseTimeZone();
+        } catch (final Exception e) {
+            log.warn(
+                    LogField.Placeholders.TWO.getPlaceholder(),
+                    StructuredArguments.kv(LogField.MSG.label(), "Error fetching database timezone"),
                     StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), e.getMessage()),
                     e);
             return unknown;

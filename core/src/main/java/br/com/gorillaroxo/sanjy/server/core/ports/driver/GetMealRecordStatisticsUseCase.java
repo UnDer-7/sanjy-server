@@ -1,9 +1,9 @@
 package br.com.gorillaroxo.sanjy.server.core.ports.driver;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.MealRecordStatisticsDomain;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public interface GetMealRecordStatisticsUseCase {
 
-    MealRecordStatisticsDomain execute(LocalDateTime consumedAtAfter, LocalDateTime consumedAtBefore);
+    MealRecordStatisticsDomain execute(Instant consumedAtAfter, Instant consumedAtBefore);
 }

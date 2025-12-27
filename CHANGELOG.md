@@ -5,47 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.2.0] - 2025-12-16
-
-### Added
-
-#### Integration & External Services
-
-- GitHub integration for retrieving latest project releases
-- Spring Cloud OpenFeign for REST client management
-- External HTTP client with configurable retry logic (max attempts, interval, backoff multiplier)
-- Enhanced error handling for HTTP client operations with detailed request/response logging
-
-#### Infrastructure & DevOps
-
-- GraalVM 25 support in deployment workflow
-- Improved error tracking with new exception types for service integrations
-
-### Changed
-
-- Enhanced logging fields for HTTP requests/responses and versioning
-- Improved visibility modifiers for use case implementations (package-private)
-
-## [1.1.0] - 2025-12-10
-
-### Added
-
-#### DevOps & Infrastructure
-
-- Automated Docker image deployment to Docker Hub on release
-  - JVM images: `under7/sanjy-server:{version}-jvm`, `under7/sanjy-server:latest-jvm`
-  - GraalVM images: `under7/sanjy-server:{version}-graalvm`, `under7/sanjy-server:latest-graalvm`, `under7/sanjy-server:latest`
-- Quality and security analysis in deploy pipeline (SonarCloud + Snyk)
-- Optimized Docker builds with BuildKit multi-stage support
-  - New fast local build targets: `make build/jvm/docker/local` and `make build/graalvm/docker/local`
-  - Reuses pre-built artifacts to speed up Docker image creation
-
-### Changed
-
-- Updated GraalVM GitHub Actions from v1.4.2 to v1.4.4
-- Enhanced Makefile help output formatting with category separators
-
-## [1.0.0] - 2024-12-07
+## [1.0.0] - 2025-12-25
 
 ### Added
 

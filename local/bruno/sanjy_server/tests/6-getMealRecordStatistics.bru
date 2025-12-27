@@ -1,0 +1,79 @@
+meta {
+  name: 6-getMealRecordStatistics
+  type: http
+  seq: 6
+}
+
+script:pre-request {
+  const today = new Date();
+  const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
+
+  bru.setVar("consumedAtAfter", startOfDay.toISOString());
+  bru.setVar("consumedAtBefore", endOfDay.toISOString());
+}
+
+get {
+  url: {{SERVER_URL}}/v1/meal-record/statistics?consumedAtAfter={{consumedAtAfter}}&consumedAtBefore={{consumedAtBefore}}
+  body: json
+  auth: inherit
+}
+
+params:query {
+  consumedAtAfter: {{consumedAtAfter}}
+  consumedAtBefore: {{consumedAtBefore}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+tests {
+  test("should return status 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should return statistics object", function() {
+    const body = res.getBody();
+    expect(body).to.be.an("object");
+  });
+
+  test("should have meal quantity", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("mealQuantity");
+    expect(body.mealQuantity).to.be.a("number");
+  });
+
+  test("should have free meal quantity", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("freeMealQuantity");
+    expect(body.freeMealQuantity).to.be.a("number");
+  });
+
+  test("should have planned meal quantity", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("plannedMealQuantity");
+    expect(body.plannedMealQuantity).to.be.a("number");
+  });
+
+  test("meal quantity should equal free meals plus planned meals", function() {
+    const body = res.getBody();
+    const total = body.freeMealQuantity + body.plannedMealQuantity;
+    expect(body.mealQuantity).to.equal(total);
+  });
+
+  test("should have at least one meal from the test", function() {
+    const body = res.getBody();
+    expect(body.mealQuantity).to.be.greaterThan(0);
+  });
+
+  test("should have at least one planned meal from the test", function() {
+    const body = res.getBody();
+    expect(body.plannedMealQuantity).to.be.greaterThan(0);
+  });
+}
+
+settings {
+  encodeUrl: false
+  timeout: 0
+}

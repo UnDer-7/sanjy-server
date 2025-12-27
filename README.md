@@ -72,3 +72,33 @@ make build/graalvm/docker/force
 make help
 ```
 
+## Date-Time Handling
+
+**IMPORTANT: This project strictly follows UTC timezone and ISO 8601 standard for all date-time operations.**
+
+### Timezone Policy
+
+- **ALL data is stored in UTC timezone** in the database
+- **ALL API requests must send date-time values in UTC timezone**
+- **ALL API responses return date-time values in UTC timezone**
+- The application does not perform timezone conversions - clients are responsible for converting to/from their local timezone
+
+### ISO 8601 Format
+
+All date and time fields in the API follow the **ISO 8601 standard**:
+
+- **Date-Time format**: `yyyy-MM-dd'T'HH:mm:ss'Z'`
+  - Example: `2025-01-15T14:30:00Z`
+  - The `Z` suffix indicates UTC timezone
+- **Date format**: `yyyy-MM-dd`
+  - Example: `2025-01-15`
+- **Time format**: `HH:mm:ss`
+  - Example: `14:30:00`
+
+### API Documentation
+
+The Swagger UI (available at `http://localhost:8080/`) provides complete documentation for all endpoints, including:
+- Expected date-time formats for each field
+- Example values following ISO 8601 standard
+- Timezone requirements
+

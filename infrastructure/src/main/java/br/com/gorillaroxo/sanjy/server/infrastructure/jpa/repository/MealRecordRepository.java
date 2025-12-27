@@ -2,7 +2,7 @@ package br.com.gorillaroxo.sanjy.server.infrastructure.jpa.repository;
 
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealRecordEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.projection.MealRecordStatisticsProjection;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -22,8 +22,7 @@ public interface MealRecordRepository
             WHERE mr.consumedAt BETWEEN :consumedAtAfter AND :consumedAtBefore
             ORDER BY mr.consumedAt
             """)
-    List<MealRecordEntity> findByConsumedAtBetweenOrderByConsumedAt(
-            LocalDateTime consumedAtAfter, LocalDateTime consumedAtBefore);
+    List<MealRecordEntity> findByConsumedAtBetweenOrderByConsumedAt(Instant consumedAtAfter, Instant consumedAtBefore);
 
     @Query("""
             SELECT new br.com.gorillaroxo.sanjy.server.infrastructure.jpa.projection.MealRecordStatisticsProjection(
@@ -34,6 +33,5 @@ public interface MealRecordRepository
             FROM MealRecordEntity mr
             WHERE mr.consumedAt BETWEEN :startDate AND :endDate
             """)
-    Optional<MealRecordStatisticsProjection> getMealRecordStatisticsByDateRange(
-            LocalDateTime startDate, LocalDateTime endDate);
+    Optional<MealRecordStatisticsProjection> getMealRecordStatisticsByDateRange(Instant startDate, Instant endDate);
 }

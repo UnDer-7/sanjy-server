@@ -3,8 +3,8 @@ package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller;
 import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
 import br.com.gorillaroxo.sanjy.server.core.domain.MealRecordDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.MealRecordStatisticsDomain;
-import br.com.gorillaroxo.sanjy.server.core.domain.PageResultDomain;
-import br.com.gorillaroxo.sanjy.server.core.domain.SearchMealRecordParamDomain;
+import br.com.gorillaroxo.sanjy.server.core.domain.pagination.PageResultDomain;
+import br.com.gorillaroxo.sanjy.server.core.domain.pagination.SearchMealRecordParamDomain;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.GetMealRecordStatisticsUseCase;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.GetTodayMealRecordsUseCase;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.RegisterMealRecordUseCase;
@@ -16,10 +16,12 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisti
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseMealRecordDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.rest.MealRecordRestService;
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import br.com.gorillaroxo.sanjy.server.infrastructure.config.McpToolMarker;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.MealRecordMapper;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.PageMapper;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -61,7 +64,7 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
                 StructuredArguments.kv(LogField.MSG.label(), "Request body to create a new meal record"),
                 StructuredArguments.kv(LogField.REQUEST_BODY.label(), "( " + request + " )"));
 
-        final var mealRecord = mealRecordMapper.toDomain(request);
+        final MealRecordDomain mealRecord = mealRecordMapper.toDomain(request);
         final MealRecordDomain mealRecordSaved = registerMealRecordUseCase.execute(mealRecord);
         final MealRecordResponseDto responseDto = mealRecordMapper.toDto(mealRecordSaved);
 
@@ -79,12 +82,14 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
             Retrieves all meals consumed today, ordered by consumption time. Includes both standard meals (following the diet plan) \
             and free meals (off-plan). Use this to check daily food intake and diet adherence.
             """)
-    public List<MealRecordResponseDto> getTodayMealRecords() {
+    public List<MealRecordResponseDto> getTodayMealRecords(
+            @RequestParam(required = false, name = RequestConstants.Query.TIMEZONE) final ZoneId timezone) {
+
         log.info(
                 LogField.Placeholders.ONE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Request to get today meal records"));
 
-        final List<MealRecordDomain> mealRecords = getTodayMealRecordsUseCase.execute();
+        final List<MealRecordDomain> mealRecords = getTodayMealRecordsUseCase.execute(timezone);
         final List<MealRecordResponseDto> responseDto = mealRecordMapper.toDto(mealRecords);
 
         log.debug(
@@ -130,7 +135,7 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
             track compliance with the meal plan, or generate summary reports for a specific period.
             """)
     public MealRecordStatisticsResponseDto getMealRecordStatisticsByDateRange(
-            final LocalDateTime consumedAtAfter, final LocalDateTime consumedAtBefore) {
+            final Instant consumedAtAfter, final Instant consumedAtBefore) {
         log.info(
                 LogField.Placeholders.ONE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Request to get meal record statistics by date range"));

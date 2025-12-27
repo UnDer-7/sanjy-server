@@ -1,5 +1,6 @@
 package br.com.gorillaroxo.sanjy.server.entrypoint.dto.request;
 
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -25,7 +26,7 @@ public record CreateMealTypesRequestDto(
 
         @Schema(
                 description = "Scheduled time for this meal",
-                example = "06:20:00",
+                example = OpenApiConstants.Examples.TIME,
                 type = "string",
                 pattern = "^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$",
                 requiredMode = Schema.RequiredMode.REQUIRED)
