@@ -27,11 +27,26 @@ jobs:
       - name: Validate POM versions consistency
         id: pom-validation
         run: |
+          set +e  # Disable exit on error to capture Maven output
+
           echo "Validating that all sub-modules reference the correct parent version..."
+          echo ""
 
           # Get root pom.xml version
-          ROOT_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)
+          ROOT_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout 2>&1)
+          MAVEN_EXIT_CODE=$?
+
+          if [ $MAVEN_EXIT_CODE -ne 0 ]; then
+            echo "::error::Failed to read root pom.xml version"
+            echo "❌ Maven command failed with exit code $MAVEN_EXIT_CODE"
+            echo ""
+            echo "Maven output:"
+            echo "$ROOT_VERSION"
+            exit 1
+          fi
+
           echo "Root project version: $ROOT_VERSION"
+          echo ""
 
           # List of sub-modules to validate
           MODULES=("core" "entrypoint" "infrastructure" "aggregate-report")
@@ -42,43 +57,53 @@ jobs:
 
           # Validate each sub-module
           for MODULE in "${MODULES[@]}"; do
-            echo ""
             echo "Checking module: $MODULE"
 
             # Get parent version from sub-module pom.xml
-            PARENT_VERSION=$(./mvnw help:evaluate -Dexpression=project.parent.version -q -DforceStdout -pl $MODULE)
+            PARENT_VERSION=$(./mvnw help:evaluate -Dexpression=project.parent.version -q -DforceStdout -pl $MODULE 2>&1)
+            MAVEN_EXIT_CODE=$?
 
-            echo "  Parent version in $MODULE/pom.xml: $PARENT_VERSION"
+            if [ $MAVEN_EXIT_CODE -ne 0 ]; then
+              echo "  ❌ Failed to read parent version from $MODULE/pom.xml"
+              VALIDATION_FAILED=true
+              FAILED_MODULES="$FAILED_MODULES $MODULE"
+              continue
+            fi
+
+            echo "  Parent version: $PARENT_VERSION"
 
             if [ "$PARENT_VERSION" != "$ROOT_VERSION" ]; then
               echo "  ❌ MISMATCH: Expected $ROOT_VERSION but found $PARENT_VERSION"
               VALIDATION_FAILED=true
               FAILED_MODULES="$FAILED_MODULES $MODULE"
             else
-              echo "  ✅ OK: Parent version matches root version"
+              echo "  ✅ OK: Matches root version"
             fi
+            echo ""
           done
 
-          echo ""
           echo "========================================="
+          echo ""
 
           if [ "$VALIDATION_FAILED" = true ]; then
-            echo "::error::POM version validation failed!"
-            echo ""
-            echo "❌ The following modules have mismatched parent versions:$FAILED_MODULES"
-            echo ""
-            echo "Root pom.xml version: $ROOT_VERSION"
-            echo ""
-            echo "💡 To fix this issue, use the version management command:"
-            echo ""
-            echo "   make version/set $ROOT_VERSION"
-            echo ""
-            echo "This command will automatically update all modules (root and sub-modules) to version $ROOT_VERSION."
-            echo ""
-            echo "Example:"
-            echo "   make version/set 1.0.0"
-            echo ""
-            echo "After running the command, commit and push the updated pom.xml files."
+            {
+              echo "::error::POM version validation failed!"
+              echo ""
+              echo "❌ The following modules have mismatched parent versions:$FAILED_MODULES"
+              echo ""
+              echo "Root pom.xml version: $ROOT_VERSION"
+              echo ""
+              echo "💡 To fix this issue, use the version management command:"
+              echo ""
+              echo "   make version/set $ROOT_VERSION"
+              echo ""
+              echo "This command will automatically update all modules (root and sub-modules) to version $ROOT_VERSION."
+              echo ""
+              echo "Example:"
+              echo "   make version/set 1.0.0"
+              echo ""
+              echo "After running the command, commit and push the updated pom.xml files."
+            } >&2
             exit 1
           else
             echo "✅ All POM versions are consistent!"
