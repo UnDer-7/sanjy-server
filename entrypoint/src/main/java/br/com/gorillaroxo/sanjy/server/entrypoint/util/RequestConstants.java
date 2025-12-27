@@ -30,12 +30,13 @@ public final class RequestConstants {
     }
 
     public static final class DateTimeFormats {
+        public static final String DATE_FORMAT = "yyyy-MM-dd";
+
+        public static final String TIME_FORMAT = "HH:mm:ss";
+        public static final String DATE_TIME_FORMAT = "yyyy-MM-ddTHH:mm:ssZ";
+
         private DateTimeFormats() {
             throw new IllegalStateException("Utility class");
         }
-
-        public static final String DATE_FORMAT = "yyyy-MM-dd";
-        public static final String TIME_FORMAT = "HH:mm:ss";
-        public static final String DATE_TIME_FORMAT = "yyyy-MM-ddTHH:mm:ssZ";
     }
 }

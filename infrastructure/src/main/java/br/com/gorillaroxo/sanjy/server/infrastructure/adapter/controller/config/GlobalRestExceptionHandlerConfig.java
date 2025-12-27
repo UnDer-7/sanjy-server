@@ -180,6 +180,21 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
         return logExceptionAndBuild(invalidValuesException);
     }
 
+    private static String buildInvalidAttributeMessage(
+        final String attributeName, final String errMotive, final Object attributeValue) {
+
+        if (errMotive.contains(Instant.class.getName())) {
+            final String errMotiveInstant = "date-time must be in the following format: %s (example: %s)"
+                .formatted(RequestConstants.DateTimeFormats.DATE_TIME_FORMAT, OpenApiConstants.Examples.DATE_TIME);
+
+            return "[ propertyPath: %s - errorMotive: %s - valueProvided: %s ]"
+                .formatted(attributeName, errMotiveInstant, attributeValue);
+        }
+
+        return "[ propertyPath: %s - errorMotive: %s - valueProvided: %s ]"
+            .formatted(attributeName, errMotive, attributeValue);
+    }
+
     private ResponseEntity<Object> buildInvalidDateResponse(
             final Exception ex, final String fieldName, final Object invalidValue) {
         final String description = "date must be in the following format: %s - example: %s"
@@ -212,21 +227,6 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
                 invalidValue,
                 "timezone must be a valid tz database identifier (e.g., America/Sao_Paulo, UTC, Europe/London)",
                 ex);
-    }
-
-    private static String buildInvalidAttributeMessage(
-            final String attributeName, final String errMotive, final Object attributeValue) {
-
-        if (errMotive.contains(Instant.class.getName())) {
-            final String errMotiveInstant = "date-time must be in the following format: %s (example: %s)"
-                    .formatted(RequestConstants.DateTimeFormats.DATE_TIME_FORMAT, OpenApiConstants.Examples.DATE_TIME);
-
-            return "[ propertyPath: %s - errorMotive: %s - valueProvided: %s ]"
-                    .formatted(attributeName, errMotiveInstant, attributeValue);
-        }
-
-        return "[ propertyPath: %s - errorMotive: %s - valueProvided: %s ]"
-                .formatted(attributeName, errMotive, attributeValue);
     }
 
     private ResponseEntity<Object> logExceptionAndBuild(final BusinessException exception) {
