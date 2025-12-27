@@ -26,7 +26,8 @@ public record CreateDietPlanRequestDto(
         String name,
 
         @Schema(
-                description = "Date when this diet plan starts (ISO 8601 format). If not provided, defaults to current date",
+                description =
+                        "Date when this diet plan starts (ISO 8601 format). If not provided, defaults to current date",
                 example = OpenApiConstants.Examples.DATE,
                 format = RequestConstants.DateTimeFormats.DATE_FORMAT,
                 nullable = true,

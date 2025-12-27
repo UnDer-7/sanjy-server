@@ -23,22 +23,24 @@ The tests follow this sequence:
 ## Prerequisites
 
 1. **Start the database:**
+
    ```bash
    docker compose -f local/docker-compose.yml up -d
    ```
-
 2. **Start the server:**
+
    ```bash
    ./mvnw spring-boot:run -pl infrastructure
    ```
 
    Or if you prefer using the JAR:
+
    ```bash
    ./mvnw package
    java -jar infrastructure/target/sanjy-server-*.jar
    ```
-
 3. **Ensure server is running:**
+
    ```bash
    curl http://localhost:8080/actuator/health
    ```
@@ -69,11 +71,13 @@ bru run tests --env LOCAL --output results.json
 The tests use dynamic variables set via `script:pre-request` and test scripts:
 
 ### Pre-Request Variables (generated dynamically)
+
 - `currentTimestamp` - Current date/time in ISO 8601 format (test 3)
 - `consumedAtAfter` - Start of current day (tests 5 and 6)
 - `consumedAtBefore` - End of current day (tests 5 and 6)
 
 ### Test Variables (saved from responses)
+
 - `dietPlanId` - Saved from test 1, used in test 2
 - `breakfastMealTypeId` - Saved from test 1, used in test 3
 - `lunchMealTypeId` - Saved from test 1
@@ -89,12 +93,15 @@ These variables are set dynamically during test execution using:
 ## How Timestamps Work
 
 ### Test 3 - newMealRecord
+
 Uses `script:pre-request` to generate the current timestamp:
+
 ```javascript
 bru.setVar("currentTimestamp", new Date().toISOString());
 ```
 
 Then references it in the body:
+
 ```json
 {
   "consumedAt": "{{currentTimestamp}}"
@@ -102,7 +109,9 @@ Then references it in the body:
 ```
 
 ### Tests 5 & 6 - Search and Statistics
+
 Calculate today's date range dynamically:
+
 ```javascript
 const today = new Date();
 const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
@@ -147,7 +156,9 @@ If you see no results in search/statistics:
 ## API Fields Used
 
 ### CreateMealRecordRequestDto
+
 - `consumedAt` (Instant, optional): UTC timestamp in ISO 8601 format
   - If not provided, defaults to current time
   - Must be past or present (not future)
   - Format: `yyyy-MM-ddTHH:mm:ss.sssZ` (e.g., `2025-12-26T14:30:00.123Z`)
+

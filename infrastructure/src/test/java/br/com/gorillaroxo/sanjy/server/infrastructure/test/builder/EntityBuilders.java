@@ -4,7 +4,6 @@ import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.DietPlanEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealTypeEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MetadataEmbeddedEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.StandardOptionEntity;
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -32,9 +31,7 @@ public final class EntityBuilders {
     }
 
     public static MetadataEmbeddedEntity.MetadataEmbeddedEntityBuilder buildMetadataEmbeddedEntity() {
-        return MetadataEmbeddedEntity.builder()
-            .createdAt(Instant.now())
-            .updatedAt(Instant.now());
+        return MetadataEmbeddedEntity.builder().createdAt(Instant.now()).updatedAt(Instant.now());
     }
 
     public static MealTypeEntity.MealTypeEntityBuilder buildMealTypeEntity() {

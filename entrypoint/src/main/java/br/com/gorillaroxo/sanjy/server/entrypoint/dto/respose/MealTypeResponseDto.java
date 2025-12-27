@@ -53,7 +53,8 @@ public record MealTypeResponseDto(
         List<StandardOptionResponseDto> standardOptions,
 
         @Schema(
-                description = "Metadata information containing creation and last update timestamps, along with other contextual data",
+                description =
+                        "Metadata information containing creation and last update timestamps, along with other contextual data",
                 requiredMode = Schema.RequiredMode.REQUIRED)
         MetadataResponseDto metadata) {
 

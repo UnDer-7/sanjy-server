@@ -14,7 +14,6 @@ import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealTypeEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.StandardOptionEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.test.IntegrationTestController;
 import br.com.gorillaroxo.sanjy.server.infrastructure.test.builder.DtoBuilders;
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -151,7 +150,9 @@ class MealRecordControllerIT extends IntegrationTestController {
                 .get()
                 .uri(uriBuilder -> uriBuilder
                         .path(getBaseUrl() + "/today")
-                        .queryParam(RequestConstants.Query.TIMEZONE, ZoneId.systemDefault().getId())
+                        .queryParam(
+                                RequestConstants.Query.TIMEZONE,
+                                ZoneId.systemDefault().getId())
                         .build())
                 .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
                 .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
@@ -182,7 +183,9 @@ class MealRecordControllerIT extends IntegrationTestController {
                 .get()
                 .uri(uriBuilder -> uriBuilder
                         .path(getBaseUrl() + "/today")
-                        .queryParam(RequestConstants.Query.TIMEZONE, ZoneId.systemDefault().getId())
+                        .queryParam(
+                                RequestConstants.Query.TIMEZONE,
+                                ZoneId.systemDefault().getId())
                         .build())
                 .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
                 .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
@@ -250,7 +253,10 @@ class MealRecordControllerIT extends IntegrationTestController {
                         .queryParam(RequestConstants.Query.PAGE_NUMBER, 0)
                         .queryParam(
                                 RequestConstants.Query.CONSUMED_AT_AFTER,
-                                LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
+                                LocalDate.now()
+                                        .atStartOfDay()
+                                        .atZone(ZoneId.systemDefault())
+                                        .toInstant())
                         .build())
                 .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
                 .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
@@ -348,9 +354,18 @@ class MealRecordControllerIT extends IntegrationTestController {
                 .uri(uriBuilder -> uriBuilder
                         .path(getBaseUrl())
                         .pathSegment("statistics")
-                        .queryParam(RequestConstants.Query.CONSUMED_AT_AFTER, currentDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
                         .queryParam(
-                                RequestConstants.Query.CONSUMED_AT_BEFORE, currentDate.atTime(LocalTime.MAX).atZone(ZoneId.systemDefault()).toInstant())
+                                RequestConstants.Query.CONSUMED_AT_AFTER,
+                                currentDate
+                                        .atStartOfDay()
+                                        .atZone(ZoneId.systemDefault())
+                                        .toInstant())
+                        .queryParam(
+                                RequestConstants.Query.CONSUMED_AT_BEFORE,
+                                currentDate
+                                        .atTime(LocalTime.MAX)
+                                        .atZone(ZoneId.systemDefault())
+                                        .toInstant())
                         .build())
                 .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
                 .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
@@ -376,9 +391,18 @@ class MealRecordControllerIT extends IntegrationTestController {
                 .uri(uriBuilder -> uriBuilder
                         .path(getBaseUrl())
                         .pathSegment("statistics")
-                        .queryParam(RequestConstants.Query.CONSUMED_AT_AFTER, currentDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
                         .queryParam(
-                                RequestConstants.Query.CONSUMED_AT_BEFORE, currentDate.atTime(LocalTime.MAX).atZone(ZoneId.systemDefault()).toInstant())
+                                RequestConstants.Query.CONSUMED_AT_AFTER,
+                                currentDate
+                                        .atStartOfDay()
+                                        .atZone(ZoneId.systemDefault())
+                                        .toInstant())
+                        .queryParam(
+                                RequestConstants.Query.CONSUMED_AT_BEFORE,
+                                currentDate
+                                        .atTime(LocalTime.MAX)
+                                        .atZone(ZoneId.systemDefault())
+                                        .toInstant())
                         .build())
                 .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
                 .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
