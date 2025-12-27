@@ -9,7 +9,7 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponse
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisticsResponseDto;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealRecordEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.projection.MealRecordStatisticsProjection;
-import br.com.gorillaroxo.sanjy.server.infrastructure.utils.ConstantsInfrastructure;
+import br.com.gorillaroxo.sanjy.server.infrastructure.utils.InfrastructureConstants;
 import java.util.List;
 import java.util.Optional;
 import org.mapstruct.AfterMapping;
@@ -19,7 +19,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(
-        componentModel = ConstantsInfrastructure.MAPSTRUCT_COMPONENT_MODEL,
+        componentModel = InfrastructureConstants.MAPSTRUCT_COMPONENT_MODEL,
         uses = {MealTypeMapper.class, StandardOptionMapper.class},
         unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface MealRecordMapper {

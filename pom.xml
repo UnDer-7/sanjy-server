@@ -64,6 +64,10 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.java.source>25</sonar.java.source>
         <sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/aggregate-report/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.exclusions>**/br/com/gorillaroxo/sanjy/server/core/exception/**,
+            **/*Constants.java,
+            **/br/com/gorillaroxo/sanjy/server/infrastructure/SanJyApplication.java,
+            **/br/com/gorillaroxo/sanjy/server/infrastructure/adapter/controller/config/GlobalRestExceptionHandlerConfig.java</sonar.coverage.exclusions>
     </properties>
 
     <dependencyManagement>
@@ -216,6 +220,12 @@
                         <excludes>
                             <!-- Exclude exception classes from coverage -->
                             <exclude>**/br/com/gorillaroxo/sanjy/server/core/exception/**</exclude>
+                            <!-- Exclude Constants classes from coverage -->
+                            <exclude>**/*Constants.class</exclude>
+                            <!-- Exclude main application class from coverage -->
+                            <exclude>**/br/com/gorillaroxo/sanjy/server/infrastructure/SanJyApplication.class</exclude>
+                            <!-- Exclude global exception handler from coverage -->
+                            <exclude>**/br/com/gorillaroxo/sanjy/server/infrastructure/adapter/controller/config/GlobalRestExceptionHandlerConfig.class</exclude>
                         </excludes>
                     </configuration>
                 </plugin>

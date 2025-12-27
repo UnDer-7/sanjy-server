@@ -4,7 +4,7 @@ import br.com.gorillaroxo.sanjy.server.core.domain.MealTypeDomain;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealTypesRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealTypeResponseDto;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealTypeEntity;
-import br.com.gorillaroxo.sanjy.server.infrastructure.utils.ConstantsInfrastructure;
+import br.com.gorillaroxo.sanjy.server.infrastructure.utils.InfrastructureConstants;
 import java.util.List;
 import java.util.Set;
 import org.mapstruct.Mapper;
@@ -12,7 +12,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(
-        componentModel = ConstantsInfrastructure.MAPSTRUCT_COMPONENT_MODEL,
+        componentModel = InfrastructureConstants.MAPSTRUCT_COMPONENT_MODEL,
         uses = StandardOptionMapper.class,
         unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface MealTypeMapper {
