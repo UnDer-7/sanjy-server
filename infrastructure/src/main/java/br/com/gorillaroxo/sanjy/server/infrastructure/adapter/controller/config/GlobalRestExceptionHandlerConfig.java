@@ -181,18 +181,18 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
     }
 
     private static String buildInvalidAttributeMessage(
-        final String attributeName, final String errMotive, final Object attributeValue) {
+            final String attributeName, final String errMotive, final Object attributeValue) {
 
         if (errMotive.contains(Instant.class.getName())) {
             final String errMotiveInstant = "date-time must be in the following format: %s (example: %s)"
-                .formatted(RequestConstants.DateTimeFormats.DATE_TIME_FORMAT, OpenApiConstants.Examples.DATE_TIME);
+                    .formatted(RequestConstants.DateTimeFormats.DATE_TIME_FORMAT, OpenApiConstants.Examples.DATE_TIME);
 
             return "[ propertyPath: %s - errorMotive: %s - valueProvided: %s ]"
-                .formatted(attributeName, errMotiveInstant, attributeValue);
+                    .formatted(attributeName, errMotiveInstant, attributeValue);
         }
 
         return "[ propertyPath: %s - errorMotive: %s - valueProvided: %s ]"
-            .formatted(attributeName, errMotive, attributeValue);
+                .formatted(attributeName, errMotive, attributeValue);
     }
 
     private ResponseEntity<Object> buildInvalidDateResponse(

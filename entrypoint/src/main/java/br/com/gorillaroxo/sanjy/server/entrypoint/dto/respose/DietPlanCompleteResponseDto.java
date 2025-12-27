@@ -92,9 +92,7 @@ public record DietPlanCompleteResponseDto(
                 requiredMode = Schema.RequiredMode.REQUIRED)
         Boolean isActive,
 
-        @Schema(
-                description = """
+        @Schema(description = """
                     Metadata information containing creation and last update timestamps, along with other contextual data
-                    """,
-                requiredMode = Schema.RequiredMode.REQUIRED)
+                    """, requiredMode = Schema.RequiredMode.REQUIRED)
         MetadataResponseDto metadata) {}

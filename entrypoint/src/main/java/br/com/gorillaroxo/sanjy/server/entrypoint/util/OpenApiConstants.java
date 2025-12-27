@@ -21,7 +21,6 @@ public final class OpenApiConstants {
         private Examples() {
             throw new IllegalStateException("Utility class");
         }
-
     }
 
     public static final class HttpStatusCodes {
