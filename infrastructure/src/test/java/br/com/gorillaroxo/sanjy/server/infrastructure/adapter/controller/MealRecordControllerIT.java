@@ -14,9 +14,11 @@ import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealTypeEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.StandardOptionEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.test.IntegrationTestController;
 import br.com.gorillaroxo.sanjy.server.infrastructure.test.builder.DtoBuilders;
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.function.Predicate;
 import org.junit.jupiter.api.BeforeAll;
@@ -75,7 +77,8 @@ class MealRecordControllerIT extends IntegrationTestController {
                     assertThat(response.quantity()).isEqualTo(request.quantity());
                     assertThat(response.unit()).isEqualTo(request.unit());
                     assertThat(response.notes()).isEqualTo(request.notes());
-                    assertThat(response.createdAt()).isNotNull();
+                    assertThat(response.metadata().createdAt()).isNotNull();
+                    assertThat(response.metadata().updatedAt()).isNotNull();
                 });
     }
 
@@ -99,7 +102,7 @@ class MealRecordControllerIT extends IntegrationTestController {
                 .value(response -> {
                     final var expectedExCode = ExceptionCode.INVALID_VALUES;
                     assertThat(response.code()).isNotBlank().isEqualTo(expectedExCode.getCode());
-                    assertThat(response.timestamp()).isNotBlank();
+                    assertThat(response.timestamp()).isNotNull();
                     assertThat(response.message()).isNotEmpty().isEqualTo(expectedExCode.getMessage());
                     assertThat(response.customMessage()).isNotEmpty().containsIgnoringCase("mealTypeId");
                     assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -145,7 +148,12 @@ class MealRecordControllerIT extends IntegrationTestController {
                 .isCreated();
         webTestClient
                 .get()
-                .uri(getBaseUrl() + "/today")
+                .uri(uriBuilder -> uriBuilder
+                        .path(getBaseUrl() + "/today")
+                        .queryParam(
+                                RequestConstants.Query.TIMEZONE,
+                                ZoneId.systemDefault().getId())
+                        .build())
                 .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
                 .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
                 .exchange()
@@ -173,7 +181,12 @@ class MealRecordControllerIT extends IntegrationTestController {
         mealRecordRepository.deleteAll();
         webTestClient
                 .get()
-                .uri(getBaseUrl() + "/today")
+                .uri(uriBuilder -> uriBuilder
+                        .path(getBaseUrl() + "/today")
+                        .queryParam(
+                                RequestConstants.Query.TIMEZONE,
+                                ZoneId.systemDefault().getId())
+                        .build())
                 .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
                 .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
                 .exchange()
@@ -196,7 +209,7 @@ class MealRecordControllerIT extends IntegrationTestController {
         final var requestPlannedMealRecord0 = DtoBuilders.buildCreateMealRecordRequestDtoPlannedMeal()
                 .mealTypeId(mealType.getId())
                 .standardOptionId(standardOption.getId())
-                .consumedAt(LocalDateTime.now().minusDays(3))
+                .consumedAt(Instant.now().minus(3, ChronoUnit.DAYS))
                 .build();
 
         final var requestPlannedMealRecord1 = DtoBuilders.buildCreateMealRecordRequestDtoPlannedMeal()
@@ -240,7 +253,10 @@ class MealRecordControllerIT extends IntegrationTestController {
                         .queryParam(RequestConstants.Query.PAGE_NUMBER, 0)
                         .queryParam(
                                 RequestConstants.Query.CONSUMED_AT_AFTER,
-                                LocalDate.now().atStartOfDay())
+                                LocalDate.now()
+                                        .atStartOfDay()
+                                        .atZone(ZoneId.systemDefault())
+                                        .toInstant())
                         .build())
                 .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
                 .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
@@ -294,7 +310,7 @@ class MealRecordControllerIT extends IntegrationTestController {
         final var requestPlannedMealRecord0 = DtoBuilders.buildCreateMealRecordRequestDtoPlannedMeal()
                 .mealTypeId(mealType.getId())
                 .standardOptionId(standardOption.getId())
-                .consumedAt(LocalDateTime.now().minusDays(3))
+                .consumedAt(Instant.now().minus(3, ChronoUnit.DAYS))
                 .build();
 
         final var requestPlannedMealRecord1 = DtoBuilders.buildCreateMealRecordRequestDtoPlannedMeal()
@@ -338,9 +354,18 @@ class MealRecordControllerIT extends IntegrationTestController {
                 .uri(uriBuilder -> uriBuilder
                         .path(getBaseUrl())
                         .pathSegment("statistics")
-                        .queryParam(RequestConstants.Query.CONSUMED_AT_AFTER, currentDate.atStartOfDay())
                         .queryParam(
-                                RequestConstants.Query.CONSUMED_AT_BEFORE, LocalDateTime.of(currentDate, LocalTime.MAX))
+                                RequestConstants.Query.CONSUMED_AT_AFTER,
+                                currentDate
+                                        .atStartOfDay()
+                                        .atZone(ZoneId.systemDefault())
+                                        .toInstant())
+                        .queryParam(
+                                RequestConstants.Query.CONSUMED_AT_BEFORE,
+                                currentDate
+                                        .atTime(LocalTime.MAX)
+                                        .atZone(ZoneId.systemDefault())
+                                        .toInstant())
                         .build())
                 .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
                 .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
@@ -366,9 +391,18 @@ class MealRecordControllerIT extends IntegrationTestController {
                 .uri(uriBuilder -> uriBuilder
                         .path(getBaseUrl())
                         .pathSegment("statistics")
-                        .queryParam(RequestConstants.Query.CONSUMED_AT_AFTER, currentDate.atStartOfDay())
                         .queryParam(
-                                RequestConstants.Query.CONSUMED_AT_BEFORE, LocalDateTime.of(currentDate, LocalTime.MAX))
+                                RequestConstants.Query.CONSUMED_AT_AFTER,
+                                currentDate
+                                        .atStartOfDay()
+                                        .atZone(ZoneId.systemDefault())
+                                        .toInstant())
+                        .queryParam(
+                                RequestConstants.Query.CONSUMED_AT_BEFORE,
+                                currentDate
+                                        .atTime(LocalTime.MAX)
+                                        .atZone(ZoneId.systemDefault())
+                                        .toInstant())
                         .build())
                 .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
                 .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
@@ -382,6 +416,328 @@ class MealRecordControllerIT extends IntegrationTestController {
                     assertThat(response.plannedMealQuantity()).isEqualTo(0);
                     assertThat(response.mealQuantity()).isEqualTo(0);
                 });
+    }
+
+    @Nested
+    @DisplayName("Test invalid date-time formats")
+    class InvalidDateTimeFormats {
+
+        @Test
+        void newMealRecord__should_fail_with_invalid_date_time_format() {
+            webTestClient
+                    .post()
+                    .uri(getBaseUrl())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue("""
+                            {
+                              "mealTypeId": 1,
+                              "consumedAt": "2025-11-14T10:34:55",
+                              "isFreeMeal": false,
+                              "standardOptionId": 1
+                            }
+                            """)
+                    .exchange()
+                    .expectStatus()
+                    .isBadRequest()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.code()).isEqualTo(ExceptionCode.INVALID_VALUES.getCode());
+                        assertThat(response.message()).isEqualTo(ExceptionCode.INVALID_VALUES.getMessage());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                        assertThat(response.customMessage()).containsIgnoringCase("consumedAt");
+                        assertThat(response.customMessage()).containsIgnoringCase("invalid date-time format");
+                        assertThat(response.customMessage()).containsIgnoringCase("yyyy-MM-ddTHH:mm:ssZ");
+                    });
+        }
+
+        @Test
+        void searchMealRecords__should_fail_with_invalid_consumedAtAfter_format() {
+            webTestClient
+                    .get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path(getBaseUrl())
+                            .queryParam(RequestConstants.Query.PAGE_NUMBER, 0)
+                            .queryParam(RequestConstants.Query.CONSUMED_AT_AFTER, "2025-11-14T10:34:55")
+                            .build())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .exchange()
+                    .expectStatus()
+                    .isBadRequest()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.code()).isEqualTo(ExceptionCode.INVALID_VALUES.getCode());
+                        assertThat(response.message()).isEqualTo(ExceptionCode.INVALID_VALUES.getMessage());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                        assertThat(response.customMessage()).containsIgnoringCase("consumedAtAfter");
+                        assertThat(response.customMessage()).containsIgnoringCase("yyyy-MM-ddTHH:mm:ssZ");
+                    });
+        }
+
+        @Test
+        void searchMealRecords__should_fail_with_invalid_consumedAtBefore_format() {
+            webTestClient
+                    .get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path(getBaseUrl())
+                            .queryParam(RequestConstants.Query.PAGE_NUMBER, 0)
+                            .queryParam(RequestConstants.Query.CONSUMED_AT_BEFORE, "invalid-date")
+                            .build())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .exchange()
+                    .expectStatus()
+                    .isBadRequest()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.code()).isEqualTo(ExceptionCode.INVALID_VALUES.getCode());
+                        assertThat(response.message()).isEqualTo(ExceptionCode.INVALID_VALUES.getMessage());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                        assertThat(response.customMessage()).containsIgnoringCase("consumedAtBefore");
+                        assertThat(response.customMessage()).containsIgnoringCase("errorMotive");
+                    });
+        }
+
+        @Test
+        void getMealRecordStatistics__should_fail_with_invalid_consumedAtAfter_format() {
+            webTestClient
+                    .get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path(getBaseUrl())
+                            .pathSegment("statistics")
+                            .queryParam(RequestConstants.Query.CONSUMED_AT_AFTER, "2025-99-99T99:99:99Z")
+                            .queryParam(RequestConstants.Query.CONSUMED_AT_BEFORE, Instant.now())
+                            .build())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .exchange()
+                    .expectStatus()
+                    .isBadRequest()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.code()).isEqualTo(ExceptionCode.INVALID_VALUES.getCode());
+                        assertThat(response.message()).isEqualTo(ExceptionCode.INVALID_VALUES.getMessage());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                        assertThat(response.customMessage()).containsIgnoringCase("consumedAtAfter");
+                        assertThat(response.customMessage()).containsIgnoringCase("errorMotive");
+                    });
+        }
+    }
+
+    @Nested
+    @DisplayName("Test invalid JSON payloads")
+    class InvalidJsonPayloads {
+
+        @Test
+        void newMealRecord__should_fail_with_malformed_json() {
+            webTestClient
+                    .post()
+                    .uri(getBaseUrl())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue("""
+                            {
+                              "mealTypeId": 1,
+                              "isFreeMeal": false,
+                              "standardOptionId": 1,
+                            """)
+                    .exchange()
+                    .expectStatus()
+                    .isBadRequest()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.code()).isEqualTo(ExceptionCode.INVALID_VALUES.getCode());
+                        assertThat(response.message()).isEqualTo(ExceptionCode.INVALID_VALUES.getMessage());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                    });
+        }
+    }
+
+    @Nested
+    @DisplayName("Test invalid field types")
+    class InvalidFieldTypes {
+
+        @Test
+        void newMealRecord__should_fail_with_boolean_instead_of_integer_for_mealTypeId() {
+            webTestClient
+                    .post()
+                    .uri(getBaseUrl())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue("""
+                            {
+                              "mealTypeId": true,
+                              "isFreeMeal": false,
+                              "standardOptionId": 1
+                            }
+                            """)
+                    .exchange()
+                    .expectStatus()
+                    .isBadRequest()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.code()).isEqualTo(ExceptionCode.INVALID_VALUES.getCode());
+                        assertThat(response.message()).isEqualTo(ExceptionCode.INVALID_VALUES.getMessage());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                        assertThat(response.customMessage()).containsIgnoringCase("JSON parse error");
+                    });
+        }
+
+        @Test
+        void newMealRecord__should_fail_with_string_instead_of_boolean_for_isFreeMeal() {
+            webTestClient
+                    .post()
+                    .uri(getBaseUrl())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue("""
+                            {
+                              "mealTypeId": 1,
+                              "isFreeMeal": "not-a-boolean",
+                              "standardOptionId": 1
+                            }
+                            """)
+                    .exchange()
+                    .expectStatus()
+                    .isBadRequest()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.code()).isEqualTo(ExceptionCode.INVALID_VALUES.getCode());
+                        assertThat(response.message()).isEqualTo(ExceptionCode.INVALID_VALUES.getMessage());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                        assertThat(response.customMessage()).containsIgnoringCase("isFreeMeal");
+                        assertThat(response.customMessage()).containsIgnoringCase("invalid format");
+                    });
+        }
+
+        @Test
+        void newMealRecord__should_fail_with_string_instead_of_number_for_quantity() {
+            webTestClient
+                    .post()
+                    .uri(getBaseUrl())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue("""
+                            {
+                              "mealTypeId": 1,
+                              "isFreeMeal": false,
+                              "standardOptionId": 1,
+                              "quantity": "not-a-number"
+                            }
+                            """)
+                    .exchange()
+                    .expectStatus()
+                    .isBadRequest()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.code()).isEqualTo(ExceptionCode.INVALID_VALUES.getCode());
+                        assertThat(response.message()).isEqualTo(ExceptionCode.INVALID_VALUES.getMessage());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                        assertThat(response.customMessage()).containsIgnoringCase("quantity");
+                        assertThat(response.customMessage()).containsIgnoringCase("invalid format");
+                    });
+        }
+
+        @Test
+        void searchMealRecords__should_fail_with_string_instead_of_integer_for_pageNumber() {
+            webTestClient
+                    .get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path(getBaseUrl())
+                            .queryParam(RequestConstants.Query.PAGE_NUMBER, "not-a-number")
+                            .build())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .exchange()
+                    .expectStatus()
+                    .isBadRequest()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.code()).isEqualTo(ExceptionCode.INVALID_VALUES.getCode());
+                        assertThat(response.message()).isEqualTo(ExceptionCode.INVALID_VALUES.getMessage());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                        assertThat(response.customMessage()).containsIgnoringCase("pageNumber");
+                    });
+        }
+
+        @Test
+        void searchMealRecords__should_fail_with_string_instead_of_boolean_for_isFreeMeal() {
+            webTestClient
+                    .get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path(getBaseUrl())
+                            .queryParam(RequestConstants.Query.PAGE_NUMBER, 0)
+                            .queryParam(RequestConstants.Query.IS_FREE_MEAL, "not-a-boolean")
+                            .build())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .exchange()
+                    .expectStatus()
+                    .isBadRequest()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.code()).isEqualTo(ExceptionCode.INVALID_VALUES.getCode());
+                        assertThat(response.message()).isEqualTo(ExceptionCode.INVALID_VALUES.getMessage());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                        assertThat(response.customMessage()).containsIgnoringCase("isFreeMeal");
+                    });
+        }
+    }
+
+    @Nested
+    @DisplayName("Test invalid timezone")
+    class InvalidTimezone {
+
+        @Test
+        void getTodayMealRecords__should_fail_with_invalid_timezone() {
+            webTestClient
+                    .get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path(getBaseUrl() + "/today")
+                            .queryParam(RequestConstants.Query.TIMEZONE, "Invalid/Timezone")
+                            .build())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .exchange()
+                    .expectStatus()
+                    .isBadRequest()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.code()).isEqualTo(ExceptionCode.INVALID_VALUES.getCode());
+                        assertThat(response.message()).isEqualTo(ExceptionCode.INVALID_VALUES.getMessage());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                        assertThat(response.customMessage()).containsIgnoringCase("timezone");
+                        assertThat(response.customMessage()).containsIgnoringCase("invalid");
+                    });
+        }
+
+        @Test
+        void getTodayMealRecords__should_fail_with_empty_timezone() {
+            webTestClient
+                    .get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path(getBaseUrl() + "/today")
+                            .queryParam(RequestConstants.Query.TIMEZONE, "")
+                            .build())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .exchange()
+                    .expectStatus()
+                    .isBadRequest()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.code()).isEqualTo(ExceptionCode.INVALID_VALUES.getCode());
+                        assertThat(response.message()).isEqualTo(ExceptionCode.INVALID_VALUES.getMessage());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                        assertThat(response.customMessage()).containsIgnoringCase("timezone");
+                    });
+        }
     }
 
     @Nested

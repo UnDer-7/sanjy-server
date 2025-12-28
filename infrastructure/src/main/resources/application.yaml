@@ -20,7 +20,7 @@ sanjy-server:
   external-http-clients:
     retry-config:
       max-attempt: ${SANJY_SERVER_EXTERNAL_HTTP_CLIENT_RETRY_CONFIG_MAX_ATTEMPT}
-      interval: ${SANJY_SERVER_EXTERNAL_HTTP_CLIENT_RETRY_CONFIG_INTERNVAL}
+      interval: ${SANJY_SERVER_EXTERNAL_HTTP_CLIENT_RETRY_CONFIG_INTERVAL}
       backoff-multiplier: ${SANJY_SERVER_EXTERNAL_HTTP_CLIENT_RETRY_CONFIG_BACKOFF_MULTIPLIER}
     github:
       url: ${SANJY_SERVER_EXTERNAL_HTTP_CLIENT_GITHUB_URL}
@@ -39,6 +39,15 @@ spring:
 #        show_sql: true
 #        format_sql: true
 #        highlight_sql: true
+        # Timezone configuration
+        jdbc:
+          time_zone: UTC
+
+  jackson:
+    time-zone: UTC
+    serialization:
+      write-dates-as-timestamps: false
+
   ai:
     mcp:
       server:

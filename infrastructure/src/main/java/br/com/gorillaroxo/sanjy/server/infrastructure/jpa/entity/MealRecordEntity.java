@@ -1,6 +1,7 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
@@ -9,10 +10,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,7 +35,7 @@ public class MealRecordEntity {
     private Long id;
 
     @Column(name = "consumed_at", nullable = false)
-    private LocalDateTime consumedAt;
+    private Instant consumedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "meal_type_id", nullable = false, foreignKey = @ForeignKey(name = "fk_record_meal_type"))
@@ -61,11 +61,6 @@ public class MealRecordEntity {
     @Column(columnDefinition = "TEXT")
     private String notes;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
+    @Embedded
+    private MetadataEmbeddedEntity metadata;
 }

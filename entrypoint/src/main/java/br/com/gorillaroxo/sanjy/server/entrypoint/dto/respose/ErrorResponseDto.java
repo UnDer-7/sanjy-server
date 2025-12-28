@@ -1,7 +1,10 @@
 package br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose;
 
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.Instant;
 import lombok.Builder;
 
 @Builder(toBuilder = true)
@@ -19,10 +22,11 @@ public record ErrorResponseDto(
         String code,
 
         @Schema(
-                description = "ISO 8601 zoned timestamp indicating exactly when the error occurred on the server",
-                example = "2025-10-13T12:31:45-03:00",
+                description = "ISO 8601 zoned time indicating exactly when the error occurred on the server",
+                example = OpenApiConstants.Examples.DATE_TIME,
+                format = RequestConstants.DateTimeFormats.DATE_TIME_FORMAT,
                 requiredMode = Schema.RequiredMode.REQUIRED)
-        String timestamp,
+        Instant timestamp,
 
         @Schema(
                 description = "Standard human-readable error message describing the error type",

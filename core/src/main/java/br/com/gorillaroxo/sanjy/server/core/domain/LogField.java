@@ -66,7 +66,11 @@ public enum LogField {
     REQUEST_METHOD,
     REQUEST_URL,
     REQUEST_HEADERS,
-    RESPONSE_HEADERS;
+    RESPONSE_HEADERS,
+    APPLICATION_TIMEZONE,
+    DATABASE_TIMEZONE,
+    TIMEZONE_ID,
+    DIET_PLAN_UPDATED_AT;
 
     public String label() {
         return this.name().toLowerCase();

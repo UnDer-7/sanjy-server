@@ -551,6 +551,50 @@ All REST endpoints have detailed OpenAPI annotations with descriptions and examp
 
 ## Important Implementation Notes
 
+### Date-Time Handling
+
+**CRITICAL: This project strictly enforces UTC timezone and ISO 8601 standard for all date-time operations.**
+
+#### Timezone Policy
+
+- **ALL data MUST be stored in UTC timezone** in the database
+- **ALL API requests MUST send date-time values in UTC timezone**
+- **ALL API responses MUST return date-time values in UTC timezone**
+- The application does NOT perform timezone conversions - this is the client's responsibility
+- Any configuration or code that handles date-time must ensure UTC is used
+
+#### ISO 8601 Format Standard
+
+All date and time fields follow the **ISO 8601 standard**:
+
+- **Date-Time format**: `yyyy-MM-dd'T'HH:mm:ss'Z'`
+  - Example: `2025-01-15T14:30:00Z`
+  - The `Z` suffix is MANDATORY and indicates UTC timezone
+  - Java type: `Instant` or `OffsetDateTime` with UTC offset
+- **Date format**: `yyyy-MM-dd`
+  - Example: `2025-01-15`
+  - Java type: `LocalDate`
+- **Time format**: `HH:mm:ss`
+  - Example: `14:30:00`
+  - Java type: `LocalTime`
+
+#### Swagger Documentation Requirements
+
+All API endpoints with date-time fields must document:
+- The exact ISO 8601 format expected
+- Example values using the `OpenApiConstants` class
+- Explicit mention that UTC timezone is required
+- Description stating "Format: ISO 8601"
+
+Example:
+
+```java
+@Parameter(
+    description = "Consumption timestamp in UTC timezone (ISO 8601 format: yyyy-MM-dd'T'HH:mm:ss'Z')",
+    example = OpenApiConstants.DATE_TIME_EXAMPLE
+)
+```
+
 ### Single Active Diet Plan Rule
 
 The database enforces **only one active diet plan** via exclusion constraint. When creating a new active diet plan, the application should deactivate existing ones first.
