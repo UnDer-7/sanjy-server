@@ -43,8 +43,9 @@ public class ProjectInfoLoggerConfig implements ApplicationListener<ApplicationR
                     final SanjyServerProps.ApplicationProp application = sanjyServerProps.application();
 
                     log.info(
-                            LogField.Placeholders.SIX.getPlaceholder(),
+                            LogField.Placeholders.SEVEN.getPlaceholder(),
                             StructuredArguments.kv(LogField.MSG.label(), "Project information"),
+                            StructuredArguments.kv(LogField.PROJECT_NAME.label(), application.name()),
                             StructuredArguments.kv(LogField.PROJECT_CURRENT_VERSION.label(), application.version()),
                             StructuredArguments.kv(LogField.PROJECT_LATEST_VERSION.label(), latestVersion),
                             StructuredArguments.kv(LogField.RUNTIME_MODE.label(), runtimeMode),

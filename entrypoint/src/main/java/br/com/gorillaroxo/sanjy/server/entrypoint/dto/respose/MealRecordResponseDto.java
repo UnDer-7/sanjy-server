@@ -17,14 +17,14 @@ public record MealRecordResponseDto(
         Long id,
 
         @Schema(
-                description = "Exact date and time when the item was consumed",
+                description = "Exact date and time when the item was consumed in UTC timezone (ISO 8601 format)",
                 example = OpenApiConstants.Examples.DATE_TIME,
                 format = RequestConstants.DateTimeFormats.DATE_TIME_FORMAT,
                 requiredMode = Schema.RequiredMode.REQUIRED)
         Instant consumedAt,
 
         @Schema(
-                description = "Meal type information (breakfast, lunch, snack, dinner, etc...)",
+                description = "Meal type information (breakfast, lunch, snack, dinner, etc...). Returns only the ID of the related meal type entity",
                 requiredMode = Schema.RequiredMode.REQUIRED)
         IdOnlyResponseDto mealType,
 
@@ -38,6 +38,7 @@ public record MealRecordResponseDto(
 
         @Schema(description = """
                     The selected diet plan option that was consumed. This field contains the standard option chosen from the diet plan. \
+                    Returns only the ID of the related standard option entity. \
                     NULL when isFreeMeal = TRUE (free meals don't follow the plan)
                     """, nullable = true, requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         IdOnlyResponseDto standardOption,
