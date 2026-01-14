@@ -39,7 +39,7 @@ RUN make build/graalvm && \
 ##################
 # BUILD STEP (LOCAL MODE)
 ##################
-FROM alpine:3.22.2 AS build-local
+FROM alpine:3.23.2 AS build-local
 
 RUN echo "========================================" && \
     echo "STAGE: build-local (using pre-built native binary)" && \
@@ -55,7 +55,7 @@ COPY infrastructure/target/*.graal ./app.graal
 ##################
 FROM build-${BUILD_MODE} AS build-selected
 
-FROM alpine:3.22.2 AS release
+FROM alpine:3.23.2 AS release
 
 RUN echo "========================================" && \
     echo "STAGE: release (final image)" && \
