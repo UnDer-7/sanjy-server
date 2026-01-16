@@ -21,7 +21,7 @@ import lombok.experimental.SuperBuilder;
 public class SearchMealRecordParamRequestDto extends PageRequestDto {
 
     @Schema(
-            description = "Filter meals consumed after this date/time",
+            description = "Filter meals consumed after this date/time, in UTC timezone (ISO 8601 format).",
             requiredMode = Schema.RequiredMode.NOT_REQUIRED,
             nullable = true,
             format = RequestConstants.DateTimeFormats.DATE_TIME_FORMAT,
@@ -29,7 +29,7 @@ public class SearchMealRecordParamRequestDto extends PageRequestDto {
     private Instant consumedAtAfter;
 
     @Schema(
-            description = "Filter meals consumed before this date/time",
+            description = "Filter meals consumed before this date/time, in UTC timezone (ISO 8601 format).",
             requiredMode = Schema.RequiredMode.NOT_REQUIRED,
             nullable = true,
             format = RequestConstants.DateTimeFormats.DATE_TIME_FORMAT,

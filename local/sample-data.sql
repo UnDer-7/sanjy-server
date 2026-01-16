@@ -2335,7 +2335,7 @@ INSERT
         CURRENT_TIMESTAMP - INTERVAL '1 day 45 minutes'
     );
 
--- Day 0 (today - 4 meals so far)
+-- Day 0 (today - 5 meals so far, including 1 free meal)
 INSERT
     INTO
         meal_record(
@@ -2385,4 +2385,16 @@ INSERT
         'Feeling satisfied',
         CURRENT_TIMESTAMP - INTERVAL '30 minutes',
         CURRENT_TIMESTAMP - INTERVAL '30 minutes'
+    ),
+    (
+        CURRENT_TIMESTAMP - INTERVAL '10 minutes',
+        4,
+        TRUE,
+        NULL,
+        'Chocolate bar -- 1 unit (50g) | Cappuccino -- 200ml',
+        1.0,
+        'combo',
+        'Sweet craving after lunch',
+        CURRENT_TIMESTAMP - INTERVAL '10 minutes',
+        CURRENT_TIMESTAMP - INTERVAL '10 minutes'
     );
