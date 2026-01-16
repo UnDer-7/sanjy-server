@@ -4,10 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import br.com.gorillaroxo.sanjy.server.core.exception.ExceptionCode;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.IdOnlyResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisticsResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.StandardOptionSimplifiedResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.DietPlanEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealTypeEntity;
@@ -171,7 +171,7 @@ class MealRecordControllerIT extends IntegrationTestController {
                             .filteredOn(Predicate.not(MealRecordResponseDto::isFreeMeal))
                             .first()
                             .extracting(MealRecordResponseDto::standardOption)
-                            .extracting(IdOnlyResponseDto::id)
+                            .extracting(StandardOptionSimplifiedResponseDto::id)
                             .isEqualTo(requestPlannedMealRecord.standardOptionId());
                 });
     }
