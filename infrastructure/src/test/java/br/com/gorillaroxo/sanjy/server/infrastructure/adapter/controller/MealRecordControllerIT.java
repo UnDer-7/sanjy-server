@@ -8,7 +8,6 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordCreatedR
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisticsResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseDto;
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.StandardOptionSimplifiedResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.DietPlanEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealTypeEntity;
@@ -19,6 +18,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.function.Predicate;
@@ -78,7 +78,7 @@ class MealRecordControllerIT extends IntegrationTestController {
                         assertThat(response.consumedAt()).isNotNull();
                         assertThat(response.isFreeMeal()).isEqualTo(request.isFreeMeal());
                         assertThat(response.freeMealDescription()).isEqualTo(request.freeMealDescription());
-                        assertThat(response.quantity()).isEqualTo(request.quantity());
+                        assertThat(response.quantity()).isEqualByComparingTo(request.quantity());
                         assertThat(response.unit()).isEqualTo(request.unit());
                         assertThat(response.notes()).isEqualTo(request.notes());
 
@@ -321,17 +321,76 @@ class MealRecordControllerIT extends IntegrationTestController {
                     .expectBodyList(MealRecordResponseDto.class)
                     .value(response -> {
                         assertThat(response).isNotNull().hasSize(2);
-                        assertThat(response)
-                                .filteredOn(MealRecordResponseDto::isFreeMeal)
-                                .first()
-                                .extracting(MealRecordResponseDto::freeMealDescription)
+
+                        // Validate PlannedMealRecord (isFreeMeal = false)
+                        final var plannedMealRecord = response.stream()
+                                .filter(Predicate.not(MealRecordResponseDto::isFreeMeal))
+                                .findFirst()
+                                .orElseThrow();
+
+                        assertThat(plannedMealRecord.id()).isNotNull();
+                        assertThat(plannedMealRecord.consumedAt()).isNotNull();
+                        assertThat(plannedMealRecord.isFreeMeal()).isFalse();
+                        assertThat(plannedMealRecord.freeMealDescription()).isNull();
+                        assertThat(plannedMealRecord.quantity()).isEqualByComparingTo(requestPlannedMealRecord.quantity());
+                        assertThat(plannedMealRecord.unit()).isEqualTo(requestPlannedMealRecord.unit());
+                        assertThat(plannedMealRecord.notes()).isEqualTo(requestPlannedMealRecord.notes());
+
+                        assertThat(plannedMealRecord.metadata()).isNotNull();
+                        assertThat(plannedMealRecord.metadata().createdAt()).isNotNull();
+                        assertThat(plannedMealRecord.metadata().updatedAt()).isNotNull();
+
+                        final var timeFormatter =
+                                DateTimeFormatter.ofPattern(RequestConstants.DateTimeFormats.TIME_FORMAT);
+
+                        assertThat(plannedMealRecord.mealType()).isNotNull();
+                        assertThat(plannedMealRecord.mealType().id()).isEqualTo(mealType.getId());
+                        assertThat(plannedMealRecord.mealType().name()).isEqualTo(mealType.getName());
+                        assertThat(plannedMealRecord.mealType().scheduledTime().format(timeFormatter))
+                                .isEqualTo(mealType.getScheduledTime().format(timeFormatter));
+                        assertThat(plannedMealRecord.mealType().observation()).isEqualTo(mealType.getObservation());
+                        assertThat(plannedMealRecord.mealType().metadata()).isNotNull();
+                        assertThat(plannedMealRecord.mealType().metadata().createdAt()).isNotNull();
+                        assertThat(plannedMealRecord.mealType().metadata().updatedAt()).isNotNull();
+
+                        assertThat(plannedMealRecord.standardOption()).isNotNull();
+                        assertThat(plannedMealRecord.standardOption().id()).isEqualTo(standardOption.getId());
+                        assertThat(plannedMealRecord.standardOption().optionNumber().intValue()).isEqualTo(standardOption.getOptionNumber());
+                        assertThat(plannedMealRecord.standardOption().description())
+                                .isEqualTo(standardOption.getDescription());
+                        assertThat(plannedMealRecord.standardOption().metadata()).isNotNull();
+                        assertThat(plannedMealRecord.standardOption().metadata().createdAt()).isNotNull();
+                        assertThat(plannedMealRecord.standardOption().metadata().updatedAt()).isNotNull();
+
+                        // Validate FreeMealRecord (isFreeMeal = true)
+                        final var freeMealRecord = response.stream()
+                                .filter(MealRecordResponseDto::isFreeMeal)
+                                .findFirst()
+                                .orElseThrow();
+
+                        assertThat(freeMealRecord.id()).isNotNull();
+                        assertThat(freeMealRecord.consumedAt()).isNotNull();
+                        assertThat(freeMealRecord.isFreeMeal()).isTrue();
+                        assertThat(freeMealRecord.freeMealDescription())
                                 .isEqualTo(requestFreeMealRecord.freeMealDescription());
-                        assertThat(response)
-                                .filteredOn(Predicate.not(MealRecordResponseDto::isFreeMeal))
-                                .first()
-                                .extracting(MealRecordResponseDto::standardOption)
-                                .extracting(StandardOptionSimplifiedResponseDto::id)
-                                .isEqualTo(requestPlannedMealRecord.standardOptionId());
+                        assertThat(freeMealRecord.standardOption()).isNull();
+                        assertThat(freeMealRecord.quantity()).isEqualByComparingTo(requestFreeMealRecord.quantity());
+                        assertThat(freeMealRecord.unit()).isEqualTo(requestFreeMealRecord.unit());
+                        assertThat(freeMealRecord.notes()).isEqualTo(requestFreeMealRecord.notes());
+
+                        assertThat(freeMealRecord.metadata()).isNotNull();
+                        assertThat(freeMealRecord.metadata().createdAt()).isNotNull();
+                        assertThat(freeMealRecord.metadata().updatedAt()).isNotNull();
+
+                        assertThat(freeMealRecord.mealType()).isNotNull();
+                        assertThat(freeMealRecord.mealType().id()).isEqualTo(mealType.getId());
+                        assertThat(freeMealRecord.mealType().name()).isEqualTo(mealType.getName());
+                        assertThat(freeMealRecord.mealType().scheduledTime().format(timeFormatter))
+                                .isEqualTo(mealType.getScheduledTime().format(timeFormatter));
+                        assertThat(freeMealRecord.mealType().observation()).isEqualTo(mealType.getObservation());
+                        assertThat(freeMealRecord.mealType().metadata()).isNotNull();
+                        assertThat(freeMealRecord.mealType().metadata().createdAt()).isNotNull();
+                        assertThat(freeMealRecord.mealType().metadata().updatedAt()).isNotNull();
                     });
         }
 
@@ -433,7 +492,7 @@ class MealRecordControllerIT extends IntegrationTestController {
                     .build();
             final var requestFreeMealRecord2 = DtoBuilders.buildCreateMealRecordRequestDtoFreeMeal()
                     .mealTypeId(mealType.getId())
-                    .freeMealDescription("Pamonha")
+                    .freeMealDescription("Canjica")
                     .build();
 
             List.of(
@@ -472,12 +531,93 @@ class MealRecordControllerIT extends IntegrationTestController {
                     .isOk()
                     .expectBody(new ParameterizedTypeReference<PageResponseDto<MealRecordResponseDto>>() {})
                     .value(response -> {
+                        // Validate pagination data
                         assertThat(response).isNotNull();
                         assertThat(response.getTotalPages()).isEqualTo(1);
-                        assertThat(response.getCurrentPage()).isEqualTo(0);
-                        assertThat(response.getPageSize()).isNotNull();
+                        assertThat(response.getCurrentPage()).isZero();
+                        assertThat(response.getPageSize()).isNotNull().isPositive();
                         assertThat(response.getTotalItems()).isEqualTo(4);
                         assertThat(response.getContent()).isNotNull().hasSize(4);
+
+                        final var timeFormatter =
+                                DateTimeFormatter.ofPattern(RequestConstants.DateTimeFormats.TIME_FORMAT);
+
+                        // Validate PlannedMealRecord (isFreeMeal = false)
+                        final var plannedMealRecord = response.getContent().stream()
+                                .filter(Predicate.not(MealRecordResponseDto::isFreeMeal))
+                                .findFirst()
+                                .orElseThrow();
+
+                        assertThat(plannedMealRecord.id()).isNotNull();
+                        assertThat(plannedMealRecord.consumedAt()).isNotNull();
+                        assertThat(plannedMealRecord.isFreeMeal()).isFalse();
+                        assertThat(plannedMealRecord.freeMealDescription()).isNull();
+                        assertThat(plannedMealRecord.quantity()).isEqualByComparingTo(requestPlannedMealRecord1.quantity());
+                        assertThat(plannedMealRecord.unit()).isEqualTo(requestPlannedMealRecord1.unit());
+                        assertThat(plannedMealRecord.notes()).isEqualTo(requestPlannedMealRecord1.notes());
+
+                        assertThat(plannedMealRecord.metadata()).isNotNull();
+                        assertThat(plannedMealRecord.metadata().createdAt()).isNotNull();
+                        assertThat(plannedMealRecord.metadata().updatedAt()).isNotNull();
+
+                        assertThat(plannedMealRecord.mealType()).isNotNull();
+                        assertThat(plannedMealRecord.mealType().id()).isEqualTo(mealType.getId());
+                        assertThat(plannedMealRecord.mealType().name()).isEqualTo(mealType.getName());
+                        assertThat(plannedMealRecord.mealType().scheduledTime().format(timeFormatter))
+                                .isEqualTo(mealType.getScheduledTime().format(timeFormatter));
+                        assertThat(plannedMealRecord.mealType().observation()).isEqualTo(mealType.getObservation());
+                        assertThat(plannedMealRecord.mealType().metadata()).isNotNull();
+                        assertThat(plannedMealRecord.mealType().metadata().createdAt()).isNotNull();
+                        assertThat(plannedMealRecord.mealType().metadata().updatedAt()).isNotNull();
+
+                        assertThat(plannedMealRecord.standardOption()).isNotNull();
+                        assertThat(plannedMealRecord.standardOption().id()).isEqualTo(standardOption.getId());
+                        assertThat(plannedMealRecord.standardOption().optionNumber())
+                                .isEqualTo(standardOption.getOptionNumber().longValue());
+                        assertThat(plannedMealRecord.standardOption().description())
+                                .isEqualTo(standardOption.getDescription());
+                        assertThat(plannedMealRecord.standardOption().metadata()).isNotNull();
+                        assertThat(plannedMealRecord.standardOption().metadata().createdAt()).isNotNull();
+                        assertThat(plannedMealRecord.standardOption().metadata().updatedAt()).isNotNull();
+
+                        // Validate FreeMealRecord (isFreeMeal = true)
+                        final var freeMealRecord = response.getContent().stream()
+                                .filter(MealRecordResponseDto::isFreeMeal)
+                                .findFirst()
+                                .orElseThrow();
+
+                        assertThat(freeMealRecord.id()).isNotNull();
+                        assertThat(freeMealRecord.consumedAt()).isNotNull();
+                        assertThat(freeMealRecord.isFreeMeal()).isTrue();
+                        assertThat(freeMealRecord.freeMealDescription()).isNotNull();
+                        assertThat(freeMealRecord.standardOption()).isNull();
+                        assertThat(freeMealRecord.quantity()).isNotNull();
+                        assertThat(freeMealRecord.unit()).isNotNull();
+                        assertThat(freeMealRecord.notes()).isEqualTo(requestFreeMealRecord1.notes());
+
+                        assertThat(freeMealRecord.metadata()).isNotNull();
+                        assertThat(freeMealRecord.metadata().createdAt()).isNotNull();
+                        assertThat(freeMealRecord.metadata().updatedAt()).isNotNull();
+
+                        assertThat(freeMealRecord.mealType()).isNotNull();
+                        assertThat(freeMealRecord.mealType().id()).isEqualTo(mealType.getId());
+                        assertThat(freeMealRecord.mealType().name()).isEqualTo(mealType.getName());
+                        assertThat(freeMealRecord.mealType().scheduledTime().format(timeFormatter))
+                                .isEqualTo(mealType.getScheduledTime().format(timeFormatter));
+                        assertThat(freeMealRecord.mealType().observation()).isEqualTo(mealType.getObservation());
+                        assertThat(freeMealRecord.mealType().metadata()).isNotNull();
+                        assertThat(freeMealRecord.mealType().metadata().createdAt()).isNotNull();
+                        assertThat(freeMealRecord.mealType().metadata().updatedAt()).isNotNull();
+
+                        // Validate counts
+                        final long plannedMealCount = response.getContent().stream()
+                                .filter(Predicate.not(MealRecordResponseDto::isFreeMeal))
+                                .count();
+                        final long freeMealCount = response.getContent().stream()
+                                .filter(MealRecordResponseDto::isFreeMeal)
+                                .count();
+                        assertThat(plannedMealCount).isEqualTo(2);
+                        assertThat(freeMealCount).isEqualTo(2);
                     });
         }
 
@@ -498,11 +638,11 @@ class MealRecordControllerIT extends IntegrationTestController {
                     .expectBody(new ParameterizedTypeReference<PageResponseDto<MealRecordResponseDto>>() {})
                     .value(response -> {
                         assertThat(response).isNotNull();
-                        assertThat(response.getTotalPages()).isEqualTo(0);
-                        assertThat(response.getCurrentPage()).isEqualTo(0);
+                        assertThat(response.getTotalPages()).isZero();
+                        assertThat(response.getCurrentPage()).isZero();
                         assertThat(response.getPageSize()).isNotNull();
-                        assertThat(response.getTotalItems()).isEqualTo(0);
-                        assertThat(response.getContent()).isNotNull().hasSize(0);
+                        assertThat(response.getTotalItems()).isZero();
+                        assertThat(response.getContent()).isNotNull().isEmpty();
                     });
         }
 
@@ -717,9 +857,9 @@ class MealRecordControllerIT extends IntegrationTestController {
                     .expectBody(MealRecordStatisticsResponseDto.class)
                     .value(response -> {
                         assertThat(response).isNotNull();
-                        assertThat(response.freeMealQuantity()).isEqualTo(0);
-                        assertThat(response.plannedMealQuantity()).isEqualTo(0);
-                        assertThat(response.mealQuantity()).isEqualTo(0);
+                        assertThat(response.freeMealQuantity()).isZero();
+                        assertThat(response.plannedMealQuantity()).isZero();
+                        assertThat(response.mealQuantity()).isZero();
                     });
         }
 
