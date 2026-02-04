@@ -5,16 +5,16 @@ meta {
 }
 
 get {
-  url: {{SERVER_URL}}/v1/meal-record?pageNumber=0&pageSize=2&consumedAtAfter=2025-11-12T00:00:00Z&consumedAtBefore=2025-11-20T23:59:59Z
+  url: {{SERVER_URL}}/v1/meal-record?pageNumber=0&pageSize=5&consumedAtAfter=2025-11-12T00:00:00Z&consumedAtBefore=2050-12-20T23:59:59Z
   body: json
   auth: inherit
 }
 
 params:query {
   pageNumber: 0
-  pageSize: 2
+  pageSize: 5
   consumedAtAfter: 2025-11-12T00:00:00Z
-  consumedAtBefore: 2025-11-20T23:59:59Z
+  consumedAtBefore: 2050-12-20T23:59:59Z
   ~isFreeMeal: true
 }
 
@@ -25,4 +25,287 @@ headers {
 settings {
   encodeUrl: false
   timeout: 0
+}
+
+example {
+  name: success
+  
+  request: {
+    url: {{SERVER_URL}}/v1/meal-record?pageNumber=0&pageSize=5&consumedAtAfter=2025-11-12T00:00:00Z&consumedAtBefore=2050-11-20T23:59:59Z
+    method: GET
+    mode: none
+    params:query: {
+      pageNumber: 0
+      pageSize: 5
+      consumedAtAfter: 2025-11-12T00:00:00Z
+      consumedAtBefore: 2050-11-20T23:59:59Z
+      ~isFreeMeal: true
+    }
+  
+    headers: {
+      Content-Type: application/json
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      transfer-encoding: chunked
+      date: Wed, 04 Feb 2026 12:55:45 GMT
+      keep-alive: timeout=60
+      connection: keep-alive
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "totalPages": 27,
+          "currentPage": 0,
+          "pageSize": 5,
+          "totalItems": 132,
+          "content": [
+            {
+              "id": 1,
+              "consumedAt": "2026-01-08T22:10:13.858714Z",
+              "mealType": {
+                "id": 1,
+                "name": "Breakfast",
+                "scheduledTime": "09:30:00",
+                "observation": "45g protein | 35g carbs | 6g fat | 380 kcal",
+                "metadata": {
+                  "createdAt": "2026-01-08T12:55:13.835577Z",
+                  "updatedAt": "2026-01-08T12:55:13.835577Z"
+                }
+              },
+              "isFreeMeal": true,
+              "standardOption": null,
+              "freeMealDescription": "Pancakes with syrup -- 3 units | Bacon -- 4 strips | Orange juice -- 250ml",
+              "quantity": 1,
+              "unit": "combo",
+              "notes": "Weekend brunch - First day of diet plan, still adjusting",
+              "metadata": {
+                "createdAt": "2026-01-08T22:10:13.858714Z",
+                "updatedAt": "2026-01-08T22:10:13.858714Z"
+              }
+            },
+            {
+              "id": 2,
+              "consumedAt": "2026-01-09T01:35:13.858714Z",
+              "mealType": {
+                "id": 3,
+                "name": "Lunch",
+                "scheduledTime": "12:30:00",
+                "observation": "50g protein | 80g carbs | 8g fat | 600 kcal",
+                "metadata": {
+                  "createdAt": "2026-01-08T12:55:13.839606Z",
+                  "updatedAt": "2026-01-08T12:55:13.839606Z"
+                }
+              },
+              "isFreeMeal": true,
+              "standardOption": null,
+              "freeMealDescription": "BBQ ribs -- 300g | Coleslaw salad -- 100g | Beer (light) -- 350ml",
+              "quantity": 1,
+              "unit": "plate",
+              "notes": "Family BBQ",
+              "metadata": {
+                "createdAt": "2026-01-09T01:35:13.858714Z",
+                "updatedAt": "2026-01-09T01:35:13.858714Z"
+              }
+            },
+            {
+              "id": 3,
+              "consumedAt": "2026-01-09T04:25:13.858714Z",
+              "mealType": {
+                "id": 4,
+                "name": "Afternoon snack",
+                "scheduledTime": "16:00:00",
+                "observation": "20g protein | 30g carbs | 5g fat | 250 kcal",
+                "metadata": {
+                  "createdAt": "2026-01-08T12:55:13.841462Z",
+                  "updatedAt": "2026-01-08T12:55:13.841462Z"
+                }
+              },
+              "isFreeMeal": true,
+              "standardOption": null,
+              "freeMealDescription": "Chips -- 50g | Cheese dip -- 30g",
+              "quantity": 1,
+              "unit": "snack",
+              "notes": "Watching sports",
+              "metadata": {
+                "createdAt": "2026-01-09T04:25:13.858714Z",
+                "updatedAt": "2026-01-09T04:25:13.858714Z"
+              }
+            },
+            {
+              "id": 4,
+              "consumedAt": "2026-01-09T09:40:13.858714Z",
+              "mealType": {
+                "id": 5,
+                "name": "Dinner",
+                "scheduledTime": "21:00:00",
+                "observation": "45g protein | 30g carbs | 5g fat | 360 kcal",
+                "metadata": {
+                  "createdAt": "2026-01-08T12:55:13.843317Z",
+                  "updatedAt": "2026-01-08T12:55:13.843317Z"
+                }
+              },
+              "isFreeMeal": false,
+              "standardOption": {
+                "id": 14,
+                "optionNumber": 2,
+                "description": "Grilled chicken -- 140g | Mashed potato or sweet potato (no milk) -- 130g or 170g | Mixed vegetables -- 100g | Olive oil -- 5g",
+                "metadata": {
+                  "createdAt": "2026-01-08T12:55:13.854994Z",
+                  "updatedAt": "2026-01-08T12:55:13.854994Z"
+                }
+              },
+              "freeMealDescription": null,
+              "quantity": 1,
+              "unit": "serving",
+              "notes": "Back on track for dinner",
+              "metadata": {
+                "createdAt": "2026-01-09T09:40:13.858714Z",
+                "updatedAt": "2026-01-09T09:40:13.858714Z"
+              }
+            },
+            {
+              "id": 5,
+              "consumedAt": "2026-01-09T12:15:13.858714Z",
+              "mealType": {
+                "id": 6,
+                "name": "Evening snack",
+                "scheduledTime": "23:30:00",
+                "observation": "20g protein | 15g carbs | 3g fat | 170 kcal",
+                "metadata": {
+                  "createdAt": "2026-01-08T12:55:13.845187Z",
+                  "updatedAt": "2026-01-08T12:55:13.845187Z"
+                }
+              },
+              "isFreeMeal": false,
+              "standardOption": {
+                "id": 16,
+                "optionNumber": 1,
+                "description": "Casein protein -- 30g | Peanut butter -- 10g",
+                "metadata": {
+                  "createdAt": "2026-01-08T12:55:13.856838Z",
+                  "updatedAt": "2026-01-08T12:55:13.856838Z"
+                }
+              },
+              "freeMealDescription": null,
+              "quantity": 1,
+              "unit": "serving",
+              "notes": null,
+              "metadata": {
+                "createdAt": "2026-01-09T12:15:13.858714Z",
+                "updatedAt": "2026-01-09T12:15:13.858714Z"
+              }
+            }
+          ]
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: success | empty
+  
+  request: {
+    url: {{SERVER_URL}}/v1/meal-record?pageNumber=0&pageSize=5&consumedAtAfter=2025-11-12T00:00:00Z&consumedAtBefore=2050-11-20T23:59:59Z
+    method: GET
+    mode: none
+    params:query: {
+      pageNumber: 0
+      pageSize: 5
+      consumedAtAfter: 2025-11-12T00:00:00Z
+      consumedAtBefore: 2050-11-20T23:59:59Z
+      ~isFreeMeal: true
+    }
+  
+    headers: {
+      Content-Type: application/json
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      transfer-encoding: chunked
+      date: Wed, 04 Feb 2026 12:56:42 GMT
+      keep-alive: timeout=60
+      connection: keep-alive
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "totalPages": 0,
+          "currentPage": 0,
+          "pageSize": 5,
+          "totalItems": 0,
+          "content": []
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: fail | invalid property
+  
+  request: {
+    url: {{SERVER_URL}}/v1/meal-record?pageNumber=0&pageSize=5&consumedAtAfter=2025-11-12T00:00:00Z&consumedAtBefore=2050-13-20T23:59:59Z
+    method: GET
+    mode: none
+    params:query: {
+      pageNumber: 0
+      pageSize: 5
+      consumedAtAfter: 2025-11-12T00:00:00Z
+      consumedAtBefore: 2050-13-20T23:59:59Z
+      ~isFreeMeal: true
+    }
+  
+    headers: {
+      Content-Type: application/json
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      transfer-encoding: chunked
+      date: Wed, 04 Feb 2026 12:57:02 GMT
+      connection: close
+    }
+  
+    status: {
+      code: 400
+      text: Bad Request
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "code": "002",
+          "timestamp": "2026-02-04T12:57:02.115439801Z",
+          "message": "Invalid values",
+          "customMessage": "[ propertyPath: consumedAtBefore - errorMotive: date-time must be in the following format: yyyy-MM-ddTHH:mm:ssZ (example: 2025-01-15T14:30:00Z) - valueProvided: 2050-13-20T23:59:59Z ]",
+          "httpStatusCode": 400
+        }
+      '''
+    }
+  }
 }
