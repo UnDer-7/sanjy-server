@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import br.com.gorillaroxo.sanjy.server.core.exception.ExceptionCode;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordCreatedResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisticsResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseDto;
@@ -66,19 +67,29 @@ class MealRecordControllerIT extends IntegrationTestController {
                 .exchange()
                 .expectStatus()
                 .isCreated()
-                .expectBody(MealRecordResponseDto.class)
+                .expectBody(MealRecordCreatedResponseDto.class)
                 .value(response -> {
+                    // MealRecordResponseDto root fields
                     assertThat(response.id()).isNotNull();
                     assertThat(response.consumedAt()).isNotNull();
-                    assertThat(response.mealType().id()).isEqualTo(mealType.getId());
                     assertThat(response.isFreeMeal()).isEqualTo(request.isFreeMeal());
-                    assertThat(response.standardOption().id()).isEqualTo(standardOption.getId());
                     assertThat(response.freeMealDescription()).isEqualTo(request.freeMealDescription());
                     assertThat(response.quantity()).isEqualTo(request.quantity());
                     assertThat(response.unit()).isEqualTo(request.unit());
                     assertThat(response.notes()).isEqualTo(request.notes());
+
+                    // MealRecordResponseDto.metadata
+                    assertThat(response.metadata()).isNotNull();
                     assertThat(response.metadata().createdAt()).isNotNull();
                     assertThat(response.metadata().updatedAt()).isNotNull();
+
+                    // MealRecordResponseDto.mealType (MealTypeSimplifiedResponseDto)
+                    assertThat(response.mealType()).isNotNull();
+                    assertThat(response.mealType().id()).isEqualTo(mealType.getId());
+
+                    // MealRecordResponseDto.standardOption (StandardOptionSimplifiedResponseDto)
+                    assertThat(response.standardOption()).isNotNull();
+                    assertThat(response.standardOption().id()).isEqualTo(standardOption.getId());
                 });
     }
 

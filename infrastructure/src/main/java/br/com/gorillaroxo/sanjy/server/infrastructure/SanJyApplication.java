@@ -7,6 +7,8 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateStandardOpti
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.PageRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.SearchMealRecordParamRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.IdOnlyResponse;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordCreatedResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealTypeSimplifiedResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseMealRecordDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.StandardOptionSimplifiedResponseDto;
@@ -39,7 +41,9 @@ import org.springframework.context.annotation.ComponentScan;
     ErrorResponseDto.class,
     PageResponseMealRecordDto.class,
     MealTypeSimplifiedResponseDto.class,
-    StandardOptionSimplifiedResponseDto.class
+    StandardOptionSimplifiedResponseDto.class,
+    IdOnlyResponse.class,
+    MealRecordCreatedResponseDto.class
 })
 public class SanJyApplication {
 

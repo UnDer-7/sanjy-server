@@ -5,6 +5,7 @@ import br.com.gorillaroxo.sanjy.server.core.domain.MealRecordStatisticsDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.MealTypeDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.StandardOptionDomain;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordCreatedResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisticsResponseDto;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealRecordEntity;
@@ -26,6 +27,8 @@ public interface MealRecordMapper {
 
     // DTOs
     MealRecordResponseDto toDto(MealRecordDomain domain);
+
+    MealRecordCreatedResponseDto toCreatedDto(MealRecordDomain domain);
 
     List<MealRecordResponseDto> toDto(List<MealRecordDomain> domain);
 
