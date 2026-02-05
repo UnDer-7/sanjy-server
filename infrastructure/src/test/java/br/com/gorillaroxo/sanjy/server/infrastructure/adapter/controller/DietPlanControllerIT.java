@@ -369,6 +369,8 @@ class DietPlanControllerIT extends IntegrationTestController {
         void should_return_active_diet_plan() {
             // Given
             dietPlanRepository.deleteAll();
+            final var timeFormatter =
+                    DateTimeFormatter.ofPattern(RequestConstants.DateTimeFormats.TIME_FORMAT);
             final var dietPlanRequest1 = DtoBuilders.buildCreateDietPlanRequestDto()
                     .name("Old Diet Plan")
                     .mealTypes(List.of(DtoBuilders.buildCreateMealTypesRequestDto().build()))
@@ -415,12 +417,71 @@ class DietPlanControllerIT extends IntegrationTestController {
                     .isOk()
                     .expectBody(DietPlanCompleteResponseDto.class)
                     .value(response -> {
+                        // DietPlanCompleteResponseDto root fields
                         assertThat(response.id()).isNotNull();
                         assertThat(response.name()).isNotBlank().isEqualTo(dietPlanRequest2.name());
+                        assertThat(response.startDate()).isEqualTo(dietPlanRequest2.startDate());
+                        assertThat(response.endDate()).isEqualTo(dietPlanRequest2.endDate());
+                        assertThat(response.dailyCalories()).isEqualTo(dietPlanRequest2.dailyCalories());
+                        assertThat(response.dailyProteinInG()).isEqualTo(dietPlanRequest2.dailyProteinInG());
+                        assertThat(response.dailyCarbsInG()).isEqualTo(dietPlanRequest2.dailyCarbsInG());
+                        assertThat(response.dailyFatInG()).isEqualTo(dietPlanRequest2.dailyFatInG());
+                        assertThat(response.goal()).isEqualTo(dietPlanRequest2.goal());
+                        assertThat(response.nutritionistNotes()).isEqualTo(dietPlanRequest2.nutritionistNotes());
+                        assertThat(response.isActive()).isTrue();
+
+                        // DietPlanCompleteResponseDto.metadata
+                        assertThat(response.metadata()).isNotNull();
+                        assertThat(response.metadata().createdAt()).isNotNull();
+                        assertThat(response.metadata().updatedAt()).isNotNull();
+
+                        // DietPlanCompleteResponseDto.mealTypes
                         assertThat(response.mealTypes())
                                 .isNotEmpty()
                                 .hasSize(dietPlanRequest2.mealTypes().size());
-                        assertThat(response.isActive()).isTrue();
+
+                        // Validate each MealType
+                        for (int i = 0; i < dietPlanRequest2.mealTypes().size(); i++) {
+                            final var requestMealType = dietPlanRequest2.mealTypes().get(i);
+                            final var responseMealType = response.mealTypes().get(i);
+
+                            // MealTypeResponseDto fields
+                            assertThat(responseMealType.id()).isNotNull();
+                            assertThat(responseMealType.name()).isEqualTo(requestMealType.name());
+                            assertThat(responseMealType.scheduledTime().format(timeFormatter))
+                                    .isEqualTo(requestMealType.scheduledTime().format(timeFormatter));
+                            assertThat(responseMealType.observation()).isEqualTo(requestMealType.observation());
+                            assertThat(responseMealType.dietPlanId()).isEqualTo(response.id());
+
+                            // MealTypeResponseDto.metadata
+                            assertThat(responseMealType.metadata()).isNotNull();
+                            assertThat(responseMealType.metadata().createdAt()).isNotNull();
+                            assertThat(responseMealType.metadata().updatedAt()).isNotNull();
+
+                            // MealTypeResponseDto.standardOptions
+                            assertThat(responseMealType.standardOptions())
+                                    .isNotEmpty()
+                                    .hasSize(requestMealType.standardOptions().size());
+
+                            // Validate each StandardOption
+                            for (int j = 0; j < requestMealType.standardOptions().size(); j++) {
+                                final var requestStandardOption = requestMealType.standardOptions().get(j);
+                                final var responseStandardOption = responseMealType.standardOptions().get(j);
+
+                                // StandardOptionResponseDto fields
+                                assertThat(responseStandardOption.id()).isNotNull();
+                                assertThat(responseStandardOption.optionNumber())
+                                        .isEqualTo(requestStandardOption.optionNumber());
+                                assertThat(responseStandardOption.description())
+                                        .isEqualTo(requestStandardOption.description());
+                                assertThat(responseStandardOption.mealTypeId()).isEqualTo(responseMealType.id());
+
+                                // StandardOptionResponseDto.metadata
+                                assertThat(responseStandardOption.metadata()).isNotNull();
+                                assertThat(responseStandardOption.metadata().createdAt()).isNotNull();
+                                assertThat(responseStandardOption.metadata().updatedAt()).isNotNull();
+                            }
+                        }
                     });
         }
 
