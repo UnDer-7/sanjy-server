@@ -37,8 +37,7 @@ class DietPlanControllerIT extends IntegrationTestController {
         void should_create_diet_plan() {
             dietPlanRepository.deleteAll();
             final var request = DtoBuilders.buildCreateDietPlanRequestDto().build();
-            final var timeFormatter =
-                    DateTimeFormatter.ofPattern(RequestConstants.DateTimeFormats.TIME_FORMAT);
+            final var timeFormatter = DateTimeFormatter.ofPattern(RequestConstants.DateTimeFormats.TIME_FORMAT);
 
             webTestClient
                     .post()
@@ -96,19 +95,24 @@ class DietPlanControllerIT extends IntegrationTestController {
                                 .isNotEmpty()
                                 .hasSize(requestMealType.standardOptions().size());
 
-                        final var requestStandardOption = requestMealType.standardOptions().getFirst();
-                        final var responseStandardOption = responseMealType.standardOptions().getFirst();
+                        final var requestStandardOption =
+                                requestMealType.standardOptions().getFirst();
+                        final var responseStandardOption =
+                                responseMealType.standardOptions().getFirst();
 
                         // StandardOptionResponseDto fields
                         assertThat(responseStandardOption.id()).isNotNull();
-                        assertThat(responseStandardOption.optionNumber()).isEqualTo(requestStandardOption.optionNumber());
+                        assertThat(responseStandardOption.optionNumber())
+                                .isEqualTo(requestStandardOption.optionNumber());
                         assertThat(responseStandardOption.description()).isEqualTo(requestStandardOption.description());
                         assertThat(responseStandardOption.mealTypeId()).isEqualTo(responseMealType.id());
 
                         // StandardOptionResponseDto.metadata
                         assertThat(responseStandardOption.metadata()).isNotNull();
-                        assertThat(responseStandardOption.metadata().createdAt()).isNotNull();
-                        assertThat(responseStandardOption.metadata().updatedAt()).isNotNull();
+                        assertThat(responseStandardOption.metadata().createdAt())
+                                .isNotNull();
+                        assertThat(responseStandardOption.metadata().updatedAt())
+                                .isNotNull();
                     });
         }
 
@@ -369,17 +373,21 @@ class DietPlanControllerIT extends IntegrationTestController {
         void should_return_active_diet_plan() {
             // Given
             dietPlanRepository.deleteAll();
-            final var timeFormatter =
-                    DateTimeFormatter.ofPattern(RequestConstants.DateTimeFormats.TIME_FORMAT);
+            final var timeFormatter = DateTimeFormatter.ofPattern(RequestConstants.DateTimeFormats.TIME_FORMAT);
             final var dietPlanRequest1 = DtoBuilders.buildCreateDietPlanRequestDto()
                     .name("Old Diet Plan")
-                    .mealTypes(List.of(DtoBuilders.buildCreateMealTypesRequestDto().build()))
+                    .mealTypes(
+                            List.of(DtoBuilders.buildCreateMealTypesRequestDto().build()))
                     .build();
             final var dietPlanRequest2 = DtoBuilders.buildCreateDietPlanRequestDto()
                     .name("New Diet Plan Test")
                     .mealTypes(List.of(
-                            DtoBuilders.buildCreateMealTypesRequestDto().name("one").build(),
-                            DtoBuilders.buildCreateMealTypesRequestDto().name("two").build(),
+                            DtoBuilders.buildCreateMealTypesRequestDto()
+                                    .name("one")
+                                    .build(),
+                            DtoBuilders.buildCreateMealTypesRequestDto()
+                                    .name("two")
+                                    .build(),
                             DtoBuilders.buildCreateMealTypesRequestDto()
                                     .name("three")
                                     .build()))
@@ -442,7 +450,8 @@ class DietPlanControllerIT extends IntegrationTestController {
 
                         // Validate each MealType
                         for (int i = 0; i < dietPlanRequest2.mealTypes().size(); i++) {
-                            final var requestMealType = dietPlanRequest2.mealTypes().get(i);
+                            final var requestMealType =
+                                    dietPlanRequest2.mealTypes().get(i);
                             final var responseMealType = response.mealTypes().get(i);
 
                             // MealTypeResponseDto fields
@@ -464,9 +473,13 @@ class DietPlanControllerIT extends IntegrationTestController {
                                     .hasSize(requestMealType.standardOptions().size());
 
                             // Validate each StandardOption
-                            for (int j = 0; j < requestMealType.standardOptions().size(); j++) {
-                                final var requestStandardOption = requestMealType.standardOptions().get(j);
-                                final var responseStandardOption = responseMealType.standardOptions().get(j);
+                            for (int j = 0;
+                                    j < requestMealType.standardOptions().size();
+                                    j++) {
+                                final var requestStandardOption =
+                                        requestMealType.standardOptions().get(j);
+                                final var responseStandardOption =
+                                        responseMealType.standardOptions().get(j);
 
                                 // StandardOptionResponseDto fields
                                 assertThat(responseStandardOption.id()).isNotNull();
@@ -478,8 +491,10 @@ class DietPlanControllerIT extends IntegrationTestController {
 
                                 // StandardOptionResponseDto.metadata
                                 assertThat(responseStandardOption.metadata()).isNotNull();
-                                assertThat(responseStandardOption.metadata().createdAt()).isNotNull();
-                                assertThat(responseStandardOption.metadata().updatedAt()).isNotNull();
+                                assertThat(responseStandardOption.metadata().createdAt())
+                                        .isNotNull();
+                                assertThat(responseStandardOption.metadata().updatedAt())
+                                        .isNotNull();
                             }
                         }
                     });

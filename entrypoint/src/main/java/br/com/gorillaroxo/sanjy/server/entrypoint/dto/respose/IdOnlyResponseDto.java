@@ -8,5 +8,4 @@ public record IdOnlyResponseDto(
                 description = "Unique identifier of the entity",
                 example = "123",
                 requiredMode = Schema.RequiredMode.REQUIRED)
-        Long id) {
-}
+        Long id) {}

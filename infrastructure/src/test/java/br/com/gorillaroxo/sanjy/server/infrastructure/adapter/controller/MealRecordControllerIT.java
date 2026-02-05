@@ -332,7 +332,8 @@ class MealRecordControllerIT extends IntegrationTestController {
                         assertThat(plannedMealRecord.consumedAt()).isNotNull();
                         assertThat(plannedMealRecord.isFreeMeal()).isFalse();
                         assertThat(plannedMealRecord.freeMealDescription()).isNull();
-                        assertThat(plannedMealRecord.quantity()).isEqualByComparingTo(requestPlannedMealRecord.quantity());
+                        assertThat(plannedMealRecord.quantity())
+                                .isEqualByComparingTo(requestPlannedMealRecord.quantity());
                         assertThat(plannedMealRecord.unit()).isEqualTo(requestPlannedMealRecord.unit());
                         assertThat(plannedMealRecord.notes()).isEqualTo(requestPlannedMealRecord.notes());
 
@@ -350,17 +351,26 @@ class MealRecordControllerIT extends IntegrationTestController {
                                 .isEqualTo(mealType.getScheduledTime().format(timeFormatter));
                         assertThat(plannedMealRecord.mealType().observation()).isEqualTo(mealType.getObservation());
                         assertThat(plannedMealRecord.mealType().metadata()).isNotNull();
-                        assertThat(plannedMealRecord.mealType().metadata().createdAt()).isNotNull();
-                        assertThat(plannedMealRecord.mealType().metadata().updatedAt()).isNotNull();
+                        assertThat(plannedMealRecord.mealType().metadata().createdAt())
+                                .isNotNull();
+                        assertThat(plannedMealRecord.mealType().metadata().updatedAt())
+                                .isNotNull();
 
                         assertThat(plannedMealRecord.standardOption()).isNotNull();
                         assertThat(plannedMealRecord.standardOption().id()).isEqualTo(standardOption.getId());
-                        assertThat(plannedMealRecord.standardOption().optionNumber().intValue()).isEqualTo(standardOption.getOptionNumber());
+                        assertThat(plannedMealRecord
+                                        .standardOption()
+                                        .optionNumber()
+                                        .intValue())
+                                .isEqualTo(standardOption.getOptionNumber());
                         assertThat(plannedMealRecord.standardOption().description())
                                 .isEqualTo(standardOption.getDescription());
-                        assertThat(plannedMealRecord.standardOption().metadata()).isNotNull();
-                        assertThat(plannedMealRecord.standardOption().metadata().createdAt()).isNotNull();
-                        assertThat(plannedMealRecord.standardOption().metadata().updatedAt()).isNotNull();
+                        assertThat(plannedMealRecord.standardOption().metadata())
+                                .isNotNull();
+                        assertThat(plannedMealRecord.standardOption().metadata().createdAt())
+                                .isNotNull();
+                        assertThat(plannedMealRecord.standardOption().metadata().updatedAt())
+                                .isNotNull();
 
                         // Validate FreeMealRecord (isFreeMeal = true)
                         final var freeMealRecord = response.stream()
@@ -389,8 +399,10 @@ class MealRecordControllerIT extends IntegrationTestController {
                                 .isEqualTo(mealType.getScheduledTime().format(timeFormatter));
                         assertThat(freeMealRecord.mealType().observation()).isEqualTo(mealType.getObservation());
                         assertThat(freeMealRecord.mealType().metadata()).isNotNull();
-                        assertThat(freeMealRecord.mealType().metadata().createdAt()).isNotNull();
-                        assertThat(freeMealRecord.mealType().metadata().updatedAt()).isNotNull();
+                        assertThat(freeMealRecord.mealType().metadata().createdAt())
+                                .isNotNull();
+                        assertThat(freeMealRecord.mealType().metadata().updatedAt())
+                                .isNotNull();
                     });
         }
 
@@ -552,7 +564,8 @@ class MealRecordControllerIT extends IntegrationTestController {
                         assertThat(plannedMealRecord.consumedAt()).isNotNull();
                         assertThat(plannedMealRecord.isFreeMeal()).isFalse();
                         assertThat(plannedMealRecord.freeMealDescription()).isNull();
-                        assertThat(plannedMealRecord.quantity()).isEqualByComparingTo(requestPlannedMealRecord1.quantity());
+                        assertThat(plannedMealRecord.quantity())
+                                .isEqualByComparingTo(requestPlannedMealRecord1.quantity());
                         assertThat(plannedMealRecord.unit()).isEqualTo(requestPlannedMealRecord1.unit());
                         assertThat(plannedMealRecord.notes()).isEqualTo(requestPlannedMealRecord1.notes());
 
@@ -567,8 +580,10 @@ class MealRecordControllerIT extends IntegrationTestController {
                                 .isEqualTo(mealType.getScheduledTime().format(timeFormatter));
                         assertThat(plannedMealRecord.mealType().observation()).isEqualTo(mealType.getObservation());
                         assertThat(plannedMealRecord.mealType().metadata()).isNotNull();
-                        assertThat(plannedMealRecord.mealType().metadata().createdAt()).isNotNull();
-                        assertThat(plannedMealRecord.mealType().metadata().updatedAt()).isNotNull();
+                        assertThat(plannedMealRecord.mealType().metadata().createdAt())
+                                .isNotNull();
+                        assertThat(plannedMealRecord.mealType().metadata().updatedAt())
+                                .isNotNull();
 
                         assertThat(plannedMealRecord.standardOption()).isNotNull();
                         assertThat(plannedMealRecord.standardOption().id()).isEqualTo(standardOption.getId());
@@ -576,9 +591,12 @@ class MealRecordControllerIT extends IntegrationTestController {
                                 .isEqualTo(standardOption.getOptionNumber().longValue());
                         assertThat(plannedMealRecord.standardOption().description())
                                 .isEqualTo(standardOption.getDescription());
-                        assertThat(plannedMealRecord.standardOption().metadata()).isNotNull();
-                        assertThat(plannedMealRecord.standardOption().metadata().createdAt()).isNotNull();
-                        assertThat(plannedMealRecord.standardOption().metadata().updatedAt()).isNotNull();
+                        assertThat(plannedMealRecord.standardOption().metadata())
+                                .isNotNull();
+                        assertThat(plannedMealRecord.standardOption().metadata().createdAt())
+                                .isNotNull();
+                        assertThat(plannedMealRecord.standardOption().metadata().updatedAt())
+                                .isNotNull();
 
                         // Validate FreeMealRecord (isFreeMeal = true)
                         final var freeMealRecord = response.getContent().stream()
@@ -606,8 +624,10 @@ class MealRecordControllerIT extends IntegrationTestController {
                                 .isEqualTo(mealType.getScheduledTime().format(timeFormatter));
                         assertThat(freeMealRecord.mealType().observation()).isEqualTo(mealType.getObservation());
                         assertThat(freeMealRecord.mealType().metadata()).isNotNull();
-                        assertThat(freeMealRecord.mealType().metadata().createdAt()).isNotNull();
-                        assertThat(freeMealRecord.mealType().metadata().updatedAt()).isNotNull();
+                        assertThat(freeMealRecord.mealType().metadata().createdAt())
+                                .isNotNull();
+                        assertThat(freeMealRecord.mealType().metadata().updatedAt())
+                                .isNotNull();
 
                         // Validate counts
                         final long plannedMealCount = response.getContent().stream()

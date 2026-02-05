@@ -3,10 +3,9 @@ package br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-
 import java.math.BigDecimal;
 import java.time.Instant;
+import lombok.Builder;
 
 @Builder
 @Schema(description = "Response DTO representing a meal record - a historical record of a food item consumed")

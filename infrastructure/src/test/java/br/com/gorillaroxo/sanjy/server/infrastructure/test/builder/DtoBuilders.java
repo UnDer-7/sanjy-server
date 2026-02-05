@@ -47,32 +47,31 @@ public final class DtoBuilders {
                         "Pão francês sem miolo -- 45g | Ovos mexidos -- 3 ovos (150g) | Queijo minas frescal zero lactose -- 25g");
     }
 
-    public static CreateMealRecordRequestDto.CreateMealRecordRequestDtoBuilder
-    buildCreateMealRecordRequestDto() {
+    public static CreateMealRecordRequestDto.CreateMealRecordRequestDtoBuilder buildCreateMealRecordRequestDto() {
         return CreateMealRecordRequestDto.builder()
-            .mealTypeId(100L)
-            .consumedAt(Instant.now().minus(2, ChronoUnit.MINUTES))
-            .isFreeMeal(false)
-            .standardOptionId(34L)
-            .freeMealDescription(null)
-            .quantity(BigDecimal.valueOf(1.5))
-            .unit("units")
-            .notes(null);
+                .mealTypeId(100L)
+                .consumedAt(Instant.now().minus(2, ChronoUnit.MINUTES))
+                .isFreeMeal(false)
+                .standardOptionId(34L)
+                .freeMealDescription(null)
+                .quantity(BigDecimal.valueOf(1.5))
+                .unit("units")
+                .notes(null);
     }
 
     public static CreateMealRecordRequestDto.CreateMealRecordRequestDtoBuilder
             buildCreateMealRecordRequestDtoFreeMeal() {
         return buildCreateMealRecordRequestDto()
-            .isFreeMeal(true)
-            .standardOptionId(null)
-            .freeMealDescription("BigMac");
+                .isFreeMeal(true)
+                .standardOptionId(null)
+                .freeMealDescription("BigMac");
     }
 
     public static CreateMealRecordRequestDto.CreateMealRecordRequestDtoBuilder
             buildCreateMealRecordRequestDtoPlannedMeal() {
         return buildCreateMealRecordRequestDtoFreeMeal()
-            .isFreeMeal(false)
-            .standardOptionId(34L)
-            .freeMealDescription(null);
+                .isFreeMeal(false)
+                .standardOptionId(34L)
+                .freeMealDescription(null);
     }
 }
