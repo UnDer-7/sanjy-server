@@ -25,9 +25,9 @@ public record MealRecordCreatedResponseDto(
         Instant consumedAt,
 
         @Schema(
-                description = "Meal type information (breakfast, lunch, snack, dinner, etc...).",
+                description = "Meal type information (breakfast, lunch, snack, dinner, etc.). Returns only the ID.",
                 requiredMode = Schema.RequiredMode.REQUIRED)
-        IdOnlyResponse mealType,
+        IdOnlyResponseDto mealType,
 
         @Schema(
                 description =
@@ -39,9 +39,9 @@ public record MealRecordCreatedResponseDto(
 
         @Schema(description = """
                     The selected diet plan option that was consumed. This field contains the standard option chosen from the diet plan. \
-                    NULL when isFreeMeal = TRUE (free meals don't follow the plan)
+                    NULL when isFreeMeal = TRUE (free meals don't follow the plan). Returns only the ID.
                     """, nullable = true, requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-        IdOnlyResponse standardOption,
+        IdOnlyResponseDto standardOption,
 
         @Schema(
                 description = "Text description of the free meal item consumed. "

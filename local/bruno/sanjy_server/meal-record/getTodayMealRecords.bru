@@ -57,150 +57,62 @@ example {
       type: json
       content: '''
         [
-          {
-            "id": 129,
-            "consumedAt": "2026-02-04T07:09:09.555854Z",
-            "mealType": {
-              "id": 2,
-              "name": "Pre-workout snack",
-              "scheduledTime": "06:20:00",
-              "observation": "25g protein | 40g carbs | 3g fat | 285 kcal",
-              "metadata": {
-                "createdAt": "2026-01-08T12:49:09.477776Z",
-                "updatedAt": "2026-01-08T12:49:09.477776Z"
-              }
+            {
+                "id": 129,
+                "consumedAt": "2026-02-04T07:09:09.555854Z",
+                "mealType": {
+                    "id": 2,
+                    "name": "Pre-workout snack",
+                    "scheduledTime": "06:20:00",
+                    "observation": "25g protein | 40g carbs | 3g fat | 285 kcal",
+                    "metadata": {
+                        "createdAt": "2026-01-08T12:49:09.477776Z",
+                        "updatedAt": "2026-01-08T12:49:09.477776Z"
+                    }
+                },
+                "isFreeMeal": false,
+                "standardOption": {
+                    "id": 4,
+                    "optionNumber": 1,
+                    "description": "Banana -- 1 unit (90g) | Whey protein isolate -- 30g | Oats -- 20g",
+                    "metadata": {
+                        "createdAt": "2026-01-08T12:49:09.490238Z",
+                        "updatedAt": "2026-01-08T12:49:09.490238Z"
+                    }
+                },
+                "freeMealDescription": null,
+                "quantity": 1,
+                "unit": "serving",
+                "notes": "Good energy for workout",
+                "metadata": {
+                    "createdAt": "2026-02-04T07:09:09.555854Z",
+                    "updatedAt": "2026-02-04T07:09:09.555854Z"
+                }
             },
-            "isFreeMeal": false,
-            "standardOption": {
-              "id": 4,
-              "optionNumber": 1,
-              "description": "Banana -- 1 unit (90g) | Whey protein isolate -- 30g | Oats -- 20g",
-              "metadata": {
-                "createdAt": "2026-01-08T12:49:09.490238Z",
-                "updatedAt": "2026-01-08T12:49:09.490238Z"
-              }
-            },
-            "freeMealDescription": null,
-            "quantity": 1,
-            "unit": "serving",
-            "notes": "Good energy for workout",
-            "metadata": {
-              "createdAt": "2026-02-04T07:09:09.555854Z",
-              "updatedAt": "2026-02-04T07:09:09.555854Z"
+            {
+                "id": 132,
+                "consumedAt": "2026-02-04T12:39:09.555854Z",
+                "mealType": {
+                    "id": 4,
+                    "name": "Afternoon snack",
+                    "scheduledTime": "16:00:00",
+                    "observation": "20g protein | 30g carbs | 5g fat | 250 kcal",
+                    "metadata": {
+                        "createdAt": "2026-01-08T12:49:09.481775Z",
+                        "updatedAt": "2026-01-08T12:49:09.481775Z"
+                    }
+                },
+                "isFreeMeal": true,
+                "standardOption": null,
+                "freeMealDescription": "Chocolate bar -- 1 unit (50g) | Cappuccino -- 200ml",
+                "quantity": 1,
+                "unit": "combo",
+                "notes": "Sweet craving after lunch",
+                "metadata": {
+                    "createdAt": "2026-02-04T12:39:09.555854Z",
+                    "updatedAt": "2026-02-04T12:39:09.555854Z"
+                }
             }
-          },
-          {
-            "id": 130,
-            "consumedAt": "2026-02-04T10:19:09.555854Z",
-            "mealType": {
-              "id": 1,
-              "name": "Breakfast",
-              "scheduledTime": "09:30:00",
-              "observation": "45g protein | 35g carbs | 6g fat | 380 kcal",
-              "metadata": {
-                "createdAt": "2026-01-08T12:49:09.474519Z",
-                "updatedAt": "2026-01-08T12:49:09.474519Z"
-              }
-            },
-            "isFreeMeal": false,
-            "standardOption": {
-              "id": 3,
-              "optionNumber": 3,
-              "description": "Tapioca -- 50g | Shredded chicken breast -- 80g | Tomato -- 50g | Zero lactose cottage cheese -- 30g",
-              "metadata": {
-                "createdAt": "2026-01-08T12:49:09.487768Z",
-                "updatedAt": "2026-01-08T12:49:09.487768Z"
-              }
-            },
-            "freeMealDescription": null,
-            "quantity": 1,
-            "unit": "serving",
-            "notes": null,
-            "metadata": {
-              "createdAt": "2026-02-04T10:19:09.555854Z",
-              "updatedAt": "2026-02-04T10:19:09.555854Z"
-            }
-          },
-          {
-            "id": 131,
-            "consumedAt": "2026-02-04T12:19:09.555854Z",
-            "mealType": {
-              "id": 3,
-              "name": "Lunch",
-              "scheduledTime": "12:30:00",
-              "observation": "50g protein | 80g carbs | 8g fat | 600 kcal",
-              "metadata": {
-                "createdAt": "2026-01-08T12:49:09.479801Z",
-                "updatedAt": "2026-01-08T12:49:09.479801Z"
-              }
-            },
-            "isFreeMeal": false,
-            "standardOption": {
-              "id": 7,
-              "optionNumber": 1,
-              "description": "Grilled chicken breast -- 150g | Brown rice -- 100g (cooked) | Black beans -- 80g | Mixed salad -- 100g | Olive oil -- 5g",
-              "metadata": {
-                "createdAt": "2026-01-08T12:49:09.492266Z",
-                "updatedAt": "2026-01-08T12:49:09.492266Z"
-              }
-            },
-            "freeMealDescription": null,
-            "quantity": 1,
-            "unit": "serving",
-            "notes": "Feeling satisfied",
-            "metadata": {
-              "createdAt": "2026-02-04T12:19:09.555854Z",
-              "updatedAt": "2026-02-04T12:19:09.555854Z"
-            }
-          },
-          {
-            "id": 132,
-            "consumedAt": "2026-02-04T12:39:09.555854Z",
-            "mealType": {
-              "id": 4,
-              "name": "Afternoon snack",
-              "scheduledTime": "16:00:00",
-              "observation": "20g protein | 30g carbs | 5g fat | 250 kcal",
-              "metadata": {
-                "createdAt": "2026-01-08T12:49:09.481775Z",
-                "updatedAt": "2026-01-08T12:49:09.481775Z"
-              }
-            },
-            "isFreeMeal": true,
-            "standardOption": null,
-            "freeMealDescription": "Chocolate bar -- 1 unit (50g) | Cappuccino -- 200ml",
-            "quantity": 1,
-            "unit": "combo",
-            "notes": "Sweet craving after lunch",
-            "metadata": {
-              "createdAt": "2026-02-04T12:39:09.555854Z",
-              "updatedAt": "2026-02-04T12:39:09.555854Z"
-            }
-          },
-          {
-            "id": 133,
-            "consumedAt": "2026-02-04T12:50:06.643716Z",
-            "mealType": {
-              "id": 1,
-              "name": "Breakfast",
-              "scheduledTime": "09:30:00",
-              "observation": "45g protein | 35g carbs | 6g fat | 380 kcal",
-              "metadata": {
-                "createdAt": "2026-01-08T12:49:09.474519Z",
-                "updatedAt": "2026-01-08T12:49:09.474519Z"
-              }
-            },
-            "isFreeMeal": true,
-            "standardOption": null,
-            "freeMealDescription": "pacote de biscoito",
-            "quantity": 1,
-            "unit": "serving",
-            "notes": null,
-            "metadata": {
-              "createdAt": "2026-02-04T12:50:06.667931Z",
-              "updatedAt": "2026-02-04T12:50:06.667952Z"
-            }
-          }
         ]
       '''
     }
@@ -252,7 +164,7 @@ example {
   request: {
     url: {{SERVER_URL}}/v1/meal-record/today
     method: GET
-    mode: json
+    mode: none
     params:query: {
       ~timezone: America/Sao_Paulo
     }
