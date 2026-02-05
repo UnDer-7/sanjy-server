@@ -39,16 +39,15 @@ dev/compile:
 	@echo ">>> Compiling…"
 	./mvnw -B -ntp clean compile
 
-## dev/run: Clean, compile, and run the application locally with spring-boot:run (loads .env variables)
+## dev/run: Clean, install all modules, and run the application locally with spring-boot:run (loads .env variables)
 .PHONY: dev/run
 dev/run:
-	@echo ">>> Loading .env, compiling, and starting application…"
+	@echo ">>> Loading .env, installing modules, and starting application…"
 	@set -a && \
 	eval $$(grep -v '^\s*#' .env | grep -v '^\s*$$' | sed 's/\r$$//') && \
 	set +a && \
-	./mvnw -B -ntp clean compile spring-boot:run -pl infrastructure
-
-
+	./mvnw -B -ntp clean install -DskipTests -pl infrastructure -am && \
+	./mvnw -B -ntp spring-boot:run -pl infrastructure
 
 
 
