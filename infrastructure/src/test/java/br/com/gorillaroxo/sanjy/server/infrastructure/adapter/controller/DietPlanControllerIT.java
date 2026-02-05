@@ -8,6 +8,7 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import br.com.gorillaroxo.sanjy.server.infrastructure.test.IntegrationTestController;
 import br.com.gorillaroxo.sanjy.server.infrastructure.test.builder.DtoBuilders;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -36,6 +37,8 @@ class DietPlanControllerIT extends IntegrationTestController {
         void should_create_diet_plan() {
             dietPlanRepository.deleteAll();
             final var request = DtoBuilders.buildCreateDietPlanRequestDto().build();
+            final var timeFormatter =
+                    DateTimeFormatter.ofPattern(RequestConstants.DateTimeFormats.TIME_FORMAT);
 
             webTestClient
                     .post()
@@ -49,12 +52,63 @@ class DietPlanControllerIT extends IntegrationTestController {
                     .isCreated()
                     .expectBody(DietPlanCompleteResponseDto.class)
                     .value(response -> {
+                        // DietPlanCompleteResponseDto root fields
                         assertThat(response.id()).isNotNull();
                         assertThat(response.name()).isNotBlank().isEqualTo(request.name());
+                        assertThat(response.startDate()).isEqualTo(request.startDate());
+                        assertThat(response.endDate()).isEqualTo(request.endDate());
+                        assertThat(response.dailyCalories()).isEqualTo(request.dailyCalories());
+                        assertThat(response.dailyProteinInG()).isEqualTo(request.dailyProteinInG());
+                        assertThat(response.dailyCarbsInG()).isEqualTo(request.dailyCarbsInG());
+                        assertThat(response.dailyFatInG()).isEqualTo(request.dailyFatInG());
+                        assertThat(response.goal()).isEqualTo(request.goal());
+                        assertThat(response.nutritionistNotes()).isEqualTo(request.nutritionistNotes());
+                        assertThat(response.isActive()).isTrue();
+
+                        // DietPlanCompleteResponseDto.metadata
+                        assertThat(response.metadata()).isNotNull();
+                        assertThat(response.metadata().createdAt()).isNotNull();
+                        assertThat(response.metadata().updatedAt()).isNotNull();
+
+                        // DietPlanCompleteResponseDto.mealTypes
                         assertThat(response.mealTypes())
                                 .isNotEmpty()
                                 .hasSize(request.mealTypes().size());
-                        assertThat(response.isActive()).isTrue();
+
+                        final var requestMealType = request.mealTypes().getFirst();
+                        final var responseMealType = response.mealTypes().getFirst();
+
+                        // MealTypeResponseDto fields
+                        assertThat(responseMealType.id()).isNotNull();
+                        assertThat(responseMealType.name()).isEqualTo(requestMealType.name());
+                        assertThat(responseMealType.scheduledTime().format(timeFormatter))
+                                .isEqualTo(requestMealType.scheduledTime().format(timeFormatter));
+                        assertThat(responseMealType.observation()).isEqualTo(requestMealType.observation());
+                        assertThat(responseMealType.dietPlanId()).isEqualTo(response.id());
+
+                        // MealTypeResponseDto.metadata
+                        assertThat(responseMealType.metadata()).isNotNull();
+                        assertThat(responseMealType.metadata().createdAt()).isNotNull();
+                        assertThat(responseMealType.metadata().updatedAt()).isNotNull();
+
+                        // MealTypeResponseDto.standardOptions
+                        assertThat(responseMealType.standardOptions())
+                                .isNotEmpty()
+                                .hasSize(requestMealType.standardOptions().size());
+
+                        final var requestStandardOption = requestMealType.standardOptions().getFirst();
+                        final var responseStandardOption = responseMealType.standardOptions().getFirst();
+
+                        // StandardOptionResponseDto fields
+                        assertThat(responseStandardOption.id()).isNotNull();
+                        assertThat(responseStandardOption.optionNumber()).isEqualTo(requestStandardOption.optionNumber());
+                        assertThat(responseStandardOption.description()).isEqualTo(requestStandardOption.description());
+                        assertThat(responseStandardOption.mealTypeId()).isEqualTo(responseMealType.id());
+
+                        // StandardOptionResponseDto.metadata
+                        assertThat(responseStandardOption.metadata()).isNotNull();
+                        assertThat(responseStandardOption.metadata().createdAt()).isNotNull();
+                        assertThat(responseStandardOption.metadata().updatedAt()).isNotNull();
                     });
         }
 
