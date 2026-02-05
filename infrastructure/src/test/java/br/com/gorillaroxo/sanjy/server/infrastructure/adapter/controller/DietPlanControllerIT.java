@@ -11,15 +11,11 @@ import br.com.gorillaroxo.sanjy.server.infrastructure.test.builder.DtoBuilders;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class DietPlanControllerIT extends IntegrationTestController {
 
     @BeforeAll
@@ -32,158 +28,73 @@ class DietPlanControllerIT extends IntegrationTestController {
         return "/v1/diet-plan";
     }
 
-    @Test
-    @Order(1)
-    void newDietPlan__should_create_diet_plan() {
-        final var request = DtoBuilders.buildCreateDietPlanRequestDto().build();
-
-        webTestClient
-                .post()
-                .uri(getBaseUrl())
-                .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
-                .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(request)
-                .exchange()
-                .expectStatus()
-                .isCreated()
-                .expectBody(DietPlanCompleteResponseDto.class)
-                .value(response -> {
-                    assertThat(response.id()).isNotNull();
-                    assertThat(response.name()).isNotBlank().isEqualTo(request.name());
-                    assertThat(response.mealTypes())
-                            .isNotEmpty()
-                            .hasSize(request.mealTypes().size());
-                    assertThat(response.isActive()).isTrue();
-                });
-    }
-
-    @Test
-    @Order(2)
-    void newDietPlan__should_fail_when_passing_two_mealTypes_with_same_name() {
-        final String repeatedName = "dinner";
-        final var request = DtoBuilders.buildCreateDietPlanRequestDto()
-                .name("New Diet Plan Test")
-                .mealTypes(List.of(
-                        DtoBuilders.buildCreateMealTypesRequestDto()
-                                .name(repeatedName)
-                                .build(),
-                        DtoBuilders.buildCreateMealTypesRequestDto()
-                                .name(repeatedName)
-                                .build()))
-                .build();
-
-        webTestClient
-                .post()
-                .uri(getBaseUrl())
-                .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
-                .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(request)
-                .exchange()
-                .expectStatus()
-                .isBadRequest()
-                .expectBody(ErrorResponseDto.class)
-                .value(response -> {
-                    final var expectedExCode = ExceptionCode.REPEATED_MEAL_TYPE_NAMES;
-                    assertThat(response.code()).isNotBlank().isEqualTo(expectedExCode.getCode());
-                    assertThat(response.timestamp()).isNotNull();
-                    assertThat(response.message()).isNotEmpty().isEqualTo(expectedExCode.getMessage());
-                    assertThat(response.customMessage()).isNotEmpty().containsIgnoringCase(repeatedName);
-                    assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-                });
-    }
-
-    @Test
-    @Order(3)
-    void activeDietPlan__should_return_active_diet_plan() {
-        // Given
-        dietPlanRepository.deleteAll();
-        final var dietPlanRequest1 = DtoBuilders.buildCreateDietPlanRequestDto()
-                .name("Old Diet Plan")
-                .mealTypes(List.of(DtoBuilders.buildCreateMealTypesRequestDto().build()))
-                .build();
-        final var dietPlanRequest2 = DtoBuilders.buildCreateDietPlanRequestDto()
-                .name("New Diet Plan Test")
-                .mealTypes(List.of(
-                        DtoBuilders.buildCreateMealTypesRequestDto().name("one").build(),
-                        DtoBuilders.buildCreateMealTypesRequestDto().name("two").build(),
-                        DtoBuilders.buildCreateMealTypesRequestDto()
-                                .name("three")
-                                .build()))
-                .build();
-
-        webTestClient
-                .post()
-                .uri(getBaseUrl())
-                .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
-                .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(dietPlanRequest1)
-                .exchange()
-                .expectStatus()
-                .isCreated();
-        webTestClient
-                .post()
-                .uri(getBaseUrl())
-                .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
-                .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(dietPlanRequest2)
-                .exchange()
-                .expectStatus()
-                .isCreated();
-
-        // When/Then
-        webTestClient
-                .get()
-                .uri(getBaseUrl() + "/active")
-                .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
-                .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectBody(DietPlanCompleteResponseDto.class)
-                .value(response -> {
-                    assertThat(response.id()).isNotNull();
-                    assertThat(response.name()).isNotBlank().isEqualTo(dietPlanRequest2.name());
-                    assertThat(response.mealTypes())
-                            .isNotEmpty()
-                            .hasSize(dietPlanRequest2.mealTypes().size());
-                    assertThat(response.isActive()).isTrue();
-                });
-    }
-
-    @Test
-    @Order(3)
-    void activeDietPlan__should_return_not_found_when_no_diet_plan_is_created() {
-        // Given
-        dietPlanRepository.deleteAll();
-        // When/Then
-        webTestClient
-                .get()
-                .uri(getBaseUrl() + "/active")
-                .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
-                .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
-                .exchange()
-                .expectStatus()
-                .isNotFound()
-                .expectBody(ErrorResponseDto.class)
-                .value(response -> {
-                    final var expectedExCode = ExceptionCode.DIET_PLAN_NOT_FOUND;
-                    assertThat(response.code()).isNotBlank().isEqualTo(expectedExCode.getCode());
-                    assertThat(response.timestamp()).isNotNull();
-                    assertThat(response.message()).isNotEmpty().isEqualTo(expectedExCode.getMessage());
-                    assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
-                });
-    }
-
     @Nested
-    @DisplayName("Test invalid date formats")
-    class InvalidDateFormats {
+    @DisplayName("POST /v1/diet-plan - newDietPlan")
+    class NewDietPlan {
 
         @Test
-        void newDietPlan__should_fail_with_invalid_startDate_format() {
+        void should_create_diet_plan() {
+            dietPlanRepository.deleteAll();
+            final var request = DtoBuilders.buildCreateDietPlanRequestDto().build();
+
+            webTestClient
+                    .post()
+                    .uri(getBaseUrl())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(request)
+                    .exchange()
+                    .expectStatus()
+                    .isCreated()
+                    .expectBody(DietPlanCompleteResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.id()).isNotNull();
+                        assertThat(response.name()).isNotBlank().isEqualTo(request.name());
+                        assertThat(response.mealTypes())
+                                .isNotEmpty()
+                                .hasSize(request.mealTypes().size());
+                        assertThat(response.isActive()).isTrue();
+                    });
+        }
+
+        @Test
+        void should_fail_when_passing_two_mealTypes_with_same_name() {
+            final String repeatedName = "dinner";
+            final var request = DtoBuilders.buildCreateDietPlanRequestDto()
+                    .name("New Diet Plan Test")
+                    .mealTypes(List.of(
+                            DtoBuilders.buildCreateMealTypesRequestDto()
+                                    .name(repeatedName)
+                                    .build(),
+                            DtoBuilders.buildCreateMealTypesRequestDto()
+                                    .name(repeatedName)
+                                    .build()))
+                    .build();
+
+            webTestClient
+                    .post()
+                    .uri(getBaseUrl())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(request)
+                    .exchange()
+                    .expectStatus()
+                    .isBadRequest()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        final var expectedExCode = ExceptionCode.REPEATED_MEAL_TYPE_NAMES;
+                        assertThat(response.code()).isNotBlank().isEqualTo(expectedExCode.getCode());
+                        assertThat(response.timestamp()).isNotNull();
+                        assertThat(response.message()).isNotEmpty().isEqualTo(expectedExCode.getMessage());
+                        assertThat(response.customMessage()).isNotEmpty().containsIgnoringCase(repeatedName);
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                    });
+        }
+
+        @Test
+        void should_fail_with_invalid_startDate_format() {
             webTestClient
                     .post()
                     .uri(getBaseUrl())
@@ -222,7 +133,7 @@ class DietPlanControllerIT extends IntegrationTestController {
         }
 
         @Test
-        void newDietPlan__should_fail_with_invalid_endDate_format() {
+        void should_fail_with_invalid_endDate_format() {
             webTestClient
                     .post()
                     .uri(getBaseUrl())
@@ -259,14 +170,9 @@ class DietPlanControllerIT extends IntegrationTestController {
                         assertThat(response.customMessage()).containsIgnoringCase("errorMotive");
                     });
         }
-    }
-
-    @Nested
-    @DisplayName("Test invalid JSON payloads")
-    class InvalidJsonPayloads {
 
         @Test
-        void newDietPlan__should_fail_with_malformed_json() {
+        void should_fail_with_malformed_json() {
             webTestClient
                     .post()
                     .uri(getBaseUrl())
@@ -291,14 +197,9 @@ class DietPlanControllerIT extends IntegrationTestController {
                         assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
                     });
         }
-    }
-
-    @Nested
-    @DisplayName("Test invalid field types")
-    class InvalidFieldTypes {
 
         @Test
-        void newDietPlan__should_fail_with_number_instead_of_string_for_name() {
+        void should_fail_with_number_instead_of_string_for_name() {
             webTestClient
                     .post()
                     .uri(getBaseUrl())
@@ -332,7 +233,7 @@ class DietPlanControllerIT extends IntegrationTestController {
         }
 
         @Test
-        void newDietPlan__should_fail_with_string_instead_of_integer_for_dailyCalories() {
+        void should_fail_with_string_instead_of_integer_for_dailyCalories() {
             webTestClient
                     .post()
                     .uri(getBaseUrl())
@@ -370,7 +271,7 @@ class DietPlanControllerIT extends IntegrationTestController {
         }
 
         @Test
-        void newDietPlan__should_fail_with_boolean_instead_of_integer_for_optionNumber() {
+        void should_fail_with_boolean_instead_of_integer_for_optionNumber() {
             webTestClient
                     .post()
                     .uri(getBaseUrl())
@@ -407,8 +308,95 @@ class DietPlanControllerIT extends IntegrationTestController {
     }
 
     @Nested
-    @DisplayName("Test default required headers")
-    class InvalidHeaders {
+    @DisplayName("GET /v1/diet-plan/active - activeDietPlan")
+    class ActiveDietPlan {
+
+        @Test
+        void should_return_active_diet_plan() {
+            // Given
+            dietPlanRepository.deleteAll();
+            final var dietPlanRequest1 = DtoBuilders.buildCreateDietPlanRequestDto()
+                    .name("Old Diet Plan")
+                    .mealTypes(List.of(DtoBuilders.buildCreateMealTypesRequestDto().build()))
+                    .build();
+            final var dietPlanRequest2 = DtoBuilders.buildCreateDietPlanRequestDto()
+                    .name("New Diet Plan Test")
+                    .mealTypes(List.of(
+                            DtoBuilders.buildCreateMealTypesRequestDto().name("one").build(),
+                            DtoBuilders.buildCreateMealTypesRequestDto().name("two").build(),
+                            DtoBuilders.buildCreateMealTypesRequestDto()
+                                    .name("three")
+                                    .build()))
+                    .build();
+
+            webTestClient
+                    .post()
+                    .uri(getBaseUrl())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(dietPlanRequest1)
+                    .exchange()
+                    .expectStatus()
+                    .isCreated();
+            webTestClient
+                    .post()
+                    .uri(getBaseUrl())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(dietPlanRequest2)
+                    .exchange()
+                    .expectStatus()
+                    .isCreated();
+
+            // When/Then
+            webTestClient
+                    .get()
+                    .uri(getBaseUrl() + "/active")
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .exchange()
+                    .expectStatus()
+                    .isOk()
+                    .expectBody(DietPlanCompleteResponseDto.class)
+                    .value(response -> {
+                        assertThat(response.id()).isNotNull();
+                        assertThat(response.name()).isNotBlank().isEqualTo(dietPlanRequest2.name());
+                        assertThat(response.mealTypes())
+                                .isNotEmpty()
+                                .hasSize(dietPlanRequest2.mealTypes().size());
+                        assertThat(response.isActive()).isTrue();
+                    });
+        }
+
+        @Test
+        void should_return_not_found_when_no_diet_plan_is_created() {
+            // Given
+            dietPlanRepository.deleteAll();
+            // When/Then
+            webTestClient
+                    .get()
+                    .uri(getBaseUrl() + "/active")
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .exchange()
+                    .expectStatus()
+                    .isNotFound()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        final var expectedExCode = ExceptionCode.DIET_PLAN_NOT_FOUND;
+                        assertThat(response.code()).isNotBlank().isEqualTo(expectedExCode.getCode());
+                        assertThat(response.timestamp()).isNotNull();
+                        assertThat(response.message()).isNotEmpty().isEqualTo(expectedExCode.getMessage());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
+                    });
+        }
+    }
+
+    @Nested
+    @DisplayName("Required headers validation")
+    class RequiredHeaders {
 
         @Test
         void should_fail_when_missing_required_headers() {
@@ -454,7 +442,6 @@ class DietPlanControllerIT extends IntegrationTestController {
         @Test
         void should_fail_when_only_passing_invalid_correlation_id() {
             final String headerNameXCorrelationId = RequestConstants.Headers.X_CORRELATION_ID;
-            final String headerNameXChannel = RequestConstants.Headers.X_CHANNEL;
 
             // WebTestClient/Netty doesn't allow empty or whitespace-only header values
             // Testing with invalid UUID format instead
@@ -462,7 +449,7 @@ class DietPlanControllerIT extends IntegrationTestController {
                     .post()
                     .uri(getBaseUrl())
                     .header(headerNameXCorrelationId, "invalid-uuid")
-                    .header(headerNameXChannel, "integration-test")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
                     .contentType(MediaType.APPLICATION_JSON)
                     .exchange()
                     .expectStatus()
