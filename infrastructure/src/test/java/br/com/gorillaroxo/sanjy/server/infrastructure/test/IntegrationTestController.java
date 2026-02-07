@@ -39,8 +39,6 @@ public abstract class IntegrationTestController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    protected abstract String getBaseUrl();
-
     protected final void cleanUpDatabase() {
         jdbcTemplate.execute("""
                 TRUNCATE TABLE

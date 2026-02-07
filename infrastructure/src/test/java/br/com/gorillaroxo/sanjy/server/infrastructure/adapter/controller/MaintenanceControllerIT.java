@@ -11,10 +11,7 @@ import org.junit.jupiter.api.Test;
 
 class MaintenanceControllerIT extends IntegrationTestController {
 
-    @Override
-    protected String getBaseUrl() {
-        return "/v1/maintenance";
-    }
+    static final String BASE_URL = "/v1/maintenance";
 
     @Nested
     @DisplayName("GET /v1/maintenance/project-info - projectInfo")
@@ -24,7 +21,7 @@ class MaintenanceControllerIT extends IntegrationTestController {
         void should_return_project_info() {
             webTestClient
                     .get()
-                    .uri(getBaseUrl() + "/project-info")
+                    .uri(BASE_URL + "/project-info")
                     .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
                     .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
                     .exchange()
@@ -55,7 +52,7 @@ class MaintenanceControllerIT extends IntegrationTestController {
         void should_fail_when_missing_required_headers() {
             webTestClient
                     .get()
-                    .uri(getBaseUrl() + "/project-info")
+                    .uri(BASE_URL + "/project-info")
                     .exchange()
                     .expectStatus()
                     .isBadRequest()
@@ -73,7 +70,7 @@ class MaintenanceControllerIT extends IntegrationTestController {
 
             webTestClient
                     .get()
-                    .uri(getBaseUrl() + "/project-info")
+                    .uri(BASE_URL + "/project-info")
                     .header(headerNameXCorrelationId, "7d1c9e48034744eca14256e77fc11dfe")
                     .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
                     .exchange()
@@ -94,7 +91,7 @@ class MaintenanceControllerIT extends IntegrationTestController {
 
             webTestClient
                     .get()
-                    .uri(getBaseUrl() + "/project-info")
+                    .uri(BASE_URL + "/project-info")
                     .header(headerNameXCorrelationId, "invalid-uuid")
                     .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
                     .exchange()
@@ -117,7 +114,7 @@ class MaintenanceControllerIT extends IntegrationTestController {
 
             webTestClient
                     .get()
-                    .uri(getBaseUrl() + "/project-info")
+                    .uri(BASE_URL + "/project-info")
                     .header(headerNameXCorrelationId, "7f804519-7a52-485c-983d-19439e5cc7a3")
                     .exchange()
                     .expectStatus()
