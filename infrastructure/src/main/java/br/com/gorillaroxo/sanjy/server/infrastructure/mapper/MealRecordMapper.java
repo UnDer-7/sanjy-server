@@ -26,9 +26,9 @@ import org.mapstruct.ReportingPolicy;
 public interface MealRecordMapper {
 
     // DTOs
-    MealRecordResponseDto toDto(MealRecordDomain domain);
-
     MealRecordCreatedResponseDto toCreatedDto(MealRecordDomain domain);
+
+    MealRecordResponseDto toDto(MealRecordDomain domain);
 
     List<MealRecordResponseDto> toDto(List<MealRecordDomain> domain);
 

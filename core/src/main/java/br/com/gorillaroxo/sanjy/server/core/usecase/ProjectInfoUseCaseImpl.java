@@ -48,6 +48,11 @@ class ProjectInfoUseCaseImpl implements ProjectInfoUseCase {
                 .build();
     }
 
+    private static String detectRuntimeMode() {
+        final String nativeImageProperty = System.getProperty(NATIVE_IMAGE_PROPERTY);
+        return nativeImageProperty != null ? RUNTIME_MODE_NATIVE : RUNTIME_MODE_JVM;
+    }
+
     private ProjectInfoDomain.Version buildVersion() {
         final var currentVersion = sanjyServerProps.application().version();
         final var latestVersion = fetchLatestVersionFromGitHub();
@@ -96,10 +101,5 @@ class ProjectInfoUseCaseImpl implements ProjectInfoUseCase {
                     e);
             return null;
         }
-    }
-
-    private static String detectRuntimeMode() {
-        final String nativeImageProperty = System.getProperty(NATIVE_IMAGE_PROPERTY);
-        return nativeImageProperty != null ? RUNTIME_MODE_NATIVE : RUNTIME_MODE_JVM;
     }
 }
