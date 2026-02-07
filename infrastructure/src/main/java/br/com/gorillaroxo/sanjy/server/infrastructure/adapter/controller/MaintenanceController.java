@@ -25,7 +25,10 @@ public class MaintenanceController implements MaintenanceRestService, McpToolMar
 
     @Override
     @GetMapping(value = "/v1/project-info", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Tool(name = "projectInfo", description = "")
+    @Tool(name = "projectInfo", description = """
+            Retrieves project information including version details (current and latest), \
+            application and database timezone configuration, and the current runtime mode.
+            """)
     public ProjectInfoResponseDto projectInfo() {
         final ProjectInfoDomain projectInfo = projectInfoUseCase.execute();
         return projectInfoMapper.toDto(projectInfo);
