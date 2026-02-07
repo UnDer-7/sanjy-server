@@ -3,6 +3,7 @@ package br.com.gorillaroxo.sanjy.server.entrypoint.rest;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.SearchMealRecordParamRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordCreatedResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordStatisticsResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseMealRecordDto;
@@ -40,7 +41,7 @@ public interface MealRecordRestService {
             content =
                     @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = MealRecordResponseDto.class)))
+                            schema = @Schema(implementation = MealRecordCreatedResponseDto.class)))
     @ApiResponse(
             responseCode = OpenApiConstants.HttpStatusCodes.BAD_REQUEST,
             description = "client error",
@@ -55,7 +56,7 @@ public interface MealRecordRestService {
                     @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponseDto.class)))
-    MealRecordResponseDto newMealRecord(@RequestBody @Valid @NotNull CreateMealRecordRequestDto request);
+    MealRecordCreatedResponseDto newMealRecord(@RequestBody @Valid @NotNull CreateMealRecordRequestDto request);
 
     @Operation(summary = "Get today's meal records", description = """
                 Retrieves all meals consumed today, ordered by consumption time. Includes both standard meals (following the diet plan) \

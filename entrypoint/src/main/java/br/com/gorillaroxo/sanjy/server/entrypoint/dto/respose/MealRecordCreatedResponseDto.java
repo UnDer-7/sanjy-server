@@ -9,7 +9,7 @@ import lombok.Builder;
 
 @Builder
 @Schema(description = "Response DTO representing a meal record - a historical record of a food item consumed")
-public record MealRecordResponseDto(
+public record MealRecordCreatedResponseDto(
         @Schema(
                 description = "Unique identifier of the meal record",
                 example = "123",
@@ -24,9 +24,9 @@ public record MealRecordResponseDto(
         Instant consumedAt,
 
         @Schema(
-                description = "Meal type information (breakfast, lunch, snack, dinner, etc...).",
+                description = "Meal type information (breakfast, lunch, snack, dinner, etc.). Returns only the ID.",
                 requiredMode = Schema.RequiredMode.REQUIRED)
-        MealTypeSimplifiedResponseDto mealType,
+        IdOnlyResponseDto mealType,
 
         @Schema(
                 description =
@@ -38,9 +38,9 @@ public record MealRecordResponseDto(
 
         @Schema(description = """
                     The selected diet plan option that was consumed. This field contains the standard option chosen from the diet plan. \
-                    NULL when isFreeMeal = TRUE (free meals don't follow the plan)
+                    NULL when isFreeMeal = TRUE (free meals don't follow the plan). Returns only the ID.
                     """, nullable = true, requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-        StandardOptionSimplifiedResponseDto standardOption,
+        IdOnlyResponseDto standardOption,
 
         @Schema(
                 description = "Text description of the free meal item consumed. "
