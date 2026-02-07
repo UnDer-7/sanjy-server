@@ -31,15 +31,23 @@ all: help
 
 
 # ==================================================================================== #
-## ===== COMPILE =====
+## ===== DEV =====
 # ==================================================================================== #
-## compile: Just compile the application
-.PHONY: compile
-compile:
+## dev/compile: Just compile the application
+.PHONY: dev/compile
+dev/compile:
 	@echo ">>> Compiling…"
 	./mvnw -B -ntp clean compile
 
-
+## dev/run: Clean, install all modules, and run the application locally with spring-boot:run (loads .env variables)
+.PHONY: dev/run
+dev/run:
+	@echo ">>> Loading .env, installing modules, and starting application…"
+	@set -a && \
+	eval $$(grep -v '^\s*#' .env | grep -v '^\s*$$' | sed 's/\r$$//') && \
+	set +a && \
+	./mvnw -B -ntp clean install -DskipTests -pl infrastructure -am && \
+	./mvnw -B -ntp spring-boot:run -pl infrastructure
 
 
 

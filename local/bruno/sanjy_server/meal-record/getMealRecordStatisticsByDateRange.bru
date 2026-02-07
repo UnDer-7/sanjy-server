@@ -5,14 +5,14 @@ meta {
 }
 
 get {
-  url: {{SERVER_URL}}/v1/meal-record/statistics?consumedAtAfter=2025-11-12T00:00:00Z&consumedAtBefore=2025-11-15T23:59:59Z
+  url: {{SERVER_URL}}/v1/meal-record/statistics?consumedAtAfter=2025-11-12T00:00:00Z
   body: json
   auth: inherit
 }
 
 params:query {
   consumedAtAfter: 2025-11-12T00:00:00Z
-  consumedAtBefore: 2025-11-15T23:59:59Z
+  ~consumedAtBefore: 2050-12-20T23:59:59Z
 }
 
 headers {
@@ -22,4 +22,137 @@ headers {
 settings {
   encodeUrl: false
   timeout: 0
+}
+
+example {
+  name: success
+  
+  request: {
+    url: {{SERVER_URL}}/v1/meal-record/statistics?consumedAtAfter=2025-11-12T00:00:00Z&consumedAtBefore=2050-12-20T23:59:59Z
+    method: GET
+    mode: none
+    params:query: {
+      consumedAtAfter: 2025-11-12T00:00:00Z
+      consumedAtBefore: 2050-12-20T23:59:59Z
+    }
+  
+    headers: {
+      Content-Type: application/json
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      transfer-encoding: chunked
+      date: Wed, 04 Feb 2026 12:57:52 GMT
+      keep-alive: timeout=60
+      connection: keep-alive
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "freeMealQuantity": 16,
+          "plannedMealQuantity": 116,
+          "mealQuantity": 132
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: success | empty
+  
+  request: {
+    url: {{SERVER_URL}}/v1/meal-record/statistics?consumedAtAfter=2025-11-12T00:00:00Z&consumedAtBefore=2050-12-20T23:59:59Z
+    method: GET
+    mode: none
+    params:query: {
+      consumedAtAfter: 2025-11-12T00:00:00Z
+      consumedAtBefore: 2050-12-20T23:59:59Z
+    }
+  
+    headers: {
+      Content-Type: application/json
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      transfer-encoding: chunked
+      date: Wed, 04 Feb 2026 12:58:14 GMT
+      keep-alive: timeout=60
+      connection: keep-alive
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "freeMealQuantity": 0,
+          "plannedMealQuantity": 0,
+          "mealQuantity": 0
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: fail | invalid property
+  
+  request: {
+    url: {{SERVER_URL}}/v1/meal-record/statistics?consumedAtAfter=2025-11-12T00:00:00Z
+    method: GET
+    mode: json
+    params:query: {
+      consumedAtAfter: 2025-11-12T00:00:00Z
+      ~consumedAtBefore: 2050-12-20T23:59:59Z
+    }
+  
+    headers: {
+      Content-Type: application/json
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      transfer-encoding: chunked
+      date: Wed, 04 Feb 2026 12:58:31 GMT
+      connection: close
+    }
+  
+    status: {
+      code: 400
+      text: Bad Request
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "code": "002",
+          "timestamp": "2026-02-04T12:58:31.224621441Z",
+          "message": "Invalid values",
+          "customMessage": "[ propertyPath: consumedAtBefore - errorMotive: must not be null - valueProvided: null ]",
+          "httpStatusCode": 400
+        }
+      '''
+    }
+  }
 }

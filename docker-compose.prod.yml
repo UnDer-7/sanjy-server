@@ -1,8 +1,9 @@
 name: sanjy-server-prod
+
 services:
-  sanjy_database_prod:
+  sanjy-database-prod:
     image: postgres:17-alpine
-    container_name: sanJy_database_prod
+    container_name: sanjy-database-prod
     restart: unless-stopped
     ports:
       - "5433:5432"
@@ -25,9 +26,9 @@ services:
       retries: 5
       start_period: 10s
 
-  sanjy_server:
+  sanjy-server:
     image: under7/sanjy-server:latest
-    container_name: "sanjy_server_graalvm"
+    container_name: sanjy-server
     restart: unless-stopped
     ports:
       - "8080:8080"
@@ -36,7 +37,7 @@ services:
     networks:
       - sanjy-network
     depends_on:
-      sanjy_database_prod:
+      sanjy-database-prod:
         condition: service_healthy
     environment:
       # ::: SERVER :::
@@ -48,7 +49,7 @@ services:
       SANJY_SERVER_LOGGING_APPENDER: CONSOLE-UNSTRUCTURED
 
       # ::: DATABASE :::
-      SANJY_SERVER_DATABASE_JDBC_URL: jdbc:postgresql://sanJy_database_prod:5432/diet_control
+      SANJY_SERVER_DATABASE_JDBC_URL: jdbc:postgresql://sanjy-database-prod:5432/diet_control
       SANJY_SERVER_DATABASE_USERNAME: admin_usr
       SANJY_SERVER_DATABASE_PASSWORD: admin_pass
 
