@@ -11,7 +11,9 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.IdOnlyResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealRecordCreatedResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealTypeSimplifiedResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseMealRecordDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ProjectInfoResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.StandardOptionSimplifiedResponseDto;
+import br.com.gorillaroxo.sanjy.server.infrastructure.client.rest.github.dto.response.GitHubReleaseResponseDto;
 import br.com.gorillaroxo.sanjy.server.infrastructure.config.TimezoneInitializer;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.projection.MealRecordStatisticsProjection;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
@@ -43,7 +45,9 @@ import org.springframework.context.annotation.ComponentScan;
     MealTypeSimplifiedResponseDto.class,
     StandardOptionSimplifiedResponseDto.class,
     IdOnlyResponseDto.class,
-    MealRecordCreatedResponseDto.class
+    MealRecordCreatedResponseDto.class,
+    ProjectInfoResponseDto.class,
+    GitHubReleaseResponseDto.class
 })
 public class SanJyApplication {
 
