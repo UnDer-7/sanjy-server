@@ -12,19 +12,21 @@ import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @Validated
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/v1/maintenance")
 public class MaintenanceController implements MaintenanceRestService, McpToolMarker {
 
     private final ProjectInfoUseCase projectInfoUseCase;
     private final ProjectInfoMapper projectInfoMapper;
 
     @Override
-    @GetMapping(value = "/v1/project-info", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/project-info", produces = MediaType.APPLICATION_JSON_VALUE)
     @Tool(name = "projectInfo", description = """
             Retrieves project information including version details (current and latest), \
             application and database timezone configuration, and the current runtime mode.
