@@ -1,0 +1,59 @@
+meta {
+  name: projectInfo
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{SERVER_URL}}/v1/maintenance/project-info
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+example {
+  name: success
+  
+  request: {
+    url: {{SERVER_URL}}/v1/maintenance/project-info
+    method: GET
+    mode: none
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      transfer-encoding: chunked
+      date: Sat, 07 Feb 2026 05:27:53 GMT
+      keep-alive: timeout=60
+      connection: keep-alive
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "version": {
+            "current": "1.0.0",
+            "latest": "1.0.0",
+            "isLatest": true
+          },
+          "timezone": {
+            "application": "UTC",
+            "database": "UTC"
+          },
+          "runtimeMode": "JVM"
+        }
+      '''
+    }
+  }
+}
