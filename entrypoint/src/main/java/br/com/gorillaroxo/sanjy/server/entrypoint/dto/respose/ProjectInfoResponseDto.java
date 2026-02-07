@@ -6,9 +6,7 @@ import lombok.Builder;
 @Builder
 @Schema(description = "Response DTO containing project information such as version, timezone, and runtime mode")
 public record ProjectInfoResponseDto(
-        @Schema(
-                description = "Version information of the project",
-                requiredMode = Schema.RequiredMode.REQUIRED)
+        @Schema(description = "Version information of the project", requiredMode = Schema.RequiredMode.REQUIRED)
         Version version,
 
         @Schema(

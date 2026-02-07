@@ -19,12 +19,10 @@ public interface MaintenanceRestService {
     @ApiResponse(
             responseCode = OpenApiConstants.HttpStatusCodes.OK,
             description = "Project information",
-            content =
-                    @Content(schema = @Schema(implementation = ProjectInfoResponseDto.class)))
+            content = @Content(schema = @Schema(implementation = ProjectInfoResponseDto.class)))
     @ApiResponse(
             responseCode = OpenApiConstants.HttpStatusCodes.INTERNAL_SERVER_ERROR,
             description = "unexpected error occurred",
-            content =
-                    @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+            content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     ProjectInfoResponseDto projectInfo();
 }
