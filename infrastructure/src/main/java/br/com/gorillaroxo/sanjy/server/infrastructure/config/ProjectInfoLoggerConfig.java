@@ -5,12 +5,8 @@ import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
 import br.com.gorillaroxo.sanjy.server.core.ports.driven.SanjyServerProps;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.ProjectInfoUseCase;
 import br.com.gorillaroxo.sanjy.server.core.util.ThreadUtils;
-import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.repository.GetDatabaseTimeZoneRepository;
-import java.time.ZoneId;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Predicate;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.argument.StructuredArguments;
@@ -27,6 +23,7 @@ public class ProjectInfoLoggerConfig implements ApplicationListener<ApplicationR
 
     @Qualifier("applicationTaskExecutor")
     private final TaskExecutor taskExecutor;
+
     private final ProjectInfoUseCase projectInfoUseCase;
     private final SanjyServerProps sanjyServerProps;
 
@@ -37,33 +34,38 @@ public class ProjectInfoLoggerConfig implements ApplicationListener<ApplicationR
                     final var unknown = "unknown";
                     final Optional<ProjectInfoDomain> projectInfoOpt = Optional.of(projectInfoUseCase.execute());
 
-                    final Optional<ProjectInfoDomain.Version> versionOpt = projectInfoOpt.map(ProjectInfoDomain::version);
-                    final Optional<ProjectInfoDomain.Timezone> timezoneOpt = projectInfoOpt.map(ProjectInfoDomain::timezone);
+                    final Optional<ProjectInfoDomain.Version> versionOpt =
+                            projectInfoOpt.map(ProjectInfoDomain::version);
+                    final Optional<ProjectInfoDomain.Timezone> timezoneOpt =
+                            projectInfoOpt.map(ProjectInfoDomain::timezone);
 
-                    final var runtimeMode = projectInfoOpt.map(ProjectInfoDomain::runtimeMode)
-                        .filter(Predicate.not(String::isBlank))
-                        .orElse(unknown);
+                    final var runtimeMode = projectInfoOpt
+                            .map(ProjectInfoDomain::runtimeMode)
+                            .filter(Predicate.not(String::isBlank))
+                            .orElse(unknown);
                     final var latestVersion = versionOpt
-                        .map(ProjectInfoDomain.Version::latest)
-                        .filter(Predicate.not(String::isBlank))
-                        .orElse(unknown);
+                            .map(ProjectInfoDomain.Version::latest)
+                            .filter(Predicate.not(String::isBlank))
+                            .orElse(unknown);
                     final var currentVersion = versionOpt
-                        .map(ProjectInfoDomain.Version::current)
-                        .filter(Predicate.not(String::isBlank))
-                        .orElse(unknown);
+                            .map(ProjectInfoDomain.Version::current)
+                            .filter(Predicate.not(String::isBlank))
+                            .orElse(unknown);
                     final var databaseTimezone = timezoneOpt
-                        .map(ProjectInfoDomain.Timezone::database)
-                        .filter(Predicate.not(String::isBlank))
-                        .orElse(unknown);
+                            .map(ProjectInfoDomain.Timezone::database)
+                            .filter(Predicate.not(String::isBlank))
+                            .orElse(unknown);
                     final var applicationTimezone = timezoneOpt
-                        .map(ProjectInfoDomain.Timezone::database)
-                        .filter(String::isBlank)
-                        .orElse(unknown);
+                            .map(ProjectInfoDomain.Timezone::database)
+                            .filter(String::isBlank)
+                            .orElse(unknown);
 
                     log.info(
                             LogField.Placeholders.SEVEN.getPlaceholder(),
                             StructuredArguments.kv(LogField.MSG.label(), "Project information"),
-                            StructuredArguments.kv(LogField.PROJECT_NAME.label(), sanjyServerProps.application().name()),
+                            StructuredArguments.kv(
+                                    LogField.PROJECT_NAME.label(),
+                                    sanjyServerProps.application().name()),
                             StructuredArguments.kv(LogField.PROJECT_CURRENT_VERSION.label(), currentVersion),
                             StructuredArguments.kv(LogField.PROJECT_LATEST_VERSION.label(), latestVersion),
                             StructuredArguments.kv(LogField.RUNTIME_MODE.label(), runtimeMode),
@@ -72,5 +74,4 @@ public class ProjectInfoLoggerConfig implements ApplicationListener<ApplicationR
                 },
                 taskExecutor);
     }
-
 }

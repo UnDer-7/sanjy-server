@@ -5,5 +5,4 @@ import br.com.gorillaroxo.sanjy.server.core.ProjectInfoDomain;
 public interface ProjectInfoUseCase {
 
     ProjectInfoDomain execute();
-
 }

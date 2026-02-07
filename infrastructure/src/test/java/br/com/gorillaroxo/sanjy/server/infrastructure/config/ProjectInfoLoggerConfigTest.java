@@ -133,7 +133,9 @@ class ProjectInfoLoggerConfigTest {
                     .runtimeMode("JVM")
                     .version(null)
                     .timezone(ProjectInfoDomain.Timezone.builder()
-                            .application("UTC").database("UTC").build())
+                            .application("UTC")
+                            .database("UTC")
+                            .build())
                     .build();
             when(projectInfoUseCase.execute()).thenReturn(domain);
 
@@ -179,7 +181,10 @@ class ProjectInfoLoggerConfigTest {
             final var domain = ProjectInfoDomain.builder()
                     .runtimeMode("JVM")
                     .version(ProjectInfoDomain.Version.builder()
-                            .current("1.0.0").latest("1.2.0").isLatest(false).build())
+                            .current("1.0.0")
+                            .latest("1.2.0")
+                            .isLatest(false)
+                            .build())
                     .timezone(null)
                     .build();
             when(projectInfoUseCase.execute()).thenReturn(domain);
@@ -194,9 +199,14 @@ class ProjectInfoLoggerConfigTest {
         return ProjectInfoDomain.builder()
                 .runtimeMode("JVM")
                 .version(ProjectInfoDomain.Version.builder()
-                        .current("1.0.0").latest("1.2.0").isLatest(false).build())
+                        .current("1.0.0")
+                        .latest("1.2.0")
+                        .isLatest(false)
+                        .build())
                 .timezone(ProjectInfoDomain.Timezone.builder()
-                        .application("UTC").database("UTC").build())
+                        .application("UTC")
+                        .database("UTC")
+                        .build())
                 .build();
     }
 
@@ -204,9 +214,14 @@ class ProjectInfoLoggerConfigTest {
         return ProjectInfoDomain.builder()
                 .runtimeMode(runtimeMode)
                 .version(ProjectInfoDomain.Version.builder()
-                        .current("1.0.0").latest("1.2.0").isLatest(false).build())
+                        .current("1.0.0")
+                        .latest("1.2.0")
+                        .isLatest(false)
+                        .build())
                 .timezone(ProjectInfoDomain.Timezone.builder()
-                        .application("UTC").database("UTC").build())
+                        .application("UTC")
+                        .database("UTC")
+                        .build())
                 .build();
     }
 
@@ -214,9 +229,14 @@ class ProjectInfoLoggerConfigTest {
         return ProjectInfoDomain.builder()
                 .runtimeMode("JVM")
                 .version(ProjectInfoDomain.Version.builder()
-                        .current(current).latest(latest).isLatest(false).build())
+                        .current(current)
+                        .latest(latest)
+                        .isLatest(false)
+                        .build())
                 .timezone(ProjectInfoDomain.Timezone.builder()
-                        .application("UTC").database("UTC").build())
+                        .application("UTC")
+                        .database("UTC")
+                        .build())
                 .build();
     }
 
@@ -224,9 +244,14 @@ class ProjectInfoLoggerConfigTest {
         return ProjectInfoDomain.builder()
                 .runtimeMode("JVM")
                 .version(ProjectInfoDomain.Version.builder()
-                        .current("1.0.0").latest("1.2.0").isLatest(false).build())
+                        .current("1.0.0")
+                        .latest("1.2.0")
+                        .isLatest(false)
+                        .build())
                 .timezone(ProjectInfoDomain.Timezone.builder()
-                        .application(application).database(database).build())
+                        .application(application)
+                        .database(database)
+                        .build())
                 .build();
     }
 }

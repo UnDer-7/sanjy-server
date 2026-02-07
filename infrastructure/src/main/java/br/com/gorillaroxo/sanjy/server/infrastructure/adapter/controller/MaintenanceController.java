@@ -30,5 +30,4 @@ public class MaintenanceController implements MaintenanceRestService, McpToolMar
         final ProjectInfoDomain projectInfo = projectInfoUseCase.execute();
         return projectInfoMapper.toDto(projectInfo);
     }
-
 }

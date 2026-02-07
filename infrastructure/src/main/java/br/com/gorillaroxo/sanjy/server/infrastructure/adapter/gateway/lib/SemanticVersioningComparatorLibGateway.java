@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SemanticVersioningComparatorLibGateway implements SemanticVersioningComparatorGateway {
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int compare(final String currentVersion, final String targetVersion) {
         final var comparableCurrent = new ComparableVersion(currentVersion);
@@ -21,5 +19,4 @@ public class SemanticVersioningComparatorLibGateway implements SemanticVersionin
 
         return comparableCurrent.compareTo(comparableTarget);
     }
-
 }

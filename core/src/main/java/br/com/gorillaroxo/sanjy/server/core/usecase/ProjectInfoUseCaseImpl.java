@@ -8,17 +8,15 @@ import br.com.gorillaroxo.sanjy.server.core.ports.driven.GitHubGateway;
 import br.com.gorillaroxo.sanjy.server.core.ports.driven.SanjyServerProps;
 import br.com.gorillaroxo.sanjy.server.core.ports.driven.SemanticVersioningComparatorGateway;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.ProjectInfoUseCase;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import net.logstash.logback.argument.StructuredArguments;
-import org.springframework.stereotype.Service;
-
 import java.time.ZoneId;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.logstash.logback.argument.StructuredArguments;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
@@ -41,13 +39,13 @@ class ProjectInfoUseCaseImpl implements ProjectInfoUseCase {
         final var version = buildVersion();
 
         return ProjectInfoDomain.builder()
-            .runtimeMode(runtimeMode)
-            .version(version)
-            .timezone(ProjectInfoDomain.Timezone.builder()
-                .application(ZoneId.systemDefault().toString())
-                .database(databaseTimezone)
-                .build())
-            .build();
+                .runtimeMode(runtimeMode)
+                .version(version)
+                .timezone(ProjectInfoDomain.Timezone.builder()
+                        .application(ZoneId.systemDefault().toString())
+                        .database(databaseTimezone)
+                        .build())
+                .build();
     }
 
     private ProjectInfoDomain.Version buildVersion() {
@@ -64,24 +62,25 @@ class ProjectInfoUseCaseImpl implements ProjectInfoUseCase {
         };
 
         return ProjectInfoDomain.Version.builder()
-            .current(currentVersion)
-            .latest(latestVersion)
-            .isLatest(getIsLatest.getAsBoolean())
-            .build();
+                .current(currentVersion)
+                .latest(latestVersion)
+                .isLatest(getIsLatest.getAsBoolean())
+                .build();
     }
 
     private String fetchLatestVersionFromGitHub() {
         try {
-            final GitHubReleaseDomain latestRelease = gitHubGateway.getLatestRelease(sanjyServerProps.application().name());
+            final GitHubReleaseDomain latestRelease = gitHubGateway.getLatestRelease(
+                    sanjyServerProps.application().name());
             return Optional.ofNullable(latestRelease.tagName())
-                .filter(Predicate.not(String::isBlank))
-                .orElse(null);
+                    .filter(Predicate.not(String::isBlank))
+                    .orElse(null);
         } catch (final Exception e) {
             log.warn(
-                LogField.Placeholders.TWO.getPlaceholder(),
-                StructuredArguments.kv(LogField.MSG.label(), "Error fetching latest version from GitHub"),
-                StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), e.getMessage()),
-                e);
+                    LogField.Placeholders.TWO.getPlaceholder(),
+                    StructuredArguments.kv(LogField.MSG.label(), "Error fetching latest version from GitHub"),
+                    StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), e.getMessage()),
+                    e);
             return null;
         }
     }
@@ -91,10 +90,10 @@ class ProjectInfoUseCaseImpl implements ProjectInfoUseCase {
             return databaseTimeZoneGateway.get();
         } catch (final Exception e) {
             log.warn(
-                LogField.Placeholders.TWO.getPlaceholder(),
-                StructuredArguments.kv(LogField.MSG.label(), "Error fetching database timezone"),
-                StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), e.getMessage()),
-                e);
+                    LogField.Placeholders.TWO.getPlaceholder(),
+                    StructuredArguments.kv(LogField.MSG.label(), "Error fetching database timezone"),
+                    StructuredArguments.kv(LogField.EXCEPTION_MESSAGE.label(), e.getMessage()),
+                    e);
             return null;
         }
     }

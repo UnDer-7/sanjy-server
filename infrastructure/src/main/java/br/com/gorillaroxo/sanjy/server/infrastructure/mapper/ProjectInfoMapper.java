@@ -7,11 +7,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(
-    componentModel = InfrastructureConstants.MAPSTRUCT_COMPONENT_MODEL,
-    uses = MealTypeMapper.class,
-    unmappedTargetPolicy = ReportingPolicy.ERROR)
+        componentModel = InfrastructureConstants.MAPSTRUCT_COMPONENT_MODEL,
+        uses = MealTypeMapper.class,
+        unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface ProjectInfoMapper {
 
     ProjectInfoResponseDto toDto(ProjectInfoDomain domain);
-
 }

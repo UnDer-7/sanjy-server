@@ -1,15 +1,14 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.gateway.lib;
 
+import static org.assertj.core.api.Assertions.*;
+
+import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class SemanticVersioningComparatorLibGatewayTest {
@@ -65,8 +64,7 @@ class SemanticVersioningComparatorLibGatewayTest {
                 Arguments.of("1.0.0-alpha", "1.0.0-alpha.1"),
                 // large version numbers
                 Arguments.of("10.20.30", "10.20.31"),
-                Arguments.of("99.99.99", "100.0.0")
-        );
+                Arguments.of("99.99.99", "100.0.0"));
     }
 
     static Stream<Arguments> versionsAreEqual() {
@@ -79,8 +77,7 @@ class SemanticVersioningComparatorLibGatewayTest {
                 Arguments.of("1.0.0-alpha-2", "1.0.0-alpha-2"),
                 Arguments.of("10.20.30", "10.20.30"),
                 Arguments.of("0.0.1", "0.0.1"),
-                Arguments.of("3.0.0-rc.1", "3.0.0-rc.1")
-        );
+                Arguments.of("3.0.0-rc.1", "3.0.0-rc.1"));
     }
 
     static Stream<Arguments> currentVersionIsGreaterThanTarget() {
@@ -107,7 +104,6 @@ class SemanticVersioningComparatorLibGatewayTest {
                 Arguments.of("1.0.0-alpha-2", "1.0.0-alpha-1"),
                 // large version numbers
                 Arguments.of("10.20.31", "10.20.30"),
-                Arguments.of("100.0.0", "99.99.99")
-        );
+                Arguments.of("100.0.0", "99.99.99"));
     }
 }

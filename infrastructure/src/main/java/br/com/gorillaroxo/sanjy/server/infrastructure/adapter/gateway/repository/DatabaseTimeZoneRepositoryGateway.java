@@ -17,5 +17,4 @@ public class DatabaseTimeZoneRepositoryGateway implements DatabaseTimeZoneGatewa
     public String get() {
         return repository.getDatabaseTimeZone();
     }
-
 }
