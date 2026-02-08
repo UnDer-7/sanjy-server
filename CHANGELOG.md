@@ -56,3 +56,4 @@ structure and verifying the end-to-end flow of diet plan management and meal tra
 - All endpoints versioned under `/v1/` prefix
 
 [0.1.0]: https://github.com/UnDer-7/sanjy-server/releases/tag/0.1.0
+
