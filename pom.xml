@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.7</version>
+        <version>3.5.10</version>
         <relativePath/>
         <!-- lookup parent from repository -->
     </parent>
@@ -130,6 +130,13 @@
                 <artifactId>commons-fileupload</artifactId>
                 <version>1.6.0</version>
             </dependency>
+            <!-- Override vulnerable assertj-core version (SNYK-JAVA-ORGASSERTJ-15102413 - XXE Injection) -->
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>3.27.7</version>
+                <scope>test</scope>
+            </dependency>
             <!-- ####################### -->
         </dependencies>
     </dependencyManagement>
@@ -176,7 +183,6 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>${assertj.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- ####################### -->
