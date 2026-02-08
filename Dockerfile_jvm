@@ -8,7 +8,7 @@ ARG BUILD_MODE=full
 ##################
 # BUILD STEP (FULL MODE)
 ##################
-FROM eclipse-temurin:25.0.1_8-jdk-alpine-3.22 AS build-full
+FROM eclipse-temurin:25.0.2_10-jdk-alpine-3.22 AS build-full
 
 RUN echo "========================================" && \
     echo "STAGE: build-full (JVM full compilation)" && \
@@ -37,7 +37,7 @@ RUN make build/jvm && \
 ##################
 # BUILD STEP (LOCAL MODE)
 ##################
-FROM eclipse-temurin:25.0.1_8-jdk-alpine-3.22 AS build-local
+FROM eclipse-temurin:25.0.2_10-jdk-alpine-3.22 AS build-local
 
 RUN echo "========================================" && \
     echo "STAGE: build-local (using pre-built JAR)" && \
@@ -53,7 +53,7 @@ COPY infrastructure/target/*.jar ./app.jar
 ##################
 FROM build-${BUILD_MODE} AS build-selected
 
-FROM eclipse-temurin:25.0.1_8-jdk-alpine-3.22 AS release
+FROM eclipse-temurin:25.0.2_10-jdk-alpine-3.22 AS release
 
 RUN echo "========================================" && \
     echo "STAGE: release (final image)" && \
