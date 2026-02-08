@@ -5,13 +5,13 @@ meta {
 }
 
 get {
-  url: {{SERVER_URL}}/v1/meal-record/today?timezone=America/Sao_Paulo
+  url: {{SERVER_URL}}/v1/meal-record/today
   body: json
   auth: inherit
 }
 
 params:query {
-  timezone: America/Sao_Paulo
+  ~timezone: America/Sao_Paulo
 }
 
 headers {
@@ -21,4 +21,183 @@ headers {
 settings {
   encodeUrl: false
   timeout: 0
+}
+
+example {
+  name: success
+  
+  request: {
+    url: {{SERVER_URL}}/v1/meal-record/today?timezone=America/Sao_Paulo
+    method: GET
+    mode: none
+    params:query: {
+      timezone: America/Sao_Paulo
+    }
+  
+    headers: {
+      Content-Type: application/json
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      transfer-encoding: chunked
+      date: Wed, 04 Feb 2026 12:52:06 GMT
+      keep-alive: timeout=60
+      connection: keep-alive
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        [
+            {
+                "id": 129,
+                "consumedAt": "2026-02-04T07:09:09.555854Z",
+                "mealType": {
+                    "id": 2,
+                    "name": "Pre-workout snack",
+                    "scheduledTime": "06:20:00",
+                    "observation": "25g protein | 40g carbs | 3g fat | 285 kcal",
+                    "metadata": {
+                        "createdAt": "2026-01-08T12:49:09.477776Z",
+                        "updatedAt": "2026-01-08T12:49:09.477776Z"
+                    }
+                },
+                "isFreeMeal": false,
+                "standardOption": {
+                    "id": 4,
+                    "optionNumber": 1,
+                    "description": "Banana -- 1 unit (90g) | Whey protein isolate -- 30g | Oats -- 20g",
+                    "metadata": {
+                        "createdAt": "2026-01-08T12:49:09.490238Z",
+                        "updatedAt": "2026-01-08T12:49:09.490238Z"
+                    }
+                },
+                "freeMealDescription": null,
+                "quantity": 1,
+                "unit": "serving",
+                "notes": "Good energy for workout",
+                "metadata": {
+                    "createdAt": "2026-02-04T07:09:09.555854Z",
+                    "updatedAt": "2026-02-04T07:09:09.555854Z"
+                }
+            },
+            {
+                "id": 132,
+                "consumedAt": "2026-02-04T12:39:09.555854Z",
+                "mealType": {
+                    "id": 4,
+                    "name": "Afternoon snack",
+                    "scheduledTime": "16:00:00",
+                    "observation": "20g protein | 30g carbs | 5g fat | 250 kcal",
+                    "metadata": {
+                        "createdAt": "2026-01-08T12:49:09.481775Z",
+                        "updatedAt": "2026-01-08T12:49:09.481775Z"
+                    }
+                },
+                "isFreeMeal": true,
+                "standardOption": null,
+                "freeMealDescription": "Chocolate bar -- 1 unit (50g) | Cappuccino -- 200ml",
+                "quantity": 1,
+                "unit": "combo",
+                "notes": "Sweet craving after lunch",
+                "metadata": {
+                    "createdAt": "2026-02-04T12:39:09.555854Z",
+                    "updatedAt": "2026-02-04T12:39:09.555854Z"
+                }
+            }
+        ]
+      '''
+    }
+  }
+}
+
+example {
+  name: success | empty
+  
+  request: {
+    url: {{SERVER_URL}}/v1/meal-record/today?timezone=America/Sao_Paulo
+    method: GET
+    mode: none
+    params:query: {
+      timezone: America/Sao_Paulo
+    }
+  
+    headers: {
+      Content-Type: application/json
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      transfer-encoding: chunked
+      date: Wed, 04 Feb 2026 12:53:19 GMT
+      keep-alive: timeout=60
+      connection: keep-alive
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        []
+      '''
+    }
+  }
+}
+
+example {
+  name: fail | invalid property
+  
+  request: {
+    url: {{SERVER_URL}}/v1/meal-record/today
+    method: GET
+    mode: none
+    params:query: {
+      ~timezone: America/Sao_Paulo
+    }
+  
+    headers: {
+      Content-Type: application/json
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      transfer-encoding: chunked
+      date: Wed, 04 Feb 2026 12:53:43 GMT
+      connection: close
+    }
+  
+    status: {
+      code: 400
+      text: Bad Request
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "code": "002",
+          "timestamp": "2026-02-04T12:53:43.648563850Z",
+          "message": "Invalid values",
+          "customMessage": "[ propertyPath: timezone - errorMotive: must not be null - valueProvided: null ]",
+          "httpStatusCode": 400
+        }
+      '''
+    }
+  }
 }

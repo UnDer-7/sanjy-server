@@ -5,14 +5,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.7</version>
+        <version>3.5.10</version>
         <relativePath/>
         <!-- lookup parent from repository -->
     </parent>
 
     <groupId>br.com.gorillaroxo</groupId>
     <artifactId>sanJy-server</artifactId>
-    <version>1.0.0</version>
+    <version>0.1.0</version>
     <packaging>pom</packaging>
     <name>sanJy-server</name>
     <description>Backend server application for diet and meal management, enabling nutritionists to create diet plans and users to track meal consumption records</description>
@@ -44,6 +44,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+        <!-- Careful when upgrading springdoc-->
+        <!-- springdoc version 2.18.15 breaks GraalVm Native Image at runtime, throws given error: "Error creating bean with name 'swaggerWelcome': Instantiation of supplied bean failed"-->
+        <!-- GitHub issue: https://github.com/springdoc/springdoc-openapi/issues/3205 (The first comment about a fix doesn't work -->
         <springdoc.version>2.8.14</springdoc.version>
         <mapstruct.version>1.6.3</mapstruct.version>
         <projectlombok.version>1.18.34</projectlombok.version>
@@ -87,6 +90,13 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-bom</artifactId>
+                <version>${springdoc.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <!-- ####################### -->
 
             <!-- Modules -->
@@ -119,6 +129,13 @@
                 <groupId>commons-fileupload</groupId>
                 <artifactId>commons-fileupload</artifactId>
                 <version>1.6.0</version>
+            </dependency>
+            <!-- Override vulnerable assertj-core version (SNYK-JAVA-ORGASSERTJ-15102413 - XXE Injection) -->
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>3.27.7</version>
+                <scope>test</scope>
             </dependency>
             <!-- ####################### -->
         </dependencies>
@@ -166,7 +183,6 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>${assertj.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- ####################### -->

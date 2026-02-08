@@ -19,12 +19,12 @@ body:json {
     "mealTypeId": 1,
   //   "consumedAt": "2025-11-14T10:34:55Z",
     
-  //   "isFreeMeal": false,
-  //   "standardOptionId": 1,
+    "isFreeMeal": false,
+    "standardOptionId": 1,
     
-    "isFreeMeal": true,
-    "standardOptionId": null,
-    "freeMealDescription": "pacote de biscoito",
+  //   "isFreeMeal": true,
+  //   "standardOptionId": null,
+  //   "freeMealDescription": "pacote de biscoito",
     
     "quantity": null,
     "unit": null,
@@ -35,4 +35,202 @@ body:json {
 settings {
   encodeUrl: false
   timeout: 0
+}
+
+example {
+  name: success | free meal
+  
+  request: {
+    url: {{SERVER_URL}}/v1/meal-record
+    method: POST
+    mode: json
+    headers: {
+      Content-Type: application/json
+    }
+  
+    body:json: {
+      {
+        "mealTypeId": 1,
+      //   "consumedAt": "2025-11-14T10:34:55Z",
+                          
+      //   "isFreeMeal": false,
+      //   "standardOptionId": 1,
+                          
+        "isFreeMeal": true,
+        "standardOptionId": null,
+        "freeMealDescription": "pacote de biscoito",
+                          
+        "quantity": null,
+        "unit": null,
+        "notes": null
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      transfer-encoding: chunked
+      date: Wed, 04 Feb 2026 12:50:06 GMT
+      keep-alive: timeout=60
+      connection: keep-alive
+    }
+  
+    status: {
+      code: 201
+      text: Created
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "id": 133,
+          "consumedAt": "2026-02-04T12:50:06.643715693Z",
+          "mealType": {
+            "id": 1
+          },
+          "isFreeMeal": true,
+          "standardOption": null,
+          "freeMealDescription": "pacote de biscoito",
+          "quantity": 1,
+          "unit": "serving",
+          "notes": null,
+          "metadata": {
+            "createdAt": "2026-02-04T12:50:06.667931123Z",
+            "updatedAt": "2026-02-04T12:50:06.667952373Z"
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: success | planned meal
+  
+  request: {
+    url: {{SERVER_URL}}/v1/meal-record
+    method: POST
+    mode: json
+    headers: {
+      Content-Type: application/json
+    }
+  
+    body:json: {
+      {
+        "mealTypeId": 1,
+      //   "consumedAt": "2025-11-14T10:34:55Z",
+                
+        "isFreeMeal": false,
+        "standardOptionId": 1,
+                
+      //   "isFreeMeal": true,
+      //   "standardOptionId": null,
+      //   "freeMealDescription": "pacote de biscoito",
+                
+        "quantity": null,
+        "unit": null,
+        "notes": null
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      transfer-encoding: chunked
+      date: Wed, 04 Feb 2026 17:22:53 GMT
+      keep-alive: timeout=60
+      connection: keep-alive
+    }
+  
+    status: {
+      code: 201
+      text: Created
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "id": 138,
+          "consumedAt": "2026-02-04T17:22:40.481755225Z",
+          "mealType": {
+            "id": 1
+          },
+          "isFreeMeal": false,
+          "standardOption": {
+            "id": 1
+          },
+          "freeMealDescription": null,
+          "quantity": 1,
+          "unit": "serving",
+          "notes": null,
+          "metadata": {
+            "createdAt": "2026-02-04T17:22:40.526726865Z",
+            "updatedAt": "2026-02-04T17:22:40.526727535Z"
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: fail | invalid property
+  
+  request: {
+    url: {{SERVER_URL}}/v1/meal-record
+    method: POST
+    mode: json
+    headers: {
+      Content-Type: application/json
+    }
+  
+    body:json: {
+      {
+        "mealTypeId": null,
+      //   "consumedAt": "2025-11-14T10:34:55Z",
+              
+        "isFreeMeal": false,
+        "standardOptionId": 1,
+              
+      //   "isFreeMeal": true,
+      //   "standardOptionId": null,
+      //   "freeMealDescription": "pacote de biscoito",
+              
+        "quantity": null,
+        "unit": null,
+        "notes": null
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      transfer-encoding: chunked
+      date: Wed, 04 Feb 2026 17:29:21 GMT
+      connection: close
+    }
+  
+    status: {
+      code: 400
+      text: Bad Request
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "code": "002",
+          "timestamp": "2026-02-04T17:29:21.398223803Z",
+          "message": "Invalid values",
+          "customMessage": "[ propertyPath: mealTypeId - errorMotive: must not be null - valueProvided: null ]",
+          "httpStatusCode": 400
+        }
+      '''
+    }
+  }
 }
