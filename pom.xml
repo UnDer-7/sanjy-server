@@ -44,6 +44,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+        <!-- Careful when upgrading springdoc-->
+        <!-- springdoc version 2.18.15 breaks GraalVm Native Image at runtime, throws given error: "Error creating bean with name 'swaggerWelcome': Instantiation of supplied bean failed"-->
+        <!-- GitHub issue: https://github.com/springdoc/springdoc-openapi/issues/3205 (The first comment about a fix doesn't work -->
         <springdoc.version>2.8.14</springdoc.version>
         <mapstruct.version>1.6.3</mapstruct.version>
         <projectlombok.version>1.18.34</projectlombok.version>
@@ -84,6 +87,13 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-bom</artifactId>
+                <version>${springdoc.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
