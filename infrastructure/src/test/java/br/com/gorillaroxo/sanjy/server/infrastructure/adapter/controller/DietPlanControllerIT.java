@@ -31,6 +31,7 @@ class DietPlanControllerIT extends IntegrationTestController {
     class NewDietPlan {
 
         @Test
+        @SuppressWarnings({"java:S5961", "Test methods should not contain too many assertions"})
         void should_create_diet_plan() {
             dietPlanRepository.deleteAll();
             final var request = DtoBuilders.buildCreateDietPlanRequestDto().build();
