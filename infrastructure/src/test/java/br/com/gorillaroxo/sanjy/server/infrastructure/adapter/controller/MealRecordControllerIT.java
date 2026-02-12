@@ -30,6 +30,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+@SuppressWarnings({"java:S5961", "Integration tests may have many assertions per method"})
 class MealRecordControllerIT extends IntegrationTestController {
 
     static final String BASE_URL = "/v1/meal-record";
