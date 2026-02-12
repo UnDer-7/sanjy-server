@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+@SuppressWarnings({"java:S5961", "Integration tests may have many assertions per method"})
 class DietPlanControllerIT extends IntegrationTestController {
 
     static final String BASE_URL = "/v1/diet-plan";
