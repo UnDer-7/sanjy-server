@@ -2,6 +2,7 @@ package br.com.gorillaroxo.sanjy.server.core.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.awaitility.Awaitility.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -20,8 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.MDC;
-
-import static org.awaitility.Awaitility.*;
 
 @ExtendWith(MockitoExtension.class)
 class ThreadUtilsTest {
@@ -101,9 +100,8 @@ class ThreadUtilsTest {
             ThreadUtils.runAsyncWithMdc(runnable, executor);
 
             // Then
-            await().atMost(1, TimeUnit.SECONDS).untilAsserted(() ->
-                assertThat(capturedMdcValue.get()).isEqualTo(mdcValue)
-            );
+            await().atMost(1, TimeUnit.SECONDS)
+                    .untilAsserted(() -> assertThat(capturedMdcValue.get()).isEqualTo(mdcValue));
         }
 
         @Test
@@ -120,9 +118,8 @@ class ThreadUtilsTest {
             ThreadUtils.runAsyncWithMdc(runnable);
 
             // Then
-            await().atMost(1, TimeUnit.SECONDS).untilAsserted(() ->
-                assertThat(capturedMdcValue.get()).isEqualTo(mdcValue)
-            );
+            await().atMost(1, TimeUnit.SECONDS)
+                    .untilAsserted(() -> assertThat(capturedMdcValue.get()).isEqualTo(mdcValue));
         }
 
         @Test
@@ -137,9 +134,8 @@ class ThreadUtilsTest {
             ThreadUtils.runAsyncWithMdc(runnable, executor);
 
             // Then
-            await().atMost(1, TimeUnit.SECONDS).untilAsserted(() ->
-                assertThat(counter.get()).isEqualTo(1)
-            );
+            await().atMost(1, TimeUnit.SECONDS)
+                    .untilAsserted(() -> assertThat(counter.get()).isEqualTo(1));
         }
 
         @Test
@@ -153,9 +149,8 @@ class ThreadUtilsTest {
             ThreadUtils.runAsyncWithMdc(runnable);
 
             // Then
-            await().atMost(1, TimeUnit.SECONDS).untilAsserted(() ->
-                assertThat(counter.get()).isEqualTo(1)
-            );
+            await().atMost(1, TimeUnit.SECONDS)
+                    .untilAsserted(() -> assertThat(counter.get()).isEqualTo(1));
         }
 
         @Test
@@ -181,9 +176,8 @@ class ThreadUtilsTest {
             ThreadUtils.runAsyncWithMdc(runnable, trackingExecutor);
 
             // Then
-            await().atMost(1, TimeUnit.SECONDS).untilAsserted(() ->
-                assertThat(mdcAfterExecution.get()).isNullOrEmpty()
-            );
+            await().atMost(1, TimeUnit.SECONDS)
+                    .untilAsserted(() -> assertThat(mdcAfterExecution.get()).isNullOrEmpty());
         }
 
         @Test
@@ -224,9 +218,8 @@ class ThreadUtilsTest {
             ThreadUtils.runAsyncWithMdc(runnable, executor);
 
             // Then
-            await().atMost(1, TimeUnit.SECONDS).untilAsserted(() ->
-                assertThat(capturedMdc.get()).containsAllEntriesOf(mdcValues)
-            );
+            await().atMost(1, TimeUnit.SECONDS)
+                    .untilAsserted(() -> assertThat(capturedMdc.get()).containsAllEntriesOf(mdcValues));
         }
     }
 

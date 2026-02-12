@@ -446,6 +446,7 @@ Custom Lombok settings in `lombok.config`:
 When updating `CHANGELOG.md`, every version section (`## [X.Y.Z]`) **must** contain at least one `####` (h4) header. The CI pipeline (`pull-request-pipeline.yml`) validates this with `grep -q "^####"` and will fail if missing.
 
 Correct structure:
+
 ```markdown
 ## [X.Y.Z] - YYYY-MM-DD
 

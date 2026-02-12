@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 #### SonarQube & Code Quality
+
 - SonarQube warnings and small code fixes
 
 ---
