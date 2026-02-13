@@ -26,7 +26,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -98,9 +97,9 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(
             final MethodArgumentNotValidException ex,
-            @Nullable final HttpHeaders headers,
-            @Nullable final HttpStatusCode status,
-            @Nullable final WebRequest request) {
+            final HttpHeaders headers,
+            final HttpStatusCode status,
+            final WebRequest request) {
 
         final String invalidValues = ex.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> buildInvalidAttributeMessage(
