@@ -46,7 +46,7 @@ public class FeignRetryer implements Retryer {
     }
 
     @Override
-    @SuppressWarnings({"checkstyle:NoClone", "checkstyle:SuperClone"})
+    @SuppressWarnings({"checkstyle:NoClone", "checkstyle:SuperClone", "java:S1182", "java:S2975"})
     public Retryer clone() {
         return new FeignRetryer(retryConfigProp);
     }

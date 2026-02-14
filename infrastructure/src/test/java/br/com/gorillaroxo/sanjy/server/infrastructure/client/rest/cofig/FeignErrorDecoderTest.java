@@ -308,7 +308,9 @@ class FeignErrorDecoderTest {
                     }
 
                     @Override
-                    public void close() {}
+                    public void close() {
+                        // default implementation ignored
+                    }
                 };
             });
         } catch (final IOException e) {
