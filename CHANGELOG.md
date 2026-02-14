@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2026-02-11
 
+### Added
+
+#### Configurable Endpoint Prefix
+
+- Configurable global prefix for resource endpoints via `SANJY_SERVER_APPLICATION_ENDPOINTS_PREFIX` environment variable
+- Only applies to resource endpoints (excludes health, monitoring, Swagger UI, and MCP)
+
 ### Fixed
 
 #### SonarQube & Code Quality

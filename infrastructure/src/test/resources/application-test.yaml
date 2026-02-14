@@ -7,6 +7,7 @@ sanjy-server:
     name: ${spring.application.name}
     version: "@project.version@"
     description: "@project.description@"
+    endpoints-prefix:
     contact:
       name: ToDo-put-name #ToDo: Put real name
       url: https://google.com #ToDo: Put real site

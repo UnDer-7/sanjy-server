@@ -9,20 +9,18 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.DietPlanCompleteRe
 import br.com.gorillaroxo.sanjy.server.entrypoint.rest.DietPlanRestService;
 import br.com.gorillaroxo.sanjy.server.infrastructure.config.McpToolMarker;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.DietPlanMapper;
+import br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller.config.SanjyEndpoint;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.argument.StructuredArguments;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@Validated
-@RestController
+@SanjyEndpoint("/v1/diet-plan")
 @RequiredArgsConstructor
 public class DietPlanController implements DietPlanRestService, McpToolMarker {
 
@@ -31,7 +29,7 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
     private final DietPlanMapper dietPlanMapper;
 
     @Override
-    @PostMapping("/v1/diet-plan")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Tool(name = "newDietPlan", description = """
             Creates a new diet plan with meal types (breakfast, lunch, snack, dinner, etc.), \
@@ -62,7 +60,7 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
 
     @Override
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/v1/diet-plan/active")
+    @GetMapping("/active")
     @Tool(name = "activeDietPlan", description = """
             Retrieves the currently active diet plan with all meal types, standard options, \
             nutritional targets (calories, protein, carbs, fat), and goals. Only one diet plan can be active at a time.

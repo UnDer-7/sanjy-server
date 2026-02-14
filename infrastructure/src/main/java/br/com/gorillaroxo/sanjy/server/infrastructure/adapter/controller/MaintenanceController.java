@@ -6,20 +6,16 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ProjectInfoRespons
 import br.com.gorillaroxo.sanjy.server.entrypoint.rest.MaintenanceRestService;
 import br.com.gorillaroxo.sanjy.server.infrastructure.config.McpToolMarker;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.ProjectInfoMapper;
+import br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller.config.SanjyEndpoint;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.http.MediaType;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@Validated
-@RestController
+@SanjyEndpoint("/v1/maintenance")
 @RequiredArgsConstructor
-@RequestMapping("/v1/maintenance")
 public class MaintenanceController implements MaintenanceRestService, McpToolMarker {
 
     private final ProjectInfoUseCase projectInfoUseCase;

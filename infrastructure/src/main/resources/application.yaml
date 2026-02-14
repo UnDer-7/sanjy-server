@@ -10,6 +10,7 @@ sanjy-server:
     name: ${spring.application.name}
     version: "@project.version@"
     description: "@project.description@"
+    endpoints-prefix: ${SANJY_SERVER_APPLICATION_ENDPOINTS_PREFIX:}
     contact:
       name: ToDo-put-name #ToDo: Put real name
       url: https://google.com #ToDo: Put real site
@@ -23,7 +24,7 @@ sanjy-server:
       interval: ${SANJY_SERVER_EXTERNAL_HTTP_CLIENT_RETRY_CONFIG_INTERVAL}
       backoff-multiplier: ${SANJY_SERVER_EXTERNAL_HTTP_CLIENT_RETRY_CONFIG_BACKOFF_MULTIPLIER}
     github:
-      url: ${SANJY_SERVER_EXTERNAL_HTTP_CLIENT_GITHUB_URL}
+      url: ${SANJY_SERVER_EXTERNAL_HTTP_CLIENT_GITHUB_URL:}
 
 
 spring:
