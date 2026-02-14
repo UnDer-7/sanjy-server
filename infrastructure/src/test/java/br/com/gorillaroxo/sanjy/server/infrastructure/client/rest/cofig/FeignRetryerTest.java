@@ -179,8 +179,6 @@ class FeignRetryerTest {
 
         // Then - Second retry should take longer due to exponential backoff
         assertThat(elapsed1).isGreaterThanOrEqualTo(400L);
-        assertThat(elapsed2)
-            .isGreaterThanOrEqualTo(1300L)
-            .isGreaterThan(elapsed1);
+        assertThat(elapsed2).isGreaterThanOrEqualTo(1300L).isGreaterThan(elapsed1);
     }
 }

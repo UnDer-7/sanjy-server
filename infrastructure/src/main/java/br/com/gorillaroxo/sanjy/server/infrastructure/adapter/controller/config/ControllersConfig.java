@@ -26,5 +26,4 @@ public class ControllersConfig implements WebMvcConfigurer {
             configurer.addPathPrefix(endpointsPrefix, HandlerTypePredicate.forAnnotation(SanjyEndpoint.class));
         }
     }
-
 }

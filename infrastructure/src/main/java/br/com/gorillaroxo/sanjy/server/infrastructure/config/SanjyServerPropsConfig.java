@@ -14,65 +14,50 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @ConfigurationProperties(prefix = "sanjy-server", ignoreUnknownFields = false)
 record SanjyServerPropsConfig(
-    @NotNull @Valid LoggingPropImpl logging,
-    @NotNull @Valid ApplicationPropImpl application,
-    @NotNull @Valid ExternalHttpClientsPropImpl externalHttpClients)
-    implements SanjyServerProps {
+        @NotNull @Valid LoggingPropImpl logging,
+        @NotNull @Valid ApplicationPropImpl application,
+        @NotNull @Valid ExternalHttpClientsPropImpl externalHttpClients)
+        implements SanjyServerProps {
 
     record LoggingPropImpl(
-        @NotBlank String level,
-        @NotBlank String filePath,
-        @NotBlank String appender) implements SanjyServerProps.LoggingProp {
-
-    }
+            @NotBlank String level,
+            @NotBlank String filePath,
+            @NotBlank String appender) implements SanjyServerProps.LoggingProp {}
 
     record ApplicationPropImpl(
-        @NotBlank String name,
-        @NotBlank String version,
-        @NotBlank String description,
-        @Pattern(
-            regexp = "^$|^/[a-zA-Z0-9]([a-zA-Z0-9._~-]|/[a-zA-Z0-9])*+$",
-            message = """
+            @NotBlank String name,
+            @NotBlank String version,
+            @NotBlank String description,
+
+            @Pattern(regexp = "^$|^/[a-zA-Z0-9]([a-zA-Z0-9._~-]|/[a-zA-Z0-9])*+$", message = """
                 Invalid endpoints prefix. Must be empty/null or a valid URL path starting with '/' (e.g. '/api', '/server/v1'). \
                 Cannot be just '/', cannot end with '/', and must contain only alphanumeric characters, '.', '_', '~', or '-'
                 """)
-        String endpointsPrefix,
-        @NotNull @Valid ApplicationContactPropImpl contact,
-        @NotNull @Valid ApplicationDocumentationPropImpl documentation)
-        implements SanjyServerProps.ApplicationProp {
+            String endpointsPrefix,
 
-    }
+            @NotNull @Valid ApplicationContactPropImpl contact,
+            @NotNull @Valid ApplicationDocumentationPropImpl documentation)
+            implements SanjyServerProps.ApplicationProp {}
 
     record ApplicationContactPropImpl(
-        @NotBlank String name,
-        @NotBlank @URL String url,
-        @NotBlank @Email String email) implements SanjyServerProps.ApplicationContactProp {
-
-    }
+            @NotBlank String name,
+            @NotBlank @URL String url,
+            @NotBlank @Email String email) implements SanjyServerProps.ApplicationContactProp {}
 
     record ApplicationDocumentationPropImpl(
-        @NotBlank @URL String url, @NotBlank String description)
-        implements SanjyServerProps.ApplicationDocumentationProp {
-
-    }
+            @NotBlank @URL String url, @NotBlank String description)
+            implements SanjyServerProps.ApplicationDocumentationProp {}
 
     record ExternalHttpClientsPropImpl(
-        @NotNull @Valid ExternalHttpClientsRetryConfigPropImpl retryConfig,
-        @NotNull @Valid GenericHttpClientsPropImpl github)
-        implements SanjyServerProps.ExternalHttpClientsProp {
+            @NotNull @Valid ExternalHttpClientsRetryConfigPropImpl retryConfig,
+            @NotNull @Valid GenericHttpClientsPropImpl github)
+            implements SanjyServerProps.ExternalHttpClientsProp {}
 
-    }
-
-    record GenericHttpClientsPropImpl(@NotBlank @URL String url) implements SanjyServerProps.GenericHttpClientsProp {
-
-    }
+    record GenericHttpClientsPropImpl(@NotBlank @URL String url) implements SanjyServerProps.GenericHttpClientsProp {}
 
     record ExternalHttpClientsRetryConfigPropImpl(
-        @NotNull @PositiveOrZero Integer maxAttempt,
-        @NotNull @PositiveOrZero Integer interval,
-        @NotNull @PositiveOrZero Integer backoffMultiplier)
-        implements SanjyServerProps.ExternalHttpClientsRetryConfigProp {
-
-    }
-
+            @NotNull @PositiveOrZero Integer maxAttempt,
+            @NotNull @PositiveOrZero Integer interval,
+            @NotNull @PositiveOrZero Integer backoffMultiplier)
+            implements SanjyServerProps.ExternalHttpClientsRetryConfigProp {}
 }
