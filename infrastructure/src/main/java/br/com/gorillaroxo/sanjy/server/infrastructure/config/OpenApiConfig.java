@@ -6,6 +6,7 @@ import br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller.config.
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.examples.Example;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.Content;
@@ -15,7 +16,6 @@ import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.media.UUIDSchema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.responses.ApiResponse;
-import io.swagger.v3.oas.models.examples.Example;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -81,12 +81,13 @@ public class OpenApiConfig {
     }
 
     private void customErrorResponses(final Operation operation) {
-        operation.getResponses()
+        operation
+                .getResponses()
                 .addApiResponse(OpenApiConstants.HttpStatusCodes.BAD_REQUEST, buildBadRequestResponse());
-        operation.getResponses()
+        operation
+                .getResponses()
                 .addApiResponse(
-                        OpenApiConstants.HttpStatusCodes.INTERNAL_SERVER_ERROR,
-                        buildInternalServerErrorResponse());
+                        OpenApiConstants.HttpStatusCodes.INTERNAL_SERVER_ERROR, buildInternalServerErrorResponse());
     }
 
     private ApiResponse buildBadRequestResponse() {

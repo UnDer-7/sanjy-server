@@ -78,7 +78,7 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
 
     @Override
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/today", produces =  MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/today", produces = MediaType.APPLICATION_JSON_VALUE)
     @Tool(name = "getTodayMealRecords", description = """
             Retrieves all meals consumed today, ordered by consumption time. Includes both standard meals (following the diet plan) \
             and free meals (off-plan). Use this to check daily food intake and diet adherence.
@@ -131,7 +131,7 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
 
     @Override
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/statistics", produces =  MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/statistics", produces = MediaType.APPLICATION_JSON_VALUE)
     @Tool(name = "getMealRecordStatistics", description = """
             Retrieves aggregated statistics of meal records within a specified date range. Returns the total count of meals consumed, \
             broken down by free meals (off-plan) and planned meals (following the diet plan). Use this to analyze diet adherence, \
