@@ -137,7 +137,7 @@ class DietPlanControllerIT extends IntegrationTestController {
                     .bodyValue(request)
                     .exchange()
                     .expectStatus()
-                    .isBadRequest()
+                    .isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.value())
                     .expectBody(ErrorResponseDto.class)
                     .value(response -> {
                         final var expectedExCode = ExceptionCode.REPEATED_MEAL_TYPE_NAMES;
@@ -145,7 +145,7 @@ class DietPlanControllerIT extends IntegrationTestController {
                         assertThat(response.timestamp()).isNotNull();
                         assertThat(response.message()).isNotEmpty().isEqualTo(expectedExCode.getMessage());
                         assertThat(response.customMessage()).isNotEmpty().containsIgnoringCase(repeatedName);
-                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.value());
                     });
         }
 
