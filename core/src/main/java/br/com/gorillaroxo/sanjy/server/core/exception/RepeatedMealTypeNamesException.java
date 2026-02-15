@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 public class RepeatedMealTypeNamesException extends BusinessException {
 
     private static final ExceptionCode CODE = ExceptionCode.REPEATED_MEAL_TYPE_NAMES;
-    private static final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
+    private static final HttpStatus STATUS = HttpStatus.UNPROCESSABLE_ENTITY;
 
     public RepeatedMealTypeNamesException(final String customMessage, final Throwable originalCause) {
         super(CODE, STATUS, customMessage, originalCause);

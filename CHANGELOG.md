@@ -24,6 +24,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Configurable global prefix for resource endpoints via `SANJY_SERVER_APPLICATION_ENDPOINTS_PREFIX` environment variable
 - Only applies to resource endpoints (excludes health, monitoring, Swagger UI, and MCP)
 
+### Changed
+
+#### Swagger Documentation
+
+- Improved OpenAPI documentation with complete and descriptive examples for all endpoints
+
 ### Fixed
 
 #### SonarQube & Code Quality

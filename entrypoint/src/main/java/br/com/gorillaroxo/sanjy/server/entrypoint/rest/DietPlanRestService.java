@@ -6,12 +6,12 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "Diet Plan", description = "Handles diet plan operations")
@@ -27,22 +27,55 @@ public interface DietPlanRestService {
             description = "Diet Plan successfully created",
             content =
                     @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = DietPlanCompleteResponseDto.class)))
     @ApiResponse(
-            responseCode = OpenApiConstants.HttpStatusCodes.BAD_REQUEST,
-            description = "client error",
-            content =
-                    @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorResponseDto.class)))
-    @ApiResponse(
-            responseCode = OpenApiConstants.HttpStatusCodes.INTERNAL_SERVER_ERROR,
-            description = "unexpected error occurred",
-            content =
-                    @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorResponseDto.class)))
+            responseCode = OpenApiConstants.HttpStatusCodes.UNPROCESSABLE_ENTITY,
+            description = "Business rule violation — all possible error scenarios are documented below",
+            content = @Content(
+                schema = @Schema(implementation = ErrorResponseDto.class),
+                examples = {
+                    @ExampleObject(
+                        name = "The first standard option number must be 1",
+                        summary = "Standard options not starting from 1",
+                        value = """
+                                {
+                                  "code": "004",
+                                  "timestamp": "2026-02-14T19:19:32.854839907Z",
+                                  "message": "Standard options is not in sequence",
+                                  "customMessage": "StandardOptions must start with number 1, but started with number 2 | MealType 'Breakfast' (ID: null)",
+                                  "httpStatusCode": 422
+                                }
+                                """
+                    ),
+                    @ExampleObject(
+                        name = "Standard option numbers have gaps or repeated values",
+                        summary = "Non-sequential standard option numbers",
+                        value = """
+                                {
+                                  "code": "004",
+                                  "timestamp": "2026-02-14T19:19:32.854839907Z",
+                                  "message": "Standard options is not in sequence",
+                                  "customMessage": "MealType 'Breakfast' (ID: null) has StandardOptions with non-sequential numbers (skipped or repeated numbers detected)",
+                                  "httpStatusCode": 422
+                                }
+                                """
+                    ),
+                    @ExampleObject(
+                        name = "Two or more meal types share the same name",
+                        summary = "Duplicate meal type names",
+                        value = """
+                                {
+                                  "code": "006",
+                                  "timestamp": "2026-02-15T06:21:00.449240797Z",
+                                  "message": "Meal type names has repeated values",
+                                  "customMessage": "Repeated meal type names: breakfast",
+                                  "httpStatusCode": 422
+                                }
+                                """
+                    )
+                }
+            )
+    )
     DietPlanCompleteResponseDto newDietPlan(@RequestBody @Valid @NotNull CreateDietPlanRequestDto request);
 
     @Operation(summary = "Get the currently active diet plan", description = """
@@ -54,21 +87,27 @@ public interface DietPlanRestService {
             description = "Active Diet Plan",
             content =
                     @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = DietPlanCompleteResponseDto.class)))
     @ApiResponse(
-            responseCode = OpenApiConstants.HttpStatusCodes.BAD_REQUEST,
-            description = "client error",
-            content =
-                    @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorResponseDto.class)))
-    @ApiResponse(
-            responseCode = OpenApiConstants.HttpStatusCodes.INTERNAL_SERVER_ERROR,
-            description = "unexpected error occurred",
-            content =
-                    @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorResponseDto.class)))
+        responseCode = OpenApiConstants.HttpStatusCodes.NOT_FOUND,
+        description = "Diet Plan not found",
+        content = @Content(
+            schema = @Schema(implementation = ErrorResponseDto.class),
+            examples = {
+                @ExampleObject(
+                    name = "No active diet plan found",
+                    value = """
+                                {
+                                  "code": "003",
+                                  "timestamp": "2026-02-15T06:38:34.896836872Z",
+                                  "message": "Diet plan was not found",
+                                  "customMessage": "Could not find active diet plan",
+                                  "httpStatusCode": 404
+                                }
+                                """
+                )
+            }
+        )
+    )
     DietPlanCompleteResponseDto activeDietPlan();
 }

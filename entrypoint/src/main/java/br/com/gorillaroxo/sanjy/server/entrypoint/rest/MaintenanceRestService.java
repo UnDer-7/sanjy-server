@@ -1,6 +1,5 @@
 package br.com.gorillaroxo.sanjy.server.entrypoint.rest;
 
-import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ProjectInfoResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,9 +19,5 @@ public interface MaintenanceRestService {
             responseCode = OpenApiConstants.HttpStatusCodes.OK,
             description = "Project information",
             content = @Content(schema = @Schema(implementation = ProjectInfoResponseDto.class)))
-    @ApiResponse(
-            responseCode = OpenApiConstants.HttpStatusCodes.INTERNAL_SERVER_ERROR,
-            description = "unexpected error occurred",
-            content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     ProjectInfoResponseDto projectInfo();
 }

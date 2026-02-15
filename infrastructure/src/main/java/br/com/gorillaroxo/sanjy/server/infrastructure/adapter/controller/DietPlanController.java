@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.argument.StructuredArguments;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -29,8 +30,8 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
     private final DietPlanMapper dietPlanMapper;
 
     @Override
-    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @Tool(name = "newDietPlan", description = """
             Creates a new diet plan with meal types (breakfast, lunch, snack, dinner, etc.), \
             standard meal options, nutritional targets, and goals. The new plan is automatically set as active and any previously active plan is deactivated.
@@ -60,7 +61,7 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
 
     @Override
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/active")
+    @GetMapping(value = "/active", produces = MediaType.APPLICATION_JSON_VALUE)
     @Tool(name = "activeDietPlan", description = """
             Retrieves the currently active diet plan with all meal types, standard options, \
             nutritional targets (calories, protein, carbs, fat), and goals. Only one diet plan can be active at a time.

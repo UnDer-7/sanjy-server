@@ -10,8 +10,10 @@ import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.ProjectInfoMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Slf4j
 @SanjyEndpoint("/v1/maintenance")
@@ -22,6 +24,7 @@ public class MaintenanceController implements MaintenanceRestService, McpToolMar
     private final ProjectInfoMapper projectInfoMapper;
 
     @Override
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/project-info", produces = MediaType.APPLICATION_JSON_VALUE)
     @Tool(name = "projectInfo", description = """
             Retrieves project information including version details (current and latest), \
