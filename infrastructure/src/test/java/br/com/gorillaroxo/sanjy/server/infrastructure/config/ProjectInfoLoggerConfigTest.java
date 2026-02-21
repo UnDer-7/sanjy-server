@@ -1,11 +1,5 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.config;
 
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import br.com.gorillaroxo.sanjy.server.core.ProjectInfoDomain;
 import br.com.gorillaroxo.sanjy.server.core.ports.driven.SanjyServerProps;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.ProjectInfoUseCase;
@@ -24,6 +18,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
+
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ProjectInfoLoggerConfigTest {

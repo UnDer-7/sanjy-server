@@ -1,9 +1,5 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.client.rest.cofig;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import br.com.gorillaroxo.sanjy.server.core.exception.BusinessException;
 import br.com.gorillaroxo.sanjy.server.core.exception.DietPlanNotFoundException;
 import br.com.gorillaroxo.sanjy.server.core.exception.UnhandledClientHttpException;
@@ -22,6 +18,10 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class FeignErrorDecoderTest {

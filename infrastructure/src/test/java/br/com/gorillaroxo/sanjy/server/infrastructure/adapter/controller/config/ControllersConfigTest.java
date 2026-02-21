@@ -1,8 +1,5 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller.config;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 import br.com.gorillaroxo.sanjy.server.core.ports.driven.SanjyServerProps;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +12,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.method.HandlerTypePredicate;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
+
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ControllersConfigTest {

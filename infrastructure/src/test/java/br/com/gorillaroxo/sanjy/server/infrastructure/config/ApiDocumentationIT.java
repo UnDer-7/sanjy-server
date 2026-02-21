@@ -1,7 +1,5 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.config;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import br.com.gorillaroxo.sanjy.server.infrastructure.test.IntegrationTestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +7,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ApiDocumentationIT extends IntegrationTestController {
 

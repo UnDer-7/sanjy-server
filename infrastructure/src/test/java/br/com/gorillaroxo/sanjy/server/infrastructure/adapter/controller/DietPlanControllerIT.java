@@ -1,7 +1,5 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import br.com.gorillaroxo.sanjy.server.core.exception.ExceptionCode;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.DietPlanCompleteResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
@@ -16,6 +14,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings({"java:S5961", "Integration tests may have many assertions per method"})
 class DietPlanControllerIT extends IntegrationTestController {
