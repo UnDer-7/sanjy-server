@@ -15,6 +15,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.1] - 2026-02-11
+
+### Added
+
+#### Configurable Endpoint Prefix
+
+- Configurable global prefix for resource endpoints via `SANJY_SERVER_APPLICATION_ENDPOINTS_PREFIX` environment variable
+- Only applies to resource endpoints (excludes health, monitoring, Swagger UI, and MCP)
+
+### Changed
+
+#### Swagger Documentation
+
+- Improved OpenAPI documentation with complete and descriptive examples for all endpoints
+
+### Fixed
+
+#### SonarQube & Code Quality
+
+- SonarQube warnings and small code fixes
+
+---
+
 ## [0.1.0] - 2026-07-02
 
 Initial pre-alpha release for testing and validation. This version focuses on establishing the core API
@@ -55,5 +78,6 @@ structure and verifying the end-to-end flow of diet plan management and meal tra
 - Single active diet plan enforcement (only one plan can be active at a time)
 - All endpoints versioned under `/v1/` prefix
 
+[0.1.1]: https://github.com/UnDer-7/sanjy-server/releases/tag/0.1.1
 [0.1.0]: https://github.com/UnDer-7/sanjy-server/releases/tag/0.1.0
 

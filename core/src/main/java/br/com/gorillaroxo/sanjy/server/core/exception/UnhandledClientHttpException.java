@@ -1,5 +1,7 @@
 package br.com.gorillaroxo.sanjy.server.core.exception;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -51,7 +53,10 @@ public class UnhandledClientHttpException extends BusinessException {
         return log;
     }
 
-    public static class RequestInformation {
+    public static class RequestInformation implements Serializable {
+
+        @Serial
+        private static final long serialVersionUID = 2443045996389729555L;
 
         private final String feignMethodKey;
         private final String requestMethod;

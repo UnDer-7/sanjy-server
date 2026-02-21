@@ -1,8 +1,5 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.config;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
-
 import java.time.ZoneOffset;
 import java.util.TimeZone;
 import org.junit.jupiter.api.AfterEach;
@@ -14,6 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ConfigurableApplicationContext;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 @ExtendWith(MockitoExtension.class)
 class TimezoneInitializerTest {

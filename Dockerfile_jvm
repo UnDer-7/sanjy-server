@@ -8,7 +8,7 @@ ARG BUILD_MODE=full
 ##################
 # BUILD STEP (FULL MODE)
 ##################
-FROM eclipse-temurin:25.0.1_8-jdk-alpine-3.22 AS build-full
+FROM eclipse-temurin:25.0.2_10-jdk-alpine-3.22 AS build-full
 
 RUN echo "========================================" && \
     echo "STAGE: build-full (JVM full compilation)" && \
@@ -31,13 +31,13 @@ COPY mvnw .
 COPY .mvn .mvn
 
 # Build and move JAR to standard location
-RUN make build/jvm && \
-    mv infrastructure/target/*.jar /app/app.jar
+RUN make build/jvm \
+    && mv infrastructure/target/*.jar /app/app.jar
 
 ##################
 # BUILD STEP (LOCAL MODE)
 ##################
-FROM eclipse-temurin:25.0.1_8-jdk-alpine-3.22 AS build-local
+FROM eclipse-temurin:25.0.2_10-jdk-alpine-3.22 AS build-local
 
 RUN echo "========================================" && \
     echo "STAGE: build-local (using pre-built JAR)" && \
@@ -53,7 +53,7 @@ COPY infrastructure/target/*.jar ./app.jar
 ##################
 FROM build-${BUILD_MODE} AS build-selected
 
-FROM eclipse-temurin:25.0.1_8-jdk-alpine-3.22 AS release
+FROM eclipse-temurin:25.0.2_10-jdk-alpine-3.22 AS release
 
 RUN echo "========================================" && \
     echo "STAGE: release (final image)" && \
@@ -71,12 +71,10 @@ COPY --from=build-selected /app/*.jar ./app.jar
 # Set up directories
 ARG S_DATA_PATH=/app/data
 RUN mkdir -p ${S_DATA_PATH}/logs/structured \
-    && mkdir -p ${S_DATA_PATH}/logs/unstructured
-
-# Create non-root user
-RUN addgroup -g 1000 sanjy && \
-    adduser -u 1000 -G sanjy -s /bin/sh -D sanjy && \
-    chown -R sanjy:sanjy /app
+    && mkdir -p ${S_DATA_PATH}/logs/unstructured \
+    && addgroup -g 1000 sanjy \
+    && adduser -u 1000 -G sanjy -s /bin/sh -D sanjy \
+    && chown -R sanjy:sanjy /app
 
 # Switch to non-root user for running the app
 USER sanjy

@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 public class InvalidMealRecordException extends BusinessException {
 
     private static final ExceptionCode CODE = ExceptionCode.INVALID_MEAL_RECORD;
-    private static final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
+    private static final HttpStatus STATUS = HttpStatus.UNPROCESSABLE_ENTITY;
 
     public InvalidMealRecordException(final String customMessage, final Throwable originalCause) {
         super(CODE, STATUS, customMessage, originalCause);

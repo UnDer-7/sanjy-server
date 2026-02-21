@@ -1,10 +1,5 @@
 package br.com.gorillaroxo.sanjy.server.core.service;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-
 import br.com.gorillaroxo.sanjy.server.core.domain.DietPlanDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.MealTypeDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.StandardOptionDomain;
@@ -24,6 +19,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class DietPlanServiceTest {

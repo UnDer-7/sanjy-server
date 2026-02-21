@@ -18,6 +18,7 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.PageResponseMealRecordDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.rest.MealRecordRestService;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
+import br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller.config.SanjyEndpoint;
 import br.com.gorillaroxo.sanjy.server.infrastructure.config.McpToolMarker;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.MealRecordMapper;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.PageMapper;
@@ -29,16 +30,14 @@ import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.argument.StructuredArguments;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@Validated
-@RestController
+@SanjyEndpoint("/v1/meal-record")
 @RequiredArgsConstructor
 public class MealRecordController implements MealRecordRestService, McpToolMarker {
 
@@ -50,8 +49,8 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
     private final PageMapper pageMapper;
 
     @Override
-    @PostMapping("/v1/meal-record")
     @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @Tool(name = "newMealRecord", description = """
             Records a meal consumption with timestamp, meal type, and quantity. Can register either a standard meal \
             (following the diet plan by referencing a standard option) or a free meal (off-plan with custom description).
@@ -78,7 +77,8 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
     }
 
     @Override
-    @GetMapping("/v1/meal-record/today")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/today", produces = MediaType.APPLICATION_JSON_VALUE)
     @Tool(name = "getTodayMealRecords", description = """
             Retrieves all meals consumed today, ordered by consumption time. Includes both standard meals (following the diet plan) \
             and free meals (off-plan). Use this to check daily food intake and diet adherence.
@@ -102,7 +102,8 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
     }
 
     @Override
-    @GetMapping("/v1/meal-record")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @Tool(name = "searchMealRecords", description = """
             Searches meal records with pagination and optional filters (date range, meal type). Returns paginated results with total count. \
             Use this to view historical meal data, analyze eating patterns, or generate reports.
@@ -129,7 +130,8 @@ public class MealRecordController implements MealRecordRestService, McpToolMarke
     }
 
     @Override
-    @GetMapping("/v1/meal-record/statistics")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/statistics", produces = MediaType.APPLICATION_JSON_VALUE)
     @Tool(name = "getMealRecordStatistics", description = """
             Retrieves aggregated statistics of meal records within a specified date range. Returns the total count of meals consumed, \
             broken down by free meals (off-plan) and planned meals (following the diet plan). Use this to analyze diet adherence, \

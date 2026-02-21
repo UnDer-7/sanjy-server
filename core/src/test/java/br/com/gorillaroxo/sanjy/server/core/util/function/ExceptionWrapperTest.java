@@ -1,11 +1,11 @@
 package br.com.gorillaroxo.sanjy.server.core.util.function;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 class ExceptionWrapperTest {

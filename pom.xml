@@ -12,7 +12,7 @@
 
     <groupId>br.com.gorillaroxo</groupId>
     <artifactId>sanJy-server</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <packaging>pom</packaging>
     <name>sanJy-server</name>
     <description>Backend server application for diet and meal management, enabling nutritionists to create diet plans and users to track meal consumption records</description>
@@ -67,6 +67,7 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.java.source>25</sonar.java.source>
         <sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/aggregate-report/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.lang.patterns.docker>Dockerfile,Dockerfile.*,Dockerfile_*,*.dockerfile</sonar.lang.patterns.docker>
         <sonar.coverage.exclusions>**/br/com/gorillaroxo/sanjy/server/core/exception/**,
             **/*Constants.java,
             **/br/com/gorillaroxo/sanjy/server/infrastructure/SanJyApplication.java,
@@ -183,6 +184,12 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>4.3.0</version>
             <scope>test</scope>
         </dependency>
         <!-- ####################### -->
@@ -398,6 +405,11 @@
                             <!-- defaults to false (optional, requires at least Palantir 2.39.0) -->
                         </palantirJavaFormat>
                         <removeUnusedImports/>
+                        <!-- SonarQube S8445: single-type imports before static imports -->
+                        <!-- Static on-demand (wildcard) imports grouped before single-static imports -->
+                        <importOrder>
+                            <order>,\#org.awaitility.Awaitility,\#</order>
+                        </importOrder>
                     </java>
 
                     <pom>

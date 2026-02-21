@@ -26,7 +26,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -34,9 +33,21 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/**
+ * Global REST exception handler that converts exceptions into structured error responses.
+ *
+ * <p><b>Sonar S2638 suppression:</b> Rule S2638 ("Method overrides should not change contracts") flags the overridden
+ * methods {@code handleMethodArgumentNotValid} and {@code handleHttpMessageNotReadable} because the parent class
+ * {@link ResponseEntityExceptionHandler} declares their parameters as {@code @Nullable}, but our overrides treat them
+ * as non-null. This is a known false positive in the current version of SonarQube when used with Spring Boot.
+ *
+ * @see <a href="https://community.sonarsource.com/t/unresolvable-fp-java-s2638/151934/5">SonarSource Community -
+ *     Unresolvable FP java:S2638</a>
+ */
 @Slf4j
 @RestControllerAdvice
 @RequiredArgsConstructor
+@SuppressWarnings("java:S2638") // FP - Spring Boot overrides are non-null by framework contract
 public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHandler {
 
     private final BusinessExceptionMapper businessExceptionMapper;
@@ -98,9 +109,9 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(
             final MethodArgumentNotValidException ex,
-            @Nullable final HttpHeaders headers,
-            @Nullable final HttpStatusCode status,
-            @Nullable final WebRequest request) {
+            final HttpHeaders headers,
+            final HttpStatusCode status,
+            final WebRequest request) {
 
         final String invalidValues = ex.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> buildInvalidAttributeMessage(

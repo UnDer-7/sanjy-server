@@ -1,7 +1,5 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import br.com.gorillaroxo.sanjy.server.core.exception.ExceptionCode;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.DietPlanCompleteResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
@@ -17,6 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SuppressWarnings({"java:S5961", "Integration tests may have many assertions per method"})
 class DietPlanControllerIT extends IntegrationTestController {
 
     static final String BASE_URL = "/v1/diet-plan";
@@ -136,7 +137,7 @@ class DietPlanControllerIT extends IntegrationTestController {
                     .bodyValue(request)
                     .exchange()
                     .expectStatus()
-                    .isBadRequest()
+                    .isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.value())
                     .expectBody(ErrorResponseDto.class)
                     .value(response -> {
                         final var expectedExCode = ExceptionCode.REPEATED_MEAL_TYPE_NAMES;
@@ -144,7 +145,7 @@ class DietPlanControllerIT extends IntegrationTestController {
                         assertThat(response.timestamp()).isNotNull();
                         assertThat(response.message()).isNotEmpty().isEqualTo(expectedExCode.getMessage());
                         assertThat(response.customMessage()).isNotEmpty().containsIgnoringCase(repeatedName);
-                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.value());
                     });
         }
 

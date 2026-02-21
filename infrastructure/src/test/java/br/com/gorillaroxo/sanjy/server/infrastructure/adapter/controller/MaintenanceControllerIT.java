@@ -1,13 +1,13 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ProjectInfoResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import br.com.gorillaroxo.sanjy.server.infrastructure.test.IntegrationTestController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class MaintenanceControllerIT extends IntegrationTestController {
 
