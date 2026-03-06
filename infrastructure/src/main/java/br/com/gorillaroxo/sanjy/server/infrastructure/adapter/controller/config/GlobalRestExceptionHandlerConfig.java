@@ -8,8 +8,8 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.BusinessExceptionMapper;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.exc.InvalidFormatException;
 import jakarta.validation.ConstraintViolationException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -159,7 +159,7 @@ public class GlobalRestExceptionHandlerConfig extends ResponseEntityExceptionHan
         if (ex.getCause() instanceof InvalidFormatException invalidFormatException) {
             final Class<?> targetType = invalidFormatException.getTargetType();
             final String fieldName = invalidFormatException.getPath().stream()
-                    .map(JsonMappingException.Reference::getFieldName)
+                    .map(JacksonException.Reference::getPropertyName)
                     .filter(Objects::nonNull)
                     .collect(Collectors.joining("."));
 

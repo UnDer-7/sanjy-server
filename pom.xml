@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.10</version>
+        <version>4.0.3</version>
         <relativePath/>
         <!-- lookup parent from repository -->
     </parent>
@@ -44,38 +44,72 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <!-- Careful when upgrading springdoc-->
-        <!-- springdoc version 2.18.15 breaks GraalVm Native Image at runtime, throws given error: "Error creating bean with name 'swaggerWelcome': Instantiation of supplied bean failed"-->
-        <!-- GitHub issue: https://github.com/springdoc/springdoc-openapi/issues/3205 (The first comment about a fix doesn't work -->
-        <springdoc.version>2.8.14</springdoc.version>
+        <!-- ### Versions Control ### -->
         <mapstruct.version>1.6.3</mapstruct.version>
-        <projectlombok.version>1.18.34</projectlombok.version>
-        <spring-cloud.version>2025.0.0</spring-cloud.version>
+        <projectlombok.version>1.18.42</projectlombok.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 
-        <spring-ai.version>1.0.3</spring-ai.version>
+        <maven-artifact.version>3.9.12</maven-artifact.version>
+        <maven-sonar-plugin.version>5.5.0.6356</maven-sonar-plugin.version>
+        <maven-enforcer-plugin.version>3.6.2</maven-enforcer-plugin.version>
+        <maven-jacoco-plugin.version>0.8.14</maven-jacoco-plugin.version>
+        <maven-snyk-plugin.version>2.3.0</maven-snyk-plugin.version>
+        <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
 
-        <spotless-maven-plugin.version>3.0.0</spotless-maven-plugin.version>
-        <spotless-palantirJavaFormat.version>2.82.0</spotless-palantirJavaFormat.version>
-        <checkstyle-maven-plugin.version>3.6.0</checkstyle-maven-plugin.version>
+        <springdoc.version>3.0.2</springdoc.version>
+        <spring-cloud.version>2025.1.1</spring-cloud.version>
+        <spring-ai.version>2.0.0-M2</spring-ai.version>
 
-        <!-- Need latest version to fix this bug: https://github.com/testcontainers/testcontainers-java/issues/11212 -->
-        <testcontainers.version>2.0.2</testcontainers.version>
+        <checkstyle.version>13.3.0</checkstyle.version>
+        <checkstyle-sevntu-checks.version>1.44.1</checkstyle-sevntu-checks.version>
 
-        <!-- SonarCloud Configuration -->
+        <spotless-maven-plugin.version>3.3.0</spotless-maven-plugin.version>
+        <spotless-palantirJavaFormat.version>2.89.0</spotless-palantirJavaFormat.version>
+
+        <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
+        <commons-io.version>2.21.0</commons-io.version>
+        <guava.version>33.5.0-jre</guava.version>
+
+        <!-- Security Fix -->
+        <!-- Override vulnerable Jackson versions - fixes SNYK-JAVA-COMFASTERXMLJACKSONCORE-15365924, SNYK-JAVA-TOOLSJACKSONCORE-15365915, SNYK-JAVA-TOOLSJACKSONCORE-15371178 -->
+        <jackson-bom.version>3.1.0</jackson-bom.version>
+        <jackson-2-bom.version>2.21.1</jackson-2-bom.version>
+        <!-- ################ -->
+
+        <!-- ### SonarCloud Configuration ### -->
         <sonar.projectKey>UnDer-7_sanjy-server</sonar.projectKey>
         <sonar.organization>under-7</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.java.source>25</sonar.java.source>
+        <sonar.java.source>${java.version}</sonar.java.source>
         <sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/aggregate-report/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.lang.patterns.docker>Dockerfile,Dockerfile.*,Dockerfile_*,*.dockerfile</sonar.lang.patterns.docker>
         <sonar.coverage.exclusions>**/br/com/gorillaroxo/sanjy/server/core/exception/**,
             **/*Constants.java,
             **/br/com/gorillaroxo/sanjy/server/infrastructure/SanJyApplication.java,
             **/br/com/gorillaroxo/sanjy/server/infrastructure/adapter/controller/config/GlobalRestExceptionHandlerConfig.java</sonar.coverage.exclusions>
+        <!-- ################ -->
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!-- Modules -->
+            <dependency>
+                <groupId>br.com.gorillaroxo</groupId>
+                <artifactId>core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>br.com.gorillaroxo</groupId>
+                <artifactId>entrypoint</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>br.com.gorillaroxo</groupId>
+                <artifactId>infrastructure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- ####################### -->
+
             <!-- BOMs -->
             <dependency>
                 <groupId>org.springframework.ai</groupId>
@@ -100,97 +134,53 @@
             </dependency>
             <!-- ####################### -->
 
-            <!-- Modules -->
+            <!-- Libs -->
             <dependency>
-                <groupId>br.com.gorillaroxo</groupId>
-                <artifactId>core</artifactId>
-                <version>${project.version}</version>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-artifact</artifactId>
+                <version>${maven-artifact.version}</version>
+                <scope>compile</scope>
             </dependency>
             <dependency>
-                <groupId>br.com.gorillaroxo</groupId>
-                <artifactId>entrypoint</artifactId>
-                <version>${project.version}</version>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>${logstash-logback-encoder.version}</version>
             </dependency>
             <dependency>
-                <groupId>br.com.gorillaroxo</groupId>
-                <artifactId>infrastructure</artifactId>
-                <version>${project.version}</version>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
             </dependency>
             <!-- ####################### -->
 
             <!-- Security Fix -->
-            <!-- Override vulnerable commons-lang3 version -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>3.20.0</version>
-            </dependency>
-            <!-- Override vulnerable commons-fileupload version (CVE-2025-48976) -->
+            <!-- Override vulnerable commons-fileupload version (CVE-2025-48976)-->
             <dependency>
                 <groupId>commons-fileupload</groupId>
                 <artifactId>commons-fileupload</artifactId>
                 <version>1.6.0</version>
-            </dependency>
-            <!-- Override vulnerable assertj-core version (SNYK-JAVA-ORGASSERTJ-15102413 - XXE Injection) -->
-            <dependency>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-core</artifactId>
-                <version>3.27.7</version>
-                <scope>test</scope>
             </dependency>
             <!-- ####################### -->
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-        <!-- Logging -->
-        <dependency>
-            <groupId>net.logstash.logback</groupId>
-            <artifactId>logstash-logback-encoder</artifactId>
-            <version>8.1</version>
-        </dependency>
-        <!-- ####################### -->
-
-        <!-- Misc -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>${mapstruct.version}</version>
-        </dependency>
+        <!-- Global dependencies -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.21.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>33.5.0-jre</version>
-        </dependency>
-        <!-- ####################### -->
-
-        <!-- Test -->
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.awaitility</groupId>
-            <artifactId>awaitility</artifactId>
-            <version>4.3.0</version>
-            <scope>test</scope>
         </dependency>
         <!-- ####################### -->
     </dependencies>
@@ -238,7 +228,7 @@
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.14</version>
+                    <version>${maven-jacoco-plugin.version}</version>
                     <configuration>
                         <excludes>
                             <!-- Exclude exception classes from coverage -->
@@ -258,7 +248,7 @@
             <plugin>
                 <groupId>io.snyk</groupId>
                 <artifactId>snyk-maven-plugin</artifactId>
-                <version>2.3.0</version>
+                <version>${maven-snyk-plugin.version}</version>
                 <inherited>false</inherited>
                 <configuration>
                     <apiToken>${env.SNYK_TOKEN}</apiToken>
@@ -287,7 +277,7 @@
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
-                <version>5.3.0.6276</version>
+                <version>${maven-sonar-plugin.version}</version>
             </plugin>
 
             <plugin>
@@ -310,7 +300,7 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok-mapstruct-binding</artifactId>
-                            <version>0.2.0</version>
+                            <version>${lombok-mapstruct-binding.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
@@ -331,7 +321,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.6.2</version>
+                <version>${maven-enforcer-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>enforce</id>
@@ -465,7 +455,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${checkstyle-maven-plugin.version}</version>
+                <version>${maven-checkstyle-plugin.version}</version>
                 <configuration>
                     <configLocation>.checkstyle/checkstyle.xml</configLocation>
                     <consoleOutput>true</consoleOutput>
@@ -478,12 +468,12 @@
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
                         <artifactId>checkstyle</artifactId>
-                        <version>12.1.2</version>
+                        <version>${checkstyle.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>com.github.sevntu-checkstyle</groupId>
                         <artifactId>sevntu-checks</artifactId>
-                        <version>1.44.1</version>
+                        <version>${checkstyle-sevntu-checks.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>

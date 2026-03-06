@@ -1,8 +1,12 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity;
 
+import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.config.HasMetadata;
+import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.config.MetadataEntityListener;
+import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.embedded.MetadataEntityEmbedded;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
@@ -27,13 +31,14 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(MetadataEntityListener.class)
 @Table(
         name = "standard_options",
         uniqueConstraints =
                 @UniqueConstraint(
                         name = "uk_type_option",
                         columnNames = {"meal_type_id", "option_number"}))
-public class StandardOptionEntity {
+public class StandardOptionEntity implements HasMetadata {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,5 +57,5 @@ public class StandardOptionEntity {
     private String description;
 
     @Embedded
-    private MetadataEmbeddedEntity metadata;
+    private MetadataEntityEmbedded metadata;
 }

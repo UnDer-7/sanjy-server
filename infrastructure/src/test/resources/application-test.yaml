@@ -28,6 +28,7 @@ spring:
     name: sanJy-server
 
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: none
     properties:

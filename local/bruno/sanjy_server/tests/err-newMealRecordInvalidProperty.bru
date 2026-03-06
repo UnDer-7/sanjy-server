@@ -1,0 +1,71 @@
+meta {
+  name: err-newMealRecordInvalidProperty
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{SERVER_URL}}/v1/meal-record
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "mealTypeId": null,
+    "consumedAt": "2026-01-15T14:30:00Z",
+    "isFreeMeal": false,
+    "standardOptionId": 1,
+    "freeMealDescription": null,
+    "quantity": 1,
+    "unit": "portion",
+    "notes": "Test"
+  }
+}
+
+tests {
+  test("should return status 400", function() {
+    expect(res.getStatus()).to.equal(400);
+  });
+
+  test("should return error code 002", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("code");
+    expect(body.code).to.equal("002");
+  });
+
+  test("should return error message", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("message");
+    expect(body.message).to.equal("Invalid values");
+  });
+
+  test("should return customMessage mentioning mealTypeId field", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("customMessage");
+    expect(body.customMessage).to.include("mealTypeId");
+    expect(body.customMessage).to.include("must not be null");
+  });
+
+  test("should return httpStatusCode 400", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("httpStatusCode");
+    expect(body.httpStatusCode).to.equal(400);
+  });
+
+  test("should return a non-empty timestamp", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("timestamp");
+    expect(body.timestamp).to.be.a("string");
+    expect(body.timestamp).to.not.be.empty;
+  });
+}
+
+settings {
+  encodeUrl: false
+  timeout: 0
+}

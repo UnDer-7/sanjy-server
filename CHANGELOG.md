@@ -30,11 +30,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improved OpenAPI documentation with complete and descriptive examples for all endpoints
 
+#### Dependency Upgrades
+
+- Upgraded Spring Boot from 3.5.x to 4.0.3
+- Updated all project dependencies to their latest compatible versions
+
 ### Fixed
 
 #### SonarQube & Code Quality
 
 - SonarQube warnings and small code fixes
+
+### Tests
+
+#### Bruno API Collections
+
+- Added error scenario test cases for all endpoints (invalid properties, not found)
+- Added project info test case
 
 ---
 

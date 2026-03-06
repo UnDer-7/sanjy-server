@@ -3,7 +3,7 @@ package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller.filter
 import br.com.gorillaroxo.sanjy.server.core.exception.InvalidValuesException;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.BusinessExceptionMapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.properties.SpringDocConfigProperties;
 import org.springdoc.core.properties.SwaggerUiConfigProperties;
-import org.springframework.ai.mcp.server.autoconfigure.McpServerProperties;
+import org.springframework.ai.mcp.server.common.autoconfigure.properties.McpServerSseProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -36,7 +36,7 @@ public class RequiredHeaderFilterConfig extends OncePerRequestFilter {
     private final AntPathMatcher pathMatcher;
     private final SwaggerUiConfigProperties swaggerUiConfigProperties;
     private final SpringDocConfigProperties springDocConfigProperties;
-    private final McpServerProperties mcpServerProperties;
+    private final McpServerSseProperties mcpServerSseProperties;
     private final ObjectMapper objectMapper;
     private final BusinessExceptionMapper businessExceptionMapper;
     private final Set<String> ignoredPaths;
@@ -45,7 +45,7 @@ public class RequiredHeaderFilterConfig extends OncePerRequestFilter {
             final AntPathMatcher pathMatcher,
             final SwaggerUiConfigProperties swaggerUiConfigProperties,
             final SpringDocConfigProperties springDocConfigProperties,
-            final McpServerProperties mcpServerProperties,
+            final McpServerSseProperties mcpServerSseProperties,
             final ObjectMapper objectMapper,
             final BusinessExceptionMapper businessExceptionMapper) {
 
@@ -53,7 +53,7 @@ public class RequiredHeaderFilterConfig extends OncePerRequestFilter {
 
         this.swaggerUiConfigProperties = swaggerUiConfigProperties;
         this.springDocConfigProperties = springDocConfigProperties;
-        this.mcpServerProperties = mcpServerProperties;
+        this.mcpServerSseProperties = mcpServerSseProperties;
         this.objectMapper = objectMapper;
         this.businessExceptionMapper = businessExceptionMapper;
 
@@ -156,8 +156,8 @@ public class RequiredHeaderFilterConfig extends OncePerRequestFilter {
     }
 
     private List<String> getMcpServerPaths() {
-        final String sseMessageEndpoint = mcpServerProperties.getSseMessageEndpoint();
-        final String sseEndpoint = mcpServerProperties.getSseEndpoint();
+        final String sseMessageEndpoint = mcpServerSseProperties.getSseMessageEndpoint();
+        final String sseEndpoint = mcpServerSseProperties.getSseEndpoint();
 
         return List.of(
                 sseMessageEndpoint, sseMessageEndpoint + WILDCARD_PATH, sseEndpoint, sseEndpoint + WILDCARD_PATH);

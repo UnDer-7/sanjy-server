@@ -1,9 +1,7 @@
-package br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity;
+package br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.embedded;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,22 +17,11 @@ import lombok.ToString;
 @Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
-public class MetadataEmbeddedEntity {
+public class MetadataEntityEmbedded {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
-    @Column(name = "updated_at", nullable = false, updatable = false)
+    @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
-
-    @PrePersist
-    public void onCreate() {
-        createdAt = Instant.now();
-        updatedAt = Instant.now();
-    }
-
-    @PreUpdate
-    public void onUpdate() {
-        updatedAt = Instant.now();
-    }
 }

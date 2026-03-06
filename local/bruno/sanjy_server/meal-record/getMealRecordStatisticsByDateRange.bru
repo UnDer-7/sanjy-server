@@ -5,14 +5,14 @@ meta {
 }
 
 get {
-  url: {{SERVER_URL}}/v1/meal-record/statistics?consumedAtAfter=2025-11-12T00:00:00Z
+  url: {{SERVER_URL}}/v1/meal-record/statistics?consumedAtAfter=2025-11-12T00:00:00Z&consumedAtBefore=2050-12-20T23:59:59Z
   body: json
   auth: inherit
 }
 
 params:query {
   consumedAtAfter: 2025-11-12T00:00:00Z
-  ~consumedAtBefore: 2050-12-20T23:59:59Z
+  consumedAtBefore: 2050-12-20T23:59:59Z
 }
 
 headers {
@@ -118,7 +118,7 @@ example {
   request: {
     url: {{SERVER_URL}}/v1/meal-record/statistics?consumedAtAfter=2025-11-12T00:00:00Z
     method: GET
-    mode: json
+    mode: none
     params:query: {
       consumedAtAfter: 2025-11-12T00:00:00Z
       ~consumedAtBefore: 2050-12-20T23:59:59Z

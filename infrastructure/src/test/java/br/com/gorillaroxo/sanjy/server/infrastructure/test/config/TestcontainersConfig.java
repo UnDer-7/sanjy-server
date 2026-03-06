@@ -1,7 +1,7 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.test.config;
 
-import org.springframework.boot.autoconfigure.flyway.FlywayConnectionDetails;
-import org.springframework.boot.autoconfigure.jdbc.JdbcConnectionDetails;
+import org.springframework.boot.flyway.autoconfigure.FlywayConnectionDetails;
+import org.springframework.boot.jdbc.autoconfigure.JdbcConnectionDetails;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;

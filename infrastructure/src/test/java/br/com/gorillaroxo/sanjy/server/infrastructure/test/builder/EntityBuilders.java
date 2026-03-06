@@ -2,7 +2,7 @@ package br.com.gorillaroxo.sanjy.server.infrastructure.test.builder;
 
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.DietPlanEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealTypeEntity;
-import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MetadataEmbeddedEntity;
+import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.embedded.MetadataEntityEmbedded;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.StandardOptionEntity;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -30,8 +30,8 @@ public final class EntityBuilders {
                 .metadata(buildMetadataEmbeddedEntity().build());
     }
 
-    public static MetadataEmbeddedEntity.MetadataEmbeddedEntityBuilder buildMetadataEmbeddedEntity() {
-        return MetadataEmbeddedEntity.builder().createdAt(Instant.now()).updatedAt(Instant.now());
+    public static MetadataEntityEmbedded.MetadataEntityEmbeddedBuilder buildMetadataEmbeddedEntity() {
+        return MetadataEntityEmbedded.builder().createdAt(Instant.now()).updatedAt(Instant.now());
     }
 
     public static MealTypeEntity.MealTypeEntityBuilder buildMealTypeEntity() {

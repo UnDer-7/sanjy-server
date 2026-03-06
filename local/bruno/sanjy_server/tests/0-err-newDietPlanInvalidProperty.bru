@@ -1,0 +1,73 @@
+meta {
+  name: 0-err-newDietPlanInvalidProperty
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{SERVER_URL}}/v1/diet-plan
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": null,
+    "startDate": "2025-12-26",
+    "endDate": "2026-12-26",
+    "dailyCalories": 2000,
+    "dailyProteinInG": 150,
+    "dailyCarbsInG": 200,
+    "dailyFatInG": 50,
+    "goal": "Test goal",
+    "nutritionistNotes": "Test notes",
+    "mealTypes": []
+  }
+}
+
+tests {
+  test("should return status 400", function() {
+    expect(res.getStatus()).to.equal(400);
+  });
+
+  test("should return error code 002", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("code");
+    expect(body.code).to.equal("002");
+  });
+
+  test("should return error message", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("message");
+    expect(body.message).to.equal("Invalid values");
+  });
+
+  test("should return customMessage mentioning name field", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("customMessage");
+    expect(body.customMessage).to.include("name");
+    expect(body.customMessage).to.include("must not be blank");
+  });
+
+  test("should return httpStatusCode 400", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("httpStatusCode");
+    expect(body.httpStatusCode).to.equal(400);
+  });
+
+  test("should return a non-empty timestamp", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("timestamp");
+    expect(body.timestamp).to.be.a("string");
+    expect(body.timestamp).to.not.be.empty;
+  });
+}
+
+settings {
+  encodeUrl: false
+  timeout: 0
+}

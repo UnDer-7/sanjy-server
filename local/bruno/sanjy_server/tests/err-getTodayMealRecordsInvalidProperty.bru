@@ -1,0 +1,58 @@
+meta {
+  name: err-getTodayMealRecordsInvalidProperty
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{SERVER_URL}}/v1/meal-record/today
+  body: none
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+tests {
+  test("should return status 400", function() {
+    expect(res.getStatus()).to.equal(400);
+  });
+
+  test("should return error code 002", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("code");
+    expect(body.code).to.equal("002");
+  });
+
+  test("should return error message", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("message");
+    expect(body.message).to.equal("Invalid values");
+  });
+
+  test("should return customMessage mentioning timezone field", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("customMessage");
+    expect(body.customMessage).to.include("timezone");
+    expect(body.customMessage).to.include("must not be null");
+  });
+
+  test("should return httpStatusCode 400", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("httpStatusCode");
+    expect(body.httpStatusCode).to.equal(400);
+  });
+
+  test("should return a non-empty timestamp", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("timestamp");
+    expect(body.timestamp).to.be.a("string");
+    expect(body.timestamp).to.not.be.empty;
+  });
+}
+
+settings {
+  encodeUrl: false
+  timeout: 0
+}
