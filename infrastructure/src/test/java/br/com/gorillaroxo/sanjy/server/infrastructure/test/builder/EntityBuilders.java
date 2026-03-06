@@ -2,8 +2,8 @@ package br.com.gorillaroxo.sanjy.server.infrastructure.test.builder;
 
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.DietPlanEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealTypeEntity;
-import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.embedded.MetadataEntityEmbedded;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.StandardOptionEntity;
+import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.embedded.MetadataEntityEmbedded;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;

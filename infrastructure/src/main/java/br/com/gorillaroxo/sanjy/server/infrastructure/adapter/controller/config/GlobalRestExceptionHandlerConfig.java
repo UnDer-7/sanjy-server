@@ -8,8 +8,6 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.BusinessExceptionMapper;
-import tools.jackson.core.JacksonException;
-import tools.jackson.databind.exc.InvalidFormatException;
 import jakarta.validation.ConstraintViolationException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -32,6 +30,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.exc.InvalidFormatException;
 
 /**
  * Global REST exception handler that converts exceptions into structured error responses.

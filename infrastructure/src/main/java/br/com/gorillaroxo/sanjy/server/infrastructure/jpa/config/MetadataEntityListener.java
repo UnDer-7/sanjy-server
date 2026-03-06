@@ -10,7 +10,8 @@ public class MetadataEntityListener {
     @PrePersist
     public void onPrePersist(HasMetadata entity) {
         Instant now = Instant.now();
-        entity.setMetadata(MetadataEntityEmbedded.builder().createdAt(now).updatedAt(now).build());
+        entity.setMetadata(
+                MetadataEntityEmbedded.builder().createdAt(now).updatedAt(now).build());
     }
 
     @PreUpdate

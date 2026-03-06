@@ -17,16 +17,16 @@ import br.com.gorillaroxo.sanjy.server.infrastructure.client.rest.github.dto.res
 import br.com.gorillaroxo.sanjy.server.infrastructure.config.SanjyServerPropsRuntimeHints;
 import br.com.gorillaroxo.sanjy.server.infrastructure.config.TimezoneInitializer;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.projection.MealRecordStatisticsProjection;
-import org.springframework.context.annotation.ImportRuntimeHints;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ImportRuntimeHints;
 
 @SpringBootApplication
 @ImportAutoConfiguration(FeignAutoConfiguration.class)
