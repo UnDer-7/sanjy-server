@@ -10,12 +10,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
 @Validated
+@Documented
 @RestController
 @RequestMapping
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface SanjyEndpoint {
 
     @AliasFor(annotation = RequestMapping.class, attribute = "path")
