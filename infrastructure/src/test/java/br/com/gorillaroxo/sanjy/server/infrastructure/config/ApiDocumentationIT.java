@@ -65,10 +65,10 @@ class ApiDocumentationIT extends IntegrationTestController {
                     .expectBody(JsonNode.class)
                     .value(json -> {
                         assertThat(json.has("openapi")).isTrue();
-                        assertThat(json.get("openapi").asText()).startsWith("3.");
+                        assertThat(json.get("openapi").asString()).startsWith("3.");
 
                         assertThat(json.has("info")).isTrue();
-                        assertThat(json.get("info").get("title").asText()).isEqualTo(applicationName);
+                        assertThat(json.get("info").get("title").asString()).isEqualTo(applicationName);
 
                         assertThat(json.has("paths")).isTrue();
                         assertThat(json.get("paths")).isNotEmpty();
