@@ -1,13 +1,14 @@
 package br.com.gorillaroxo.sanjy.server.core.util.function;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import java.io.IOException;
+import java.util.Objects;
 import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
 class PredicateWrapperTest {
@@ -81,7 +82,7 @@ class PredicateWrapperTest {
     @Test
     void should_handle_null_argument_when_predicate_accepts_null() {
         // Given
-        final PredicateWrapper<String, Exception> predicateWrapper = arg -> arg == null;
+        final PredicateWrapper<String, Exception> predicateWrapper = Objects::isNull;
         final Predicate<String> wrappedPredicate = PredicateWrapper.wrap(predicateWrapper);
 
         // When

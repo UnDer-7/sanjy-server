@@ -1,14 +1,14 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.config;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import br.com.gorillaroxo.sanjy.server.infrastructure.test.IntegrationTestController;
-import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import tools.jackson.databind.JsonNode;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ApiDocumentationIT extends IntegrationTestController {
 
@@ -65,10 +65,10 @@ class ApiDocumentationIT extends IntegrationTestController {
                     .expectBody(JsonNode.class)
                     .value(json -> {
                         assertThat(json.has("openapi")).isTrue();
-                        assertThat(json.get("openapi").asText()).startsWith("3.");
+                        assertThat(json.get("openapi").asString()).startsWith("3.");
 
                         assertThat(json.has("info")).isTrue();
-                        assertThat(json.get("info").get("title").asText()).isEqualTo(applicationName);
+                        assertThat(json.get("info").get("title").asString()).isEqualTo(applicationName);
 
                         assertThat(json.has("paths")).isTrue();
                         assertThat(json.get("paths")).isNotEmpty();

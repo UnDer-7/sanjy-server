@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -27,6 +28,13 @@ record SanjyServerPropsConfig(
             @NotBlank String name,
             @NotBlank String version,
             @NotBlank String description,
+
+            @Pattern(regexp = "^$|^/[a-zA-Z0-9]([a-zA-Z0-9._~-]|/[a-zA-Z0-9])*+$", message = """
+                Invalid endpoints prefix. Must be empty/null or a valid URL path starting with '/' (e.g. '/api', '/server/v1'). \
+                Cannot be just '/', cannot end with '/', and must contain only alphanumeric characters, '.', '_', '~', or '-'
+                """)
+            String endpointsPrefix,
+
             @NotNull @Valid ApplicationContactPropImpl contact,
             @NotNull @Valid ApplicationDocumentationPropImpl documentation)
             implements SanjyServerProps.ApplicationProp {}

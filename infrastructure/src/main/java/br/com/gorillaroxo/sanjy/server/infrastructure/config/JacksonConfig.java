@@ -1,17 +1,19 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.config;
 
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import tools.jackson.databind.ext.javatime.deser.LocalDateDeserializer;
+import tools.jackson.databind.ext.javatime.deser.LocalTimeDeserializer;
+import tools.jackson.databind.ext.javatime.ser.LocalDateSerializer;
+import tools.jackson.databind.ext.javatime.ser.LocalTimeSerializer;
+import tools.jackson.databind.module.SimpleModule;
 
 @Slf4j
 @Configuration
@@ -19,19 +21,20 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 public class JacksonConfig {
 
     @Bean
-    public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
-        return JacksonConfig::dateTimeFormat;
-    }
+    public JsonMapperBuilderCustomizer jsonCustomizer() {
+        return builder -> {
+            final DateTimeFormatter dateFormatter =
+                    DateTimeFormatter.ofPattern(RequestConstants.DateTimeFormats.DATE_FORMAT);
+            final DateTimeFormatter timeFormatter =
+                    DateTimeFormatter.ofPattern(RequestConstants.DateTimeFormats.TIME_FORMAT);
 
-    private static void dateTimeFormat(final Jackson2ObjectMapperBuilder builder) {
-        final DateTimeFormatter dateFormatter =
-                DateTimeFormatter.ofPattern(RequestConstants.DateTimeFormats.DATE_FORMAT);
-        builder.serializers(new LocalDateSerializer(dateFormatter));
-        builder.deserializers(new LocalDateDeserializer(dateFormatter));
+            final SimpleModule module = new SimpleModule();
+            module.addSerializer(LocalDate.class, new LocalDateSerializer(dateFormatter));
+            module.addDeserializer(LocalDate.class, new LocalDateDeserializer(dateFormatter));
+            module.addSerializer(LocalTime.class, new LocalTimeSerializer(timeFormatter));
+            module.addDeserializer(LocalTime.class, new LocalTimeDeserializer(timeFormatter));
 
-        final DateTimeFormatter timeFormatter =
-                DateTimeFormatter.ofPattern(RequestConstants.DateTimeFormats.TIME_FORMAT);
-        builder.serializers(new LocalTimeSerializer(timeFormatter));
-        builder.deserializers(new LocalTimeDeserializer(timeFormatter));
+            builder.addModule(module);
+        };
     }
 }

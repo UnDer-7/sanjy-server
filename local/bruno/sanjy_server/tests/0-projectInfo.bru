@@ -1,0 +1,51 @@
+meta {
+  name: 0-projectInfo
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{SERVER_URL}}/v1/maintenance/project-info
+  body: none
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+tests {
+  test("should return status 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("should return version object", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("version");
+    expect(body.version).to.have.property("current");
+    expect(body.version.current).to.be.a("string");
+    expect(body.version.current).to.not.be.empty;
+    expect(body.version).to.have.property("isLatest");
+    expect(body.version.isLatest).to.be.a("boolean");
+  });
+
+  test("should return timezone object", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("timezone");
+    expect(body.timezone).to.have.property("application");
+    expect(body.timezone.application).to.be.a("string");
+    expect(body.timezone.application).to.not.be.empty;
+  });
+
+  test("should return runtimeMode", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("runtimeMode");
+    expect(body.runtimeMode).to.be.a("string");
+    expect(["JVM", "Native"]).to.include(body.runtimeMode);
+  });
+}
+
+settings {
+  encodeUrl: false
+  timeout: 0
+}

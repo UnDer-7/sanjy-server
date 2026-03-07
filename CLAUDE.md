@@ -441,6 +441,21 @@ Custom Lombok settings in `lombok.config`:
 
 ## Coding Patterns & Conventions
 
+### CHANGELOG Convention
+
+When updating `CHANGELOG.md`, every version section (`## [X.Y.Z]`) **must** contain at least one `####` (h4) header. The CI pipeline (`pull-request-pipeline.yml`) validates this with `grep -q "^####"` and will fail if missing.
+
+Correct structure:
+
+```markdown
+## [X.Y.Z] - YYYY-MM-DD
+
+### Fixed
+
+#### Short Description
+- Details of the fix
+```
+
 ### Language Convention
 
 **IMPORTANT: All code, comments, commit messages, documentation, and any text in the codebase must be written in ENGLISH.**

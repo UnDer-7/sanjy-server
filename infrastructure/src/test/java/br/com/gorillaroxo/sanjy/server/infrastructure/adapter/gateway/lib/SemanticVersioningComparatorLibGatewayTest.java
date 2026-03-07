@@ -1,7 +1,5 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.gateway.lib;
 
-import static org.assertj.core.api.Assertions.*;
-
 import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -9,6 +7,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class SemanticVersioningComparatorLibGatewayTest {

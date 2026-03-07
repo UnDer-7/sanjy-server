@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 public class StandardOptionNotFoundException extends BusinessException {
 
     private static final ExceptionCode CODE = ExceptionCode.STANDARD_OPTION_NOT_FOUND;
-    private static final HttpStatus STATUS = HttpStatus.NOT_FOUND;
+    private static final HttpStatus STATUS = HttpStatus.UNPROCESSABLE_ENTITY;
 
     public StandardOptionNotFoundException(final String customMessage, final Throwable originalCause) {
         super(CODE, STATUS, customMessage, originalCause);

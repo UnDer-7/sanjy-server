@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 public class MealTypeNotFoundException extends BusinessException {
 
     private static final ExceptionCode CODE = ExceptionCode.MEAL_TYPE_NOT_FOUND;
-    private static final HttpStatus STATUS = HttpStatus.NOT_FOUND;
+    private static final HttpStatus STATUS = HttpStatus.UNPROCESSABLE_ENTITY;
 
     public MealTypeNotFoundException(final String customMessage, final Throwable originalCause) {
         super(CODE, STATUS, customMessage, originalCause);

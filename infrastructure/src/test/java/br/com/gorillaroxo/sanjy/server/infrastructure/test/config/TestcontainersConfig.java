@@ -1,19 +1,20 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.test.config;
 
-import org.springframework.boot.autoconfigure.flyway.FlywayConnectionDetails;
-import org.springframework.boot.autoconfigure.jdbc.JdbcConnectionDetails;
+import org.jspecify.annotations.NonNull;
+import org.springframework.boot.flyway.autoconfigure.FlywayConnectionDetails;
+import org.springframework.boot.jdbc.autoconfigure.JdbcConnectionDetails;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 
 @TestConfiguration(proxyBeanMethods = false)
 public class TestcontainersConfig {
 
     @Bean
     @ServiceConnection
-    public PostgreSQLContainer<?> postgresContainer() {
-        PostgreSQLContainer<?> container = new PostgreSQLContainer<>("postgres:17-alpine");
+    public PostgreSQLContainer postgresContainer() {
+        PostgreSQLContainer container = new PostgreSQLContainer("postgres:17-alpine");
         container.start();
         return container;
     }
@@ -23,10 +24,10 @@ public class TestcontainersConfig {
      * doesn't work in AOT mode.
      */
     @Bean
-    public JdbcConnectionDetails jdbcConnectionDetails(PostgreSQLContainer<?> container) {
+    public JdbcConnectionDetails jdbcConnectionDetails(PostgreSQLContainer container) {
         return new JdbcConnectionDetails() {
             @Override
-            public String getJdbcUrl() {
+            public @NonNull String getJdbcUrl() {
                 return container.getJdbcUrl();
             }
 
@@ -47,7 +48,7 @@ public class TestcontainersConfig {
      * doesn't work in AOT mode.
      */
     @Bean
-    public FlywayConnectionDetails flywayConnectionDetails(final PostgreSQLContainer<?> container) {
+    public FlywayConnectionDetails flywayConnectionDetails(final PostgreSQLContainer container) {
         return new FlywayConnectionDetails() {
             @Override
             public String getJdbcUrl() {

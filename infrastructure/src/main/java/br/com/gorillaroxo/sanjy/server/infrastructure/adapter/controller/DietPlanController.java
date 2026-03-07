@@ -7,6 +7,7 @@ import br.com.gorillaroxo.sanjy.server.core.ports.driver.GetActiveDietPlanUseCas
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.DietPlanCompleteResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.rest.DietPlanRestService;
+import br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller.config.SanjyEndpoint;
 import br.com.gorillaroxo.sanjy.server.infrastructure.config.McpToolMarker;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.DietPlanMapper;
 import lombok.RequiredArgsConstructor;
@@ -14,15 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.argument.StructuredArguments;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@Validated
-@RestController
+@SanjyEndpoint("/v1/diet-plan")
 @RequiredArgsConstructor
 public class DietPlanController implements DietPlanRestService, McpToolMarker {
 
@@ -31,8 +30,8 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
     private final DietPlanMapper dietPlanMapper;
 
     @Override
-    @PostMapping("/v1/diet-plan")
     @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @Tool(name = "newDietPlan", description = """
             Creates a new diet plan with meal types (breakfast, lunch, snack, dinner, etc.), \
             standard meal options, nutritional targets, and goals. The new plan is automatically set as active and any previously active plan is deactivated.
@@ -62,7 +61,7 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
 
     @Override
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/v1/diet-plan/active")
+    @GetMapping(value = "/active", produces = MediaType.APPLICATION_JSON_VALUE)
     @Tool(name = "activeDietPlan", description = """
             Retrieves the currently active diet plan with all meal types, standard options, \
             nutritional targets (calories, protein, carbs, fat), and goals. Only one diet plan can be active at a time.

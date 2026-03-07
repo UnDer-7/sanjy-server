@@ -1,0 +1,57 @@
+meta {
+  name: 0-err-activeDietPlanNotFound
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{SERVER_URL}}/v1/diet-plan/active
+  body: none
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+tests {
+  test("should return status 404", function() {
+    expect(res.getStatus()).to.equal(404);
+  });
+
+  test("should return error code 003", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("code");
+    expect(body.code).to.equal("003");
+  });
+
+  test("should return error message", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("message");
+    expect(body.message).to.equal("Diet plan was not found");
+  });
+
+  test("should return customMessage indicating no active diet plan", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("customMessage");
+    expect(body.customMessage).to.equal("Could not find active diet plan");
+  });
+
+  test("should return httpStatusCode 404", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("httpStatusCode");
+    expect(body.httpStatusCode).to.equal(404);
+  });
+
+  test("should return a non-empty timestamp", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("timestamp");
+    expect(body.timestamp).to.be.a("string");
+    expect(body.timestamp).to.not.be.empty;
+  });
+}
+
+settings {
+  encodeUrl: false
+  timeout: 0
+}

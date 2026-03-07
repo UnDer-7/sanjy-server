@@ -1,14 +1,21 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.config;
 
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
+import br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller.config.SanjyEndpoint;
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.examples.Example;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.media.Content;
+import io.swagger.v3.oas.models.media.MediaType;
+import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.media.UUIDSchema;
 import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.oas.models.responses.ApiResponse;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,6 +65,87 @@ public class OpenApiConfig {
 
             return operation;
         };
+    }
+
+    @Bean
+    public OperationCustomizer globalApiResponsesCustomizer() {
+        return (Operation operation, HandlerMethod handlerMethod) -> {
+            if (!handlerMethod.getBeanType().isAnnotationPresent(SanjyEndpoint.class)) {
+                return operation;
+            }
+
+            customErrorResponses(operation);
+
+            return operation;
+        };
+    }
+
+    private void customErrorResponses(final Operation operation) {
+        operation
+                .getResponses()
+                .addApiResponse(OpenApiConstants.HttpStatusCodes.BAD_REQUEST, buildBadRequestResponse());
+        operation
+                .getResponses()
+                .addApiResponse(
+                        OpenApiConstants.HttpStatusCodes.INTERNAL_SERVER_ERROR, buildInternalServerErrorResponse());
+    }
+
+    private ApiResponse buildBadRequestResponse() {
+        return new ApiResponse()
+                .description("Invalid values")
+                .content(new Content()
+                        .addMediaType(
+                                org.springframework.http.MediaType.APPLICATION_JSON_VALUE,
+                                new MediaType()
+                                        .schema(new Schema<>().$ref("#/components/schemas/ErrorResponseDto"))
+                                        .addExamples(
+                                                "Required headers are missing or invalid",
+                                                new Example()
+                                                        .summary("Missing required headers")
+                                                        .value("""
+                                                            {
+                                                                "code": "002",
+                                                                "timestamp": "2026-02-15T17:32:10.590433349Z",
+                                                                "message": "Invalid values",
+                                                                "customMessage": "Missing headers. Headers: [X-Correlation-ID, X-Channel] are required",
+                                                                "httpStatusCode": 400
+                                                            }
+                                                            """))
+                                        .addExamples(
+                                                "Any invalid input data will return a response similar to this",
+                                                new Example()
+                                                        .summary("Invalid input data")
+                                                        .value("""
+                                                            {
+                                                                "code": "002",
+                                                                "timestamp": "2026-02-04T17:29:21.398223803Z",
+                                                                "message": "Invalid values",
+                                                                "customMessage": "[ propertyPath: mealTypeId - errorMotive: must not be null - valueProvided: null ]",
+                                                                "httpStatusCode": 400
+                                                            }
+                                                            """))));
+    }
+
+    private ApiResponse buildInternalServerErrorResponse() {
+        return new ApiResponse()
+                .description("Internal Server Error")
+                .content(new Content()
+                        .addMediaType(
+                                org.springframework.http.MediaType.APPLICATION_JSON_VALUE,
+                                new MediaType()
+                                        .schema(new Schema<>().$ref("#/components/schemas/ErrorResponseDto"))
+                                        .addExamples(
+                                                "Any unexpected internal error will return a response similar to this",
+                                                new Example()
+                                                        .summary("Unexpected internal error")
+                                                        .value("""
+                                                            {
+                                                                "code": "001",
+                                                                "timestamp": "2026-02-15T17:42:49.743256697Z",
+                                                                "message": "An unexpected error occurred",
+                                                                "httpStatusCode": 500
+                                                            }
+                                                            """))));
     }
 
     private ExternalDocumentation buildExternalDocs(final OpenAPI openApi) {

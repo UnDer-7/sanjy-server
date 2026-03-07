@@ -8,6 +8,7 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(
         componentModel = InfrastructureConstants.MAPSTRUCT_COMPONENT_MODEL,
         unmappedTargetPolicy = ReportingPolicy.ERROR)
+@SuppressWarnings("java:S2789")
 public class OptionalMapper {
 
     public <T> T fromOptional(final Optional<T> optional) {

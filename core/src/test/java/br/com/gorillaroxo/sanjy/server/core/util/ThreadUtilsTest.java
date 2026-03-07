@@ -1,16 +1,10 @@
 package br.com.gorillaroxo.sanjy.server.core.util;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.AfterEach;
@@ -19,6 +13,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.MDC;
+
+import static org.awaitility.Awaitility.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class ThreadUtilsTest {
@@ -83,7 +86,7 @@ class ThreadUtilsTest {
         }
 
         @Test
-        void should_execute_runnable_with_executor_and_preserve_mdc_context() throws Exception {
+        void should_execute_runnable_with_executor_and_preserve_mdc_context() {
             // Given
             final String mdcKey = "requestId";
             final String mdcValue = "12345";
@@ -96,14 +99,14 @@ class ThreadUtilsTest {
 
             // When
             ThreadUtils.runAsyncWithMdc(runnable, executor);
-            Thread.sleep(100); // Give time for async execution
 
             // Then
-            assertThat(capturedMdcValue.get()).isEqualTo(mdcValue);
+            await().atMost(1, TimeUnit.SECONDS)
+                    .untilAsserted(() -> assertThat(capturedMdcValue.get()).isEqualTo(mdcValue));
         }
 
         @Test
-        void should_execute_runnable_without_executor_and_preserve_mdc_context() throws Exception {
+        void should_execute_runnable_without_executor_and_preserve_mdc_context() {
             // Given
             final String mdcKey = "requestId";
             final String mdcValue = "12345";
@@ -114,14 +117,14 @@ class ThreadUtilsTest {
 
             // When
             ThreadUtils.runAsyncWithMdc(runnable);
-            Thread.sleep(100); // Give time for async execution
 
             // Then
-            assertThat(capturedMdcValue.get()).isEqualTo(mdcValue);
+            await().atMost(1, TimeUnit.SECONDS)
+                    .untilAsserted(() -> assertThat(capturedMdcValue.get()).isEqualTo(mdcValue));
         }
 
         @Test
-        void should_handle_empty_mdc_context_when_running_async_with_executor() throws Exception {
+        void should_handle_empty_mdc_context_when_running_async_with_executor() {
             // Given
             MDC.clear();
             final AtomicInteger counter = new AtomicInteger(0);
@@ -130,14 +133,14 @@ class ThreadUtilsTest {
 
             // When
             ThreadUtils.runAsyncWithMdc(runnable, executor);
-            Thread.sleep(100);
 
             // Then
-            assertThat(counter.get()).isEqualTo(1);
+            await().atMost(1, TimeUnit.SECONDS)
+                    .untilAsserted(() -> assertThat(counter.get()).isEqualTo(1));
         }
 
         @Test
-        void should_handle_empty_mdc_context_when_running_async_without_executor() throws Exception {
+        void should_handle_empty_mdc_context_when_running_async_without_executor() {
             // Given
             MDC.clear();
             final AtomicInteger counter = new AtomicInteger(0);
@@ -145,14 +148,14 @@ class ThreadUtilsTest {
 
             // When
             ThreadUtils.runAsyncWithMdc(runnable);
-            Thread.sleep(100);
 
             // Then
-            assertThat(counter.get()).isEqualTo(1);
+            await().atMost(1, TimeUnit.SECONDS)
+                    .untilAsserted(() -> assertThat(counter.get()).isEqualTo(1));
         }
 
         @Test
-        void should_clear_mdc_after_runnable_execution_with_executor() throws Exception {
+        void should_clear_mdc_after_runnable_execution_with_executor() {
             // Given
             final String mdcKey = "requestId";
             final String mdcValue = "12345";
@@ -172,11 +175,10 @@ class ThreadUtilsTest {
             });
 
             ThreadUtils.runAsyncWithMdc(runnable, trackingExecutor);
-            Thread.sleep(100);
 
             // Then
-            final Map<String, String> capturedMdc = mdcAfterExecution.get();
-            assertThat(capturedMdc).isNullOrEmpty();
+            await().atMost(1, TimeUnit.SECONDS)
+                    .untilAsserted(() -> assertThat(mdcAfterExecution.get()).isNullOrEmpty());
         }
 
         @Test
@@ -201,7 +203,7 @@ class ThreadUtilsTest {
         }
 
         @Test
-        void should_preserve_multiple_mdc_values_when_running_async() throws Exception {
+        void should_preserve_multiple_mdc_values_when_running_async() {
             // Given
             final Map<String, String> mdcValues = new HashMap<>();
             mdcValues.put("requestId", "12345");
@@ -215,10 +217,10 @@ class ThreadUtilsTest {
 
             // When
             ThreadUtils.runAsyncWithMdc(runnable, executor);
-            Thread.sleep(100);
 
             // Then
-            assertThat(capturedMdc.get()).containsAllEntriesOf(mdcValues);
+            await().atMost(1, TimeUnit.SECONDS)
+                    .untilAsserted(() -> assertThat(capturedMdc.get()).containsAllEntriesOf(mdcValues));
         }
     }
 

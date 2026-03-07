@@ -22,6 +22,8 @@ public interface SanjyServerProps {
 
         String description();
 
+        String endpointsPrefix();
+
         ApplicationContactProp contact();
 
         ApplicationDocumentationProp documentation();

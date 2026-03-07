@@ -1,17 +1,17 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.client.rest.cofig;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import br.com.gorillaroxo.sanjy.server.core.ports.driven.SanjyServerProps;
 import feign.RetryableException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class FeignRetryerTest {
@@ -179,7 +179,6 @@ class FeignRetryerTest {
 
         // Then - Second retry should take longer due to exponential backoff
         assertThat(elapsed1).isGreaterThanOrEqualTo(400L);
-        assertThat(elapsed2).isGreaterThanOrEqualTo(1300L);
-        assertThat(elapsed2).isGreaterThan(elapsed1);
+        assertThat(elapsed2).isGreaterThanOrEqualTo(1300L).isGreaterThan(elapsed1);
     }
 }

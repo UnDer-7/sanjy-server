@@ -1,9 +1,13 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity;
 
+import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.config.HasMetadata;
+import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.config.MetadataEntityListener;
+import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.embedded.MetadataEntityEmbedded;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,7 +32,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "diet_plan")
-public class DietPlanEntity {
+@EntityListeners(MetadataEntityListener.class)
+public class DietPlanEntity implements HasMetadata {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,5 +76,5 @@ public class DietPlanEntity {
     private Set<MealTypeEntity> mealTypes = new LinkedHashSet<>();
 
     @Embedded
-    private MetadataEmbeddedEntity metadata;
+    private MetadataEntityEmbedded metadata;
 }

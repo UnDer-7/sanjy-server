@@ -1,0 +1,65 @@
+meta {
+  name: err-searchMealRecordsInvalidProperty
+  type: http
+  seq: 12
+}
+
+get {
+  url: {{SERVER_URL}}/v1/meal-record?pageNumber=0&pageSize=10&consumedAtAfter=2026-01-01T00:00:00Z&consumedAtBefore=2050-13-20T23:59:59Z
+  body: none
+  auth: inherit
+}
+
+params:query {
+  pageNumber: 0
+  pageSize: 10
+  consumedAtAfter: 2026-01-01T00:00:00Z
+  consumedAtBefore: 2050-13-20T23:59:59Z
+}
+
+headers {
+  Content-Type: application/json
+}
+
+tests {
+  test("should return status 400", function() {
+    expect(res.getStatus()).to.equal(400);
+  });
+
+  test("should return error code 002", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("code");
+    expect(body.code).to.equal("002");
+  });
+
+  test("should return error message", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("message");
+    expect(body.message).to.equal("Invalid values");
+  });
+
+  test("should return customMessage mentioning consumedAtBefore field with format error", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("customMessage");
+    expect(body.customMessage).to.include("consumedAtBefore");
+    expect(body.customMessage).to.include("date-time must be in the following format");
+  });
+
+  test("should return httpStatusCode 400", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("httpStatusCode");
+    expect(body.httpStatusCode).to.equal(400);
+  });
+
+  test("should return a non-empty timestamp", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("timestamp");
+    expect(body.timestamp).to.be.a("string");
+    expect(body.timestamp).to.not.be.empty;
+  });
+}
+
+settings {
+  encodeUrl: false
+  timeout: 0
+}
