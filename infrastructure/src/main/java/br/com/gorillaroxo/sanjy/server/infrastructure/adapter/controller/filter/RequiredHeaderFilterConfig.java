@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -34,8 +35,8 @@ public class RequiredHeaderFilterConfig extends OncePerRequestFilter {
     private static final String WILDCARD_PATH = "/**/*";
 
     private final AntPathMatcher pathMatcher;
-    private final SwaggerUiConfigProperties swaggerUiConfigProperties;
-    private final SpringDocConfigProperties springDocConfigProperties;
+    private final Optional<SwaggerUiConfigProperties> swaggerUiConfigProperties;
+    private final Optional<SpringDocConfigProperties> springDocConfigProperties;
     private final McpServerSseProperties mcpServerSseProperties;
     private final ObjectMapper objectMapper;
     private final BusinessExceptionMapper businessExceptionMapper;
@@ -43,8 +44,8 @@ public class RequiredHeaderFilterConfig extends OncePerRequestFilter {
 
     public RequiredHeaderFilterConfig(
             final AntPathMatcher pathMatcher,
-            final SwaggerUiConfigProperties swaggerUiConfigProperties,
-            final SpringDocConfigProperties springDocConfigProperties,
+            final Optional<SwaggerUiConfigProperties> swaggerUiConfigProperties,
+            final Optional<SpringDocConfigProperties> springDocConfigProperties,
             final McpServerSseProperties mcpServerSseProperties,
             final ObjectMapper objectMapper,
             final BusinessExceptionMapper businessExceptionMapper) {
@@ -146,13 +147,21 @@ public class RequiredHeaderFilterConfig extends OncePerRequestFilter {
     }
 
     private List<String> getApiDocsPaths() {
-        final String path = springDocConfigProperties.getApiDocs().getPath();
-        return List.of(path, path + WILDCARD_PATH);
+        return springDocConfigProperties
+                .map(props -> {
+                    final String path = props.getApiDocs().getPath();
+                    return List.of(path, path + WILDCARD_PATH);
+                })
+                .orElse(List.of());
     }
 
     private List<String> getSwaggerUiPaths() {
-        final String path = swaggerUiConfigProperties.getPath();
-        return List.of(path, "/swagger-ui" + WILDCARD_PATH);
+        return swaggerUiConfigProperties
+                .map(props -> {
+                    final String path = props.getPath();
+                    return List.of(path, "/swagger-ui" + WILDCARD_PATH);
+                })
+                .orElse(List.of());
     }
 
     private List<String> getMcpServerPaths() {
