@@ -49,6 +49,9 @@ dev/run:
 	./mvnw -B -ntp clean install -DskipTests -pl infrastructure -am && \
 	./mvnw -B -ntp spring-boot:run -pl infrastructure
 
+## dev/pipe: Run most pipeline checks locally (fmt/check → lint → snyk/test → sonar → test → test/native). Recommended before pushing to CI — covers the majority of validations, though some checks only run in the pipeline
+.PHONE: dev/pipe
+dev/pipe: fmt/check lint snyk/test sonar test test/native
 
 
 # ==================================================================================== #
@@ -306,7 +309,7 @@ lint/report:
 	echo " ✅  CHECKSTYLE REPORT GENERATED SUCCESSFULLY  ✅" && \
 	echo "==========================================================================" && \
 	echo "" && \
-	echo "Report location: target/site/checkstyle-aggregate.html" && \
+	echo "Report location: target/reports/checkstyle-aggregate.html" && \
 	echo "" && \
 	echo "Simply open it in your browser to view detailed violation information." && \
 	echo "==========================================================================" && \
