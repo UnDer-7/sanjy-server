@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.3</version>
+        <version>4.0.5</version>
         <relativePath/>
         <!-- lookup parent from repository -->
     </parent>
@@ -49,7 +49,7 @@
         <projectlombok.version>1.18.42</projectlombok.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 
-        <maven-artifact.version>3.9.12</maven-artifact.version>
+        <maven-artifact.version>3.9.14</maven-artifact.version>
         <maven-sonar-plugin.version>5.5.0.6356</maven-sonar-plugin.version>
         <maven-enforcer-plugin.version>3.6.2</maven-enforcer-plugin.version>
         <maven-jacoco-plugin.version>0.8.14</maven-jacoco-plugin.version>
@@ -58,7 +58,7 @@
 
         <springdoc.version>3.0.2</springdoc.version>
         <spring-cloud.version>2025.1.1</spring-cloud.version>
-        <spring-ai.version>2.0.0-M2</spring-ai.version>
+        <spring-ai.version>2.0.0-M4</spring-ai.version>
 
         <checkstyle.version>13.3.0</checkstyle.version>
         <checkstyle-sevntu-checks.version>1.44.1</checkstyle-sevntu-checks.version>
@@ -71,9 +71,12 @@
         <guava.version>33.5.0-jre</guava.version>
 
         <!-- Security Fix -->
-        <!-- Override vulnerable Jackson versions - fixes SNYK-JAVA-COMFASTERXMLJACKSONCORE-15365924, SNYK-JAVA-TOOLSJACKSONCORE-15365915, SNYK-JAVA-TOOLSJACKSONCORE-15371178 -->
-        <jackson-bom.version>3.1.0</jackson-bom.version>
-        <jackson-2-bom.version>2.21.1</jackson-2-bom.version>
+        <!-- Override vulnerable tools.jackson.core version - fixes SNYK-JAVA-TOOLSJACKSONCORE-15907550 -->
+        <!-- TODO: Remove when spring-boot-starter-parent is upgraded to a version that includes tools.jackson.core >= 3.1.1 -->
+        <jackson-bom.version>3.1.1</jackson-bom.version>
+        <!-- Override vulnerable com.fasterxml.jackson.core version - fixes SNYK-JAVA-COMFASTERXMLJACKSONCORE-15907551 -->
+        <!-- TODO: Remove when springdoc-openapi-bom and flyway-core are upgraded to versions that include jackson-core >= 2.21.2 -->
+        <jackson-2-bom.version>2.21.2</jackson-2-bom.version>
         <!-- ################ -->
 
         <!-- ### SonarCloud Configuration ### -->
@@ -164,11 +167,26 @@
             <!-- ####################### -->
 
             <!-- Security Fix -->
-            <!-- Override vulnerable commons-fileupload version (CVE-2025-48976)-->
+            <!-- Override vulnerable commons-fileupload version - fixes SNYK-JAVA-COMMONSFILEUPLOAD-10363252 -->
+            <!-- TODO: Remove when spring-cloud-starter-openfeign is upgraded to a version that includes commons-fileupload >= 1.6.0 -->
             <dependency>
                 <groupId>commons-fileupload</groupId>
                 <artifactId>commons-fileupload</artifactId>
                 <version>1.6.0</version>
+            </dependency>
+            <!-- Override vulnerable mcp-core version - fixes SNYK-JAVA-IOMODELCONTEXTPROTOCOLSDK-15857186 -->
+            <!-- TODO: Remove when spring-ai-starter-mcp-server-webmvc is upgraded to a version that includes mcp-core >= 1.1.1 -->
+            <dependency>
+                <groupId>io.modelcontextprotocol.sdk</groupId>
+                <artifactId>mcp-core</artifactId>
+                <version>1.1.1</version>
+            </dependency>
+            <!-- Override vulnerable plexus-utils version - fixes SNYK-JAVA-ORGCODEHAUSPLEXUS-15766699 -->
+            <!-- TODO: Remove when maven-artifact is upgraded to a version that includes plexus-utils >= 4.0.3 -->
+            <dependency>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-utils</artifactId>
+                <version>4.0.3</version>
             </dependency>
             <!-- ####################### -->
         </dependencies>
