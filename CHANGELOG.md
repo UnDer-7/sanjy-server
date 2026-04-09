@@ -23,6 +23,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `RequiredHeaderFilterConfig` now handles Swagger and ApiDocs configuration as optional, preventing failures when Swagger UI or API docs are disabled via configuration
 
+### Security
+
+#### Dependency Vulnerability Fixes
+
+- Overridden transitive dependency versions to address high and medium severity vulnerabilities flagged by Snyk
+
 ---
 
 ## [0.1.1] - 2026-03-07
