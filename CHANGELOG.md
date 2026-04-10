@@ -15,6 +15,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.2] - 2026-04-09
+
+### Fixed
+
+#### Swagger and ApiDocs Cannot Be Disabled
+
+- `RequiredHeaderFilterConfig` now handles Swagger and ApiDocs configuration as optional, preventing failures when Swagger UI or API docs are disabled via configuration
+
+### Security
+
+#### Dependency Vulnerability Fixes
+
+- Overridden transitive dependency versions to address high and medium severity vulnerabilities flagged by Snyk
+
+---
+
 ## [0.1.1] - 2026-03-07
 
 ### Added
@@ -90,6 +106,7 @@ structure and verifying the end-to-end flow of diet plan management and meal tra
 - Single active diet plan enforcement (only one plan can be active at a time)
 - All endpoints versioned under `/v1/` prefix
 
+[0.1.2]: https://github.com/UnDer-7/sanjy-server/releases/tag/0.1.2
 [0.1.1]: https://github.com/UnDer-7/sanjy-server/releases/tag/0.1.1
 [0.1.0]: https://github.com/UnDer-7/sanjy-server/releases/tag/0.1.0
 
