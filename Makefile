@@ -29,7 +29,6 @@ all: help
 
 
 
-
 # ==================================================================================== #
 ## ===== DEV =====
 # ==================================================================================== #
@@ -92,7 +91,6 @@ db/seed:
 
 
 
-
 # ==================================================================================== #
 ## ===== BUILD =====
 # ==================================================================================== #
@@ -100,43 +98,43 @@ db/seed:
 ## build/jvm: Build the project to be run on a JVM environment
 .PHONY: build/jvm
 build/jvm:
-	@START=$$(date +%s); \
-	echo 'Installing all modules...'; \
-	./mvnw -B -ntp clean install -DskipTests; \
-	echo 'Building for JVM...'; \
-	./mvnw -B -ntp clean package -Dmaven.test.skip -T1C -DargLine="Xms2g -Xmx2g" --batch-mode -q; \
-	END=$$(date +%s); \
-	ELAPSED=$$((END-START)); \
+	@START=$$(date +%s) && \
+	echo 'Installing all modules...' && \
+	./mvnw -B -ntp clean install -DskipTests && \
+	echo 'Building for JVM...' && \
+	./mvnw -B -ntp clean package -Dmaven.test.skip -T1C -DargLine="Xms2g -Xmx2g" --batch-mode -q && \
+	END=$$(date +%s) && \
+	ELAPSED=$$((END-START)) && \
 	echo "JVM build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
 
 ## build/jvm/docker: Build a Docker image with jvm (full build from scratch)
 .PHONY: build/jvm/docker
 build/jvm/docker:
-	@START=$$(date +%s); \
-	echo 'Building docker image for JVM (full mode)...'; \
-	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-jvm' -f Dockerfile_jvm .; \
-	END=$$(date +%s); \
-	ELAPSED=$$((END-START)); \
+	@START=$$(date +%s) && \
+	echo 'Building docker image for JVM (full mode)...' && \
+	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-jvm' -f Dockerfile_jvm . && \
+	END=$$(date +%s) && \
+	ELAPSED=$$((END-START)) && \
 	echo "Docker JVM image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
 
 ## build/jvm/docker/local: Build a Docker image with jvm using pre-built artifacts (fast)
 .PHONY: build/jvm/docker/local
 build/jvm/docker/local:
-	@START=$$(date +%s); \
-	echo 'Building docker image for JVM (local mode - using pre-built JAR)...'; \
-	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=local --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-jvm' -f Dockerfile_jvm .; \
-	END=$$(date +%s); \
-	ELAPSED=$$((END-START)); \
+	@START=$$(date +%s) && \
+	echo 'Building docker image for JVM (local mode - using pre-built JAR)...' && \
+	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=local --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-jvm' -f Dockerfile_jvm . && \
+	END=$$(date +%s) && \
+	ELAPSED=$$((END-START)) && \
 	echo "Docker JVM image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
 
 ## build/jvm/docker/force: Build a Docker image with jvm without caching layers (For debugging)
 .PHONY: build/jvm/docker/force
 build/jvm/docker/force:
-	@START=$$(date +%s); \
-	echo 'Building docker image for JVM without caching layers'; \
-	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-jvm' -f Dockerfile_jvm . --progress=plain --no-cache; \
-	END=$$(date +%s); \
-	ELAPSED=$$((END-START)); \
+	@START=$$(date +%s) && \
+	echo 'Building docker image for JVM without caching layers' && \
+	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-jvm' -f Dockerfile_jvm . --progress=plain --no-cache && \
+	END=$$(date +%s) && \
+	ELAPSED=$$((END-START)) && \
 	echo "Docker JVM force image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
 
 ## ----- GRAALVM -----
@@ -159,33 +157,32 @@ build/graalvm:
 ## build/graalvm/docker: Build a Docker image with GraalVM (full build from scratch)
 .PHONY: build/graalvm/docker
 build/graalvm/docker:
-	@START=$$(date +%s); \
-	echo 'Building docker image for GraalVM (full mode)...'; \
-	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-graalvm' -f Dockerfile_graalvm .; \
-	END=$$(date +%s); \
-	ELAPSED=$$((END-START)); \
+	@START=$$(date +%s) && \
+	echo 'Building docker image for GraalVM (full mode)...' && \
+	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-graalvm' -f Dockerfile_graalvm . && \
+	END=$$(date +%s) && \
+	ELAPSED=$$((END-START)) && \
 	echo "Docker GraalVM image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
 
 ## build/graalvm/docker/local: Build a Docker image with GraalVM using pre-built artifacts (fast)
 .PHONY: build/graalvm/docker/local
 build/graalvm/docker/local:
-	@START=$$(date +%s); \
-	echo 'Building docker image for GraalVM (local mode - using pre-built native binary)...'; \
-	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=local --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-graalvm' -f Dockerfile_graalvm .; \
-	END=$$(date +%s); \
-	ELAPSED=$$((END-START)); \
+	@START=$$(date +%s) && \
+	echo 'Building docker image for GraalVM (local mode - using pre-built native binary)...' && \
+	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=local --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-graalvm' -f Dockerfile_graalvm . && \
+	END=$$(date +%s) && \
+	ELAPSED=$$((END-START)) && \
 	echo "Docker GraalVM image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
 
 ## build/graalvm/docker/force: Build a Docker image with GraalVM without caching layers (For debugging)
 .PHONY: build/graalvm/docker/force
 build/graalvm/docker/force:
-	@START=$$(date +%s); \
-	echo 'Building docker image for GraalVM without caching layers'; \
-	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-graalvm' -f Dockerfile_graalvm . --progress=plain --no-cache; \
-	END=$$(date +%s); \
-	ELAPSED=$$((END-START)); \
+	@START=$$(date +%s) && \
+	echo 'Building docker image for GraalVM without caching layers' && \
+	DOCKER_BUILDKIT=1 docker build --build-arg BUILD_MODE=full --tag '$(REGISTRY_HOST)/$(PROJECT_NAME):$(POM_VERSION)-graalvm' -f Dockerfile_graalvm . --progress=plain --no-cache && \
+	END=$$(date +%s) && \
+	ELAPSED=$$((END-START)) && \
 	echo "Docker GraalVM force image build completed in $$((ELAPSED/3600))h $$(((ELAPSED%3600)/60))m $$((ELAPSED%60))s"
-
 
 
 
@@ -235,7 +232,6 @@ sonar:
 	./mvnw -B -ntp sonar:sonar
 	@echo ">>> Analysis published successfully!"
 	@echo ">>> View results at: https://sonarcloud.io/dashboard?id=UnDer-7_sanjy-server"
-
 
 
 
