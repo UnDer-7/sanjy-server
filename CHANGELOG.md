@@ -15,6 +15,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.3] - 2026-04-21
+
+### Security
+
+#### Dependency Vulnerability Fixes
+
+- Upgraded `tomcat-embed-core` to 11.0.21 — fixes improper encoding and improper authentication (High/Medium)
+- Upgraded `spring-webmvc` to 7.0.7 — fixes HTTP request smuggling (Low)
+- Upgraded `bcprov-jdk18on` to 1.84 — fixes timing attack, LDAP injection, and broken cryptographic algorithm (High/Medium)
+
+### Fixed
+
+#### Makefile Build Targets Fail-Fast
+
+- Replaced `;` with `&&` in all multistep build targets so a failing step aborts the sequence instead of silently continuing
+
+---
+
 ## [0.1.2] - 2026-04-09
 
 ### Fixed
@@ -106,6 +124,7 @@ structure and verifying the end-to-end flow of diet plan management and meal tra
 - Single active diet plan enforcement (only one plan can be active at a time)
 - All endpoints versioned under `/v1/` prefix
 
+[0.1.3]: https://github.com/UnDer-7/sanjy-server/releases/tag/0.1.3
 [0.1.2]: https://github.com/UnDer-7/sanjy-server/releases/tag/0.1.2
 [0.1.1]: https://github.com/UnDer-7/sanjy-server/releases/tag/0.1.1
 [0.1.0]: https://github.com/UnDer-7/sanjy-server/releases/tag/0.1.0
