@@ -10,6 +10,7 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequ
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.UpdateDietPlanRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.DietPlanCompleteResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.rest.DietPlanRestService;
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller.config.SanjyEndpoint;
 import br.com.gorillaroxo.sanjy.server.infrastructure.config.McpToolMarker;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.DietPlanMapper;
@@ -94,7 +95,7 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public DietPlanCompleteResponseDto updateDietPlan(
-            @RequestBody final UpdateDietPlanRequestDto requestBody, @PathVariable final Long id) {
+            @RequestBody final UpdateDietPlanRequestDto requestBody, @PathVariable(RequestConstants.Path.ID) final Long id) {
         final PatchableDietPlanDomain domain = dietPlanMapper.toDomain(requestBody, id);
         final DietPlanDomain updated = patchDietPlanUseCase.execute(domain);
         return dietPlanMapper.toDto(updated);

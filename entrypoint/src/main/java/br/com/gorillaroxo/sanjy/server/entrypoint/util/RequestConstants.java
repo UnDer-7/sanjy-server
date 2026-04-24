@@ -6,6 +6,14 @@ public final class RequestConstants {
         throw new IllegalStateException("Utility class");
     }
 
+    public static final class Path {
+        public static final String ID = "id";
+
+        private Path() {
+            throw new IllegalStateException("Utility class");
+        }
+    }
+
     public static final class Query {
         public static final String CONSUMED_AT_AFTER = "consumedAtAfter";
         public static final String CONSUMED_AT_BEFORE = "consumedAtBefore";

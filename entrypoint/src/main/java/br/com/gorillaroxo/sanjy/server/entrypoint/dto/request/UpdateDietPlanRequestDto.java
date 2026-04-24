@@ -5,6 +5,12 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 
+@Schema(description = """
+        Request DTO for partially updating a diet plan. \
+        Only fields explicitly provided in the request body will be updated — \
+        omitted, null, empty fields are ignored and the existing values are preserved. \
+        Meal types and standard options are not affected by this operation.
+        """)
 public record UpdateDietPlanRequestDto(
         @Schema(
                 description = "Name/identifier of the diet plan",

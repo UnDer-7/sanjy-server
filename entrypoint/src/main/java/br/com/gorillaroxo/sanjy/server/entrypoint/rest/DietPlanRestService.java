@@ -5,7 +5,10 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.UpdateDietPlanRequ
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.DietPlanCompleteResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -97,6 +100,39 @@ public interface DietPlanRestService {
                                 """)}))
     DietPlanCompleteResponseDto activeDietPlan();
 
+    @Operation(summary = "Partially update a diet plan", description = """
+                Partially updates an existing diet plan. Only the fields explicitly provided in the request body will \
+                be modified — omitted, null, empty fields are ignored and existing values are preserved. \
+                Meal types and standard options are not affected by this operation.
+                """)
+    @Parameter(
+        name = RequestConstants.Path.ID,
+        description = "Diet plan ID",
+        required = true,
+        example = OpenApiConstants.Examples.ID,
+        in = ParameterIn.PATH,
+        schema = @Schema(implementation = String.class)
+    )
+    @ApiResponse(
+            responseCode = OpenApiConstants.HttpStatusCodes.OK,
+            description = "Diet Plan successfully updated",
+            content = @Content(schema = @Schema(implementation = DietPlanCompleteResponseDto.class)))
+    @ApiResponse(
+            responseCode = OpenApiConstants.HttpStatusCodes.NOT_FOUND,
+            description = "Diet Plan not found",
+            content =
+                    @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = {@ExampleObject(name = "Diet plan not found", value = """
+                                {
+                                  "code": "003",
+                                  "timestamp": "2026-02-15T06:38:34.896836872Z",
+                                  "message": "Diet plan was not found",
+                                  "customMessage": "Could not find diet plan with id 99",
+                                  "httpStatusCode": 404
+                                }
+                                """)}))
     DietPlanCompleteResponseDto updateDietPlan(
-            @Valid @NotNull UpdateDietPlanRequestDto requestBody, @NotNull final Long id);
+            @Valid @NotNull UpdateDietPlanRequestDto requestBody,
+            @NotNull Long id);
 }
