@@ -1,7 +1,9 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.mapper;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.DietPlanDomain;
+import br.com.gorillaroxo.sanjy.server.core.domain.PatchableDietPlanDomain;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequestDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.UpdateDietPlanRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.DietPlanCompleteResponseDto;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.DietPlanEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.utils.InfrastructureConstants;
@@ -26,6 +28,8 @@ public interface DietPlanMapper {
     @Mapping(target = "metadata.createdAt", ignore = true)
     @Mapping(target = "metadata.updatedAt", ignore = true)
     DietPlanDomain toDomain(CreateDietPlanRequestDto request);
+
+    PatchableDietPlanDomain toDomain(UpdateDietPlanRequestDto request, final Long id);
 
     // Entities
     DietPlanEntity toEntity(DietPlanDomain domain);

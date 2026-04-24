@@ -2,9 +2,12 @@ package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.DietPlanDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.LogField;
+import br.com.gorillaroxo.sanjy.server.core.domain.PatchableDietPlanDomain;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.CreateDietPlanUseCase;
 import br.com.gorillaroxo.sanjy.server.core.ports.driver.GetActiveDietPlanUseCase;
+import br.com.gorillaroxo.sanjy.server.core.usecase.PatchDietPlanUseCase;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequestDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.UpdateDietPlanRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.DietPlanCompleteResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.rest.DietPlanRestService;
 import br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller.config.SanjyEndpoint;
@@ -17,7 +20,10 @@ import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Slf4j
@@ -27,6 +33,7 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
 
     private final CreateDietPlanUseCase createDietPlanUseCase;
     private final GetActiveDietPlanUseCase getActiveDietPlanUseCase;
+    private final PatchDietPlanUseCase patchDietPlanUseCase;
     private final DietPlanMapper dietPlanMapper;
 
     @Override
@@ -36,7 +43,7 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
             Creates a new diet plan with meal types (breakfast, lunch, snack, dinner, etc.), \
             standard meal options, nutritional targets, and goals. The new plan is automatically set as active and any previously active plan is deactivated.
             """)
-    public DietPlanCompleteResponseDto newDietPlan(final CreateDietPlanRequestDto request) {
+    public DietPlanCompleteResponseDto newDietPlan(@RequestBody final CreateDietPlanRequestDto request) {
         log.info(
                 LogField.Placeholders.ONE.getPlaceholder(),
                 StructuredArguments.kv(LogField.MSG.label(), "Request to create a new diet plan"));
@@ -81,5 +88,15 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
                 StructuredArguments.kv(LogField.RESPONSE_BODY.label(), "( " + dtoResponse + " )"));
 
         return dtoResponse;
+    }
+
+    @Override
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public DietPlanCompleteResponseDto updateDietPlan(
+            @RequestBody final UpdateDietPlanRequestDto requestBody, @PathVariable final Long id) {
+        final PatchableDietPlanDomain domain = dietPlanMapper.toDomain(requestBody, id);
+        final DietPlanDomain updated = patchDietPlanUseCase.execute(domain);
+        return dietPlanMapper.toDto(updated);
     }
 }

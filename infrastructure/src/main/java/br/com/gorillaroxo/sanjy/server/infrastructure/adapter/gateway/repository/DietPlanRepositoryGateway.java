@@ -6,6 +6,7 @@ import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.DietPlanEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.repository.DietPlanRepository;
 import br.com.gorillaroxo.sanjy.server.infrastructure.mapper.DietPlanMapper;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,5 +44,31 @@ public class DietPlanRepositoryGateway implements DietPlanGateway {
     @Transactional(readOnly = true)
     public Optional<DietPlanDomain> findActive() {
         return dietPlanRepository.findActiveDietPlan().map(dietPlanMapper::toDomain);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<DietPlanDomain> findById(final Long id) {
+        return dietPlanRepository.findById(id).map(dietPlanMapper::toDomain);
+    }
+
+    @Override
+    @Transactional
+    public DietPlanDomain patch(final DietPlanDomain domain) {
+        Objects.requireNonNull(domain.getId(), "To update diet plan, id must not be null");
+
+        final DietPlanEntity managedEntity =
+                dietPlanRepository.findById(domain.getId()).orElseThrow();
+        managedEntity.setName(domain.getName());
+        managedEntity.setStartDate(domain.getStartDate());
+        managedEntity.setEndDate(domain.getEndDate());
+        managedEntity.setDailyCalories(domain.getDailyCalories());
+        managedEntity.setDailyProteinInG(domain.getDailyProteinInG());
+        managedEntity.setDailyCarbsInG(domain.getDailyCarbsInG());
+        managedEntity.setDailyFatInG(domain.getDailyFatInG());
+        managedEntity.setGoal(domain.getGoal());
+        managedEntity.setNutritionistNotes(domain.getNutritionistNotes());
+        final DietPlanEntity updated = dietPlanRepository.save(managedEntity);
+        return dietPlanMapper.toDomain(updated);
     }
 }

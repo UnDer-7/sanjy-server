@@ -1,6 +1,7 @@
 package br.com.gorillaroxo.sanjy.server.entrypoint.rest;
 
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequestDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.UpdateDietPlanRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.DietPlanCompleteResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
@@ -12,7 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "Diet Plan", description = "Handles diet plan operations")
 public interface DietPlanRestService {
@@ -70,7 +70,7 @@ public interface DietPlanRestService {
                                 }
                                 """)
                             }))
-    DietPlanCompleteResponseDto newDietPlan(@RequestBody @Valid @NotNull CreateDietPlanRequestDto request);
+    DietPlanCompleteResponseDto newDietPlan(@Valid @NotNull CreateDietPlanRequestDto request);
 
     @Operation(summary = "Get the currently active diet plan", description = """
                 Retrieves the currently active diet plan with all meal types, standard options, nutritional targets (calories, protein, carbs, fat), \
@@ -96,4 +96,7 @@ public interface DietPlanRestService {
                                 }
                                 """)}))
     DietPlanCompleteResponseDto activeDietPlan();
+
+    DietPlanCompleteResponseDto updateDietPlan(
+            @Valid @NotNull UpdateDietPlanRequestDto requestBody, @NotNull final Long id);
 }
