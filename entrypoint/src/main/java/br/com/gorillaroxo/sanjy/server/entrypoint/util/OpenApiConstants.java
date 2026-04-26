@@ -17,6 +17,7 @@ public final class OpenApiConstants {
 
         public static final String FALSE = "false";
         public static final String TRUE = "true";
+        public static final String ID = "42";
 
         private Examples() {
             throw new IllegalStateException("Utility class");

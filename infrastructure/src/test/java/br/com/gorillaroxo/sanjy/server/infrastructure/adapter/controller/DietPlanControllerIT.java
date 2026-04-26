@@ -1,12 +1,14 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.adapter.controller;
 
 import br.com.gorillaroxo.sanjy.server.core.exception.ExceptionCode;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.UpdateDietPlanRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.DietPlanCompleteResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.ErrorResponseDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import br.com.gorillaroxo.sanjy.server.infrastructure.test.IntegrationTestController;
 import br.com.gorillaroxo.sanjy.server.infrastructure.test.builder.DtoBuilders;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -508,6 +510,222 @@ class DietPlanControllerIT extends IntegrationTestController {
                     .uri(BASE_URL + "/active")
                     .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
                     .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .exchange()
+                    .expectStatus()
+                    .isNotFound()
+                    .expectBody(ErrorResponseDto.class)
+                    .value(response -> {
+                        final var expectedExCode = ExceptionCode.DIET_PLAN_NOT_FOUND;
+                        assertThat(response.code()).isNotBlank().isEqualTo(expectedExCode.getCode());
+                        assertThat(response.timestamp()).isNotNull();
+                        assertThat(response.message()).isNotEmpty().isEqualTo(expectedExCode.getMessage());
+                        assertThat(response.httpStatusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
+                    });
+        }
+    }
+
+    @Nested
+    @DisplayName("PATCH /v1/diet-plan/{id} - updateDietPlan")
+    class UpdateDietPlan {
+
+        @Test
+        void should_update_all_fields() {
+            // Given
+            dietPlanRepository.deleteAll();
+            final var createRequest = DtoBuilders.buildCreateDietPlanRequestDto().build();
+            final var timeFormatter = DateTimeFormatter.ofPattern(RequestConstants.DateTimeFormats.TIME_FORMAT);
+
+            final var createdPlan = webTestClient
+                    .post()
+                    .uri(BASE_URL)
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(createRequest)
+                    .exchange()
+                    .expectStatus()
+                    .isCreated()
+                    .expectBody(DietPlanCompleteResponseDto.class)
+                    .returnResult()
+                    .getResponseBody();
+            assertThat(createdPlan).isNotNull();
+
+            final var patchRequest = DtoBuilders.buildUpdateDietPlanRequestDto().build();
+
+            // When/Then
+            webTestClient
+                    .patch()
+                    .uri(BASE_URL + "/{id}", createdPlan.id())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(patchRequest)
+                    .exchange()
+                    .expectStatus()
+                    .isOk()
+                    .expectBody(DietPlanCompleteResponseDto.class)
+                    .value(response -> {
+                        // Updated fields
+                        assertThat(response.id()).isEqualTo(createdPlan.id());
+                        assertThat(response.name()).isEqualTo(patchRequest.name());
+                        assertThat(response.startDate()).isEqualTo(patchRequest.startDate());
+                        assertThat(response.endDate()).isEqualTo(patchRequest.endDate());
+                        assertThat(response.dailyCalories()).isEqualTo(patchRequest.dailyCalories());
+                        assertThat(response.dailyProteinInG()).isEqualTo(patchRequest.dailyProteinInG());
+                        assertThat(response.dailyCarbsInG()).isEqualTo(patchRequest.dailyCarbsInG());
+                        assertThat(response.dailyFatInG()).isEqualTo(patchRequest.dailyFatInG());
+                        assertThat(response.goal()).isEqualTo(patchRequest.goal());
+                        assertThat(response.nutritionistNotes()).isEqualTo(patchRequest.nutritionistNotes());
+
+                        // Unchanged fields
+                        assertThat(response.isActive()).isEqualTo(createdPlan.isActive());
+                        assertThat(response.metadata()).isNotNull();
+                        assertThat(response.metadata().createdAt().truncatedTo(ChronoUnit.MILLIS))
+                                .isEqualTo(createdPlan.metadata().createdAt().truncatedTo(ChronoUnit.MILLIS));
+                        assertThat(response.metadata().updatedAt()).isNotNull();
+
+                        // mealTypes and children preserved
+                        assertThat(response.mealTypes())
+                                .isNotEmpty()
+                                .hasSize(createdPlan.mealTypes().size());
+
+                        final var responseMealType = response.mealTypes().getFirst();
+                        final var originalMealType = createdPlan.mealTypes().getFirst();
+
+                        assertThat(responseMealType.id()).isEqualTo(originalMealType.id());
+                        assertThat(responseMealType.name()).isEqualTo(originalMealType.name());
+                        assertThat(responseMealType.scheduledTime().format(timeFormatter))
+                                .isEqualTo(originalMealType.scheduledTime().format(timeFormatter));
+                        assertThat(responseMealType.observation()).isEqualTo(originalMealType.observation());
+                        assertThat(responseMealType.dietPlanId()).isEqualTo(createdPlan.id());
+                        assertThat(responseMealType.metadata()).isNotNull();
+                        assertThat(responseMealType.metadata().createdAt()).isNotNull();
+                        assertThat(responseMealType.metadata().updatedAt()).isNotNull();
+
+                        assertThat(responseMealType.standardOptions())
+                                .isNotEmpty()
+                                .hasSize(originalMealType.standardOptions().size());
+
+                        final var responseOption = responseMealType.standardOptions().getFirst();
+                        final var originalOption = originalMealType.standardOptions().getFirst();
+
+                        assertThat(responseOption.id()).isEqualTo(originalOption.id());
+                        assertThat(responseOption.optionNumber()).isEqualTo(originalOption.optionNumber());
+                        assertThat(responseOption.description()).isEqualTo(originalOption.description());
+                        assertThat(responseOption.mealTypeId()).isEqualTo(responseMealType.id());
+                        assertThat(responseOption.metadata()).isNotNull();
+                        assertThat(responseOption.metadata().createdAt()).isNotNull();
+                        assertThat(responseOption.metadata().updatedAt()).isNotNull();
+                    });
+        }
+
+        @Test
+        void should_preserve_fields_not_included_in_request() {
+            // Given
+            dietPlanRepository.deleteAll();
+            final var createRequest = DtoBuilders.buildCreateDietPlanRequestDto().build();
+            final var timeFormatter = DateTimeFormatter.ofPattern(RequestConstants.DateTimeFormats.TIME_FORMAT);
+
+            final var createdPlan = webTestClient
+                    .post()
+                    .uri(BASE_URL)
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(createRequest)
+                    .exchange()
+                    .expectStatus()
+                    .isCreated()
+                    .expectBody(DietPlanCompleteResponseDto.class)
+                    .returnResult()
+                    .getResponseBody();
+            assertThat(createdPlan).isNotNull();
+
+            final var patchRequest = UpdateDietPlanRequestDto.builder()
+                .name("Plan N°01 - Bulk")
+                .build();
+
+            // When/Then
+            webTestClient
+                    .patch()
+                    .uri(BASE_URL + "/{id}", createdPlan.id())
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(patchRequest)
+                    .exchange()
+                    .expectStatus()
+                    .isOk()
+                    .expectBody(DietPlanCompleteResponseDto.class)
+                    .value(response -> {
+                        // Updated field
+                        assertThat(response.name()).isEqualTo(patchRequest.name());
+
+                        // All other fields preserved from original
+                        assertThat(response.id()).isEqualTo(createdPlan.id());
+                        assertThat(response.startDate()).isEqualTo(createRequest.startDate());
+                        assertThat(response.endDate()).isEqualTo(createRequest.endDate());
+                        assertThat(response.dailyCalories()).isEqualTo(createRequest.dailyCalories());
+                        assertThat(response.dailyProteinInG()).isEqualTo(createRequest.dailyProteinInG());
+                        assertThat(response.dailyCarbsInG()).isEqualTo(createRequest.dailyCarbsInG());
+                        assertThat(response.dailyFatInG()).isEqualTo(createRequest.dailyFatInG());
+                        assertThat(response.goal()).isEqualTo(createRequest.goal());
+                        assertThat(response.nutritionistNotes()).isEqualTo(createRequest.nutritionistNotes());
+                        assertThat(response.isActive()).isEqualTo(createdPlan.isActive());
+                        assertThat(response.metadata()).isNotNull();
+                        assertThat(response.metadata().createdAt().truncatedTo(ChronoUnit.MILLIS))
+                                .isEqualTo(createdPlan.metadata().createdAt().truncatedTo(ChronoUnit.MILLIS));
+                        assertThat(response.metadata().updatedAt()).isNotNull();
+
+                        // mealTypes and children preserved
+                        assertThat(response.mealTypes())
+                                .isNotEmpty()
+                                .hasSize(createdPlan.mealTypes().size());
+
+                        final var responseMealType = response.mealTypes().getFirst();
+                        final var originalMealType = createdPlan.mealTypes().getFirst();
+
+                        assertThat(responseMealType.id()).isEqualTo(originalMealType.id());
+                        assertThat(responseMealType.name()).isEqualTo(originalMealType.name());
+                        assertThat(responseMealType.scheduledTime().format(timeFormatter))
+                                .isEqualTo(originalMealType.scheduledTime().format(timeFormatter));
+                        assertThat(responseMealType.observation()).isEqualTo(originalMealType.observation());
+                        assertThat(responseMealType.dietPlanId()).isEqualTo(createdPlan.id());
+                        assertThat(responseMealType.metadata()).isNotNull();
+                        assertThat(responseMealType.metadata().createdAt()).isNotNull();
+                        assertThat(responseMealType.metadata().updatedAt()).isNotNull();
+
+                        assertThat(responseMealType.standardOptions())
+                                .isNotEmpty()
+                                .hasSize(originalMealType.standardOptions().size());
+
+                        final var responseOption = responseMealType.standardOptions().getFirst();
+                        final var originalOption = originalMealType.standardOptions().getFirst();
+
+                        assertThat(responseOption.id()).isEqualTo(originalOption.id());
+                        assertThat(responseOption.optionNumber()).isEqualTo(originalOption.optionNumber());
+                        assertThat(responseOption.description()).isEqualTo(originalOption.description());
+                        assertThat(responseOption.mealTypeId()).isEqualTo(responseMealType.id());
+                        assertThat(responseOption.metadata()).isNotNull();
+                        assertThat(responseOption.metadata().createdAt()).isNotNull();
+                        assertThat(responseOption.metadata().updatedAt()).isNotNull();
+                    });
+        }
+
+        @Test
+        void should_return_not_found_when_diet_plan_does_not_exist() {
+            // Given
+            dietPlanRepository.deleteAll();
+            final var patchRequest = DtoBuilders.buildUpdateDietPlanRequestDto().build();
+
+            // When/Then
+            webTestClient
+                    .patch()
+                    .uri(BASE_URL + "/{id}", 99999L)
+                    .header(RequestConstants.Headers.X_CORRELATION_ID, "bf5ef8a2-5af2-4adf-8b58-d186fe01cd11")
+                    .header(RequestConstants.Headers.X_CHANNEL, "integration-test")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(patchRequest)
                     .exchange()
                     .expectStatus()
                     .isNotFound()
