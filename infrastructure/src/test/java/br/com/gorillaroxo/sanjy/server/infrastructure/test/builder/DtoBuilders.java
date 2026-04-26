@@ -4,6 +4,8 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequ
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealTypesRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateStandardOptionRequestDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.UpdateDietPlanRequestDto;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -73,5 +75,18 @@ public final class DtoBuilders {
                 .isFreeMeal(false)
                 .standardOptionId(34L)
                 .freeMealDescription(null);
+    }
+
+    public static UpdateDietPlanRequestDto.UpdateDietPlanRequestDtoBuilder buildUpdateDietPlanRequestDto() {
+        return UpdateDietPlanRequestDto.builder()
+            .name("Plan N°01 - Bulk")
+            .startDate(LocalDate.now().plusDays(7))
+            .endDate(LocalDate.now().plusMonths(6))
+            .dailyCalories(3001)
+            .dailyProteinInG(221)
+            .dailyCarbsInG(451)
+            .dailyFatInG(92)
+            .goal("Muscle mass gain")
+            .nutritionistNotes("No dietary restrictions");
     }
 }

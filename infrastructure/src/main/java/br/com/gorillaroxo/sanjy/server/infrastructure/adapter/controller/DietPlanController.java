@@ -96,7 +96,18 @@ public class DietPlanController implements DietPlanRestService, McpToolMarker {
     @PatchMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public DietPlanCompleteResponseDto updateDietPlan(
             @RequestBody final UpdateDietPlanRequestDto requestBody, @PathVariable(RequestConstants.Path.ID) final Long id) {
+        log.info(
+            LogField.Placeholders.TWO.getPlaceholder(),
+            StructuredArguments.kv(LogField.MSG.label(), "Request to patch diet plan"),
+            StructuredArguments.kv(LogField.DIET_PLAN_ID.label(), id));
+
+        log.debug(
+            LogField.Placeholders.TWO.getPlaceholder(),
+            StructuredArguments.kv(LogField.MSG.label(), "Request body to patch diet plan"),
+            StructuredArguments.kv(LogField.REQUEST_BODY.label(), "( " + requestBody + " )"));
+
         final PatchableDietPlanDomain domain = dietPlanMapper.toDomain(requestBody, id);
+
         final DietPlanDomain updated = patchDietPlanUseCase.execute(domain);
         return dietPlanMapper.toDto(updated);
     }

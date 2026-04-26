@@ -3,8 +3,11 @@ package br.com.gorillaroxo.sanjy.server.entrypoint.dto.request;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
 import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
+
 import java.time.LocalDate;
 
+@Builder
 @Schema(description = """
         Request DTO for partially updating a diet plan. \
         Only fields explicitly provided in the request body will be updated — \

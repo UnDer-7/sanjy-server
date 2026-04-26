@@ -49,4 +49,16 @@ public class DietPlanDomain {
         patchableDietPlan.getGoal().ifPresent(g -> this.goal = g);
         patchableDietPlan.getNutritionistNotes().ifPresent(nn -> this.nutritionistNotes = nn);
     }
+
+    public String toPatchableFieldsString() {
+        return "( name=" + name +
+            ", startDate=" + startDate +
+            ", endDate=" + endDate +
+            ", dailyCalories=" + dailyCalories +
+            ", dailyProteinInG=" + dailyProteinInG +
+            ", dailyCarbsInG=" + dailyCarbsInG +
+            ", dailyFatInG=" + dailyFatInG +
+            ", goal=" + goal +
+            ", nutritionistNotes=" + nutritionistNotes + " )";
+    }
 }

@@ -71,6 +71,7 @@ public enum LogField {
     DATABASE_TIMEZONE,
     TIMEZONE_ID,
     DIET_PLAN_UPDATED_AT,
+    DIET_PLAN,
     PROJECT_NAME;
 
     public String label() {
