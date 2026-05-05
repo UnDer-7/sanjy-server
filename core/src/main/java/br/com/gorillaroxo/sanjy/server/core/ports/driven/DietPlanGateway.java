@@ -8,4 +8,8 @@ public interface DietPlanGateway {
     DietPlanDomain insert(DietPlanDomain dietPlanDomain);
 
     Optional<DietPlanDomain> findActive();
+
+    Optional<DietPlanDomain> findById(final Long id);
+
+    DietPlanDomain patch(final DietPlanDomain dietPlanDomain);
 }

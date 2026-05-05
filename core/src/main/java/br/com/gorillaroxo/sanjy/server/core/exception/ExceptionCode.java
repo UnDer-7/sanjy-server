@@ -14,7 +14,8 @@ public enum ExceptionCode {
     REPEATED_MEAL_TYPE_NAMES("006", "Meal type names has repeated values"),
     MEAL_TYPE_NOT_FOUND("007", "Meal Type was not found"),
     STANDARD_OPTION_NOT_FOUND("008", "Standard Option was not found"),
-    UNHANDLED_CLIENT_HTTP("009", "A service integration error has occurred.");
+    UNHANDLED_CLIENT_HTTP("009", "A service integration error has occurred."),
+    MEAL_TYPE_DUPLICATE_NAME("010", "Meal type name already in use");
 
     private final String code;
     private final String message;

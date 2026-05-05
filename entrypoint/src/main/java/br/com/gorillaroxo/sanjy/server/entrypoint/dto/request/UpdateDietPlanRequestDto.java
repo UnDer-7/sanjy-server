@@ -1,0 +1,86 @@
+package br.com.gorillaroxo.sanjy.server.entrypoint.dto.request;
+
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.OpenApiConstants;
+import br.com.gorillaroxo.sanjy.server.entrypoint.util.RequestConstants;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
+
+import java.time.LocalDate;
+
+@Builder
+@Schema(description = """
+        Request DTO for partially updating a diet plan. \
+        Only fields explicitly provided in the request body will be updated — \
+        omitted, null, empty fields are ignored and the existing values are preserved. \
+        Meal types and standard options are not affected by this operation.
+        """)
+public record UpdateDietPlanRequestDto(
+        @Schema(
+                description = "Name/identifier of the diet plan",
+                example = "Plan N°02 - Cutting",
+                nullable = true,
+                requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+                maxLength = 100)
+        String name,
+
+        @Schema(
+                description =
+                        "Date when this diet plan starts (ISO 8601 format). If not provided, defaults to current date",
+                example = OpenApiConstants.Examples.DATE,
+                format = RequestConstants.DateTimeFormats.DATE_FORMAT,
+                nullable = true,
+                requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        LocalDate startDate,
+
+        @Schema(
+                description = """
+                    Date when this diet plan ends (ISO 8601 format). If not provided, defaults to current date + 2 months. \
+                    If provided, must be a future date
+                    """,
+                example = OpenApiConstants.Examples.DATE,
+                format = RequestConstants.DateTimeFormats.DATE_FORMAT,
+                nullable = true,
+                requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        LocalDate endDate,
+
+        @Schema(
+                description = "Target daily calories",
+                example = "2266",
+                nullable = true,
+                requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        Integer dailyCalories,
+
+        @Schema(
+                description = "Target daily protein in grams",
+                example = "186",
+                nullable = true,
+                requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        Integer dailyProteinInG,
+
+        @Schema(
+                description = "Target daily carbohydrates in grams",
+                example = "288",
+                nullable = true,
+                requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        Integer dailyCarbsInG,
+
+        @Schema(
+                description = "Target daily fat in grams",
+                example = "30",
+                nullable = true,
+                requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        Integer dailyFatInG,
+
+        @Schema(
+                description = "Main goal of this diet plan",
+                example = "Body fat reduction with muscle mass preservation",
+                nullable = true,
+                requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        String goal,
+
+        @Schema(
+                description = "Additional notes or observations from the nutritionist",
+                example = "Patient has lactose intolerance. Avoid dairy products.",
+                nullable = true,
+                requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        String nutritionistNotes) {}

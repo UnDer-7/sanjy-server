@@ -4,6 +4,10 @@ import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateDietPlanRequ
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealRecordRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealTypesRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateStandardOptionRequestDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.UpdateDietPlanRequestDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.UpdateMealTypeRequestDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.UpdateStandardOptionRequestDto;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -73,5 +77,30 @@ public final class DtoBuilders {
                 .isFreeMeal(false)
                 .standardOptionId(34L)
                 .freeMealDescription(null);
+    }
+
+    public static UpdateDietPlanRequestDto.UpdateDietPlanRequestDtoBuilder buildUpdateDietPlanRequestDto() {
+        return UpdateDietPlanRequestDto.builder()
+            .name("Plan N°01 - Bulk")
+            .startDate(LocalDate.now().plusDays(7))
+            .endDate(LocalDate.now().plusMonths(6))
+            .dailyCalories(3001)
+            .dailyProteinInG(221)
+            .dailyCarbsInG(451)
+            .dailyFatInG(92)
+            .goal("Muscle mass gain")
+            .nutritionistNotes("No dietary restrictions");
+    }
+
+    public static UpdateMealTypeRequestDto.UpdateMealTypeRequestDtoBuilder buildUpdateMealTypeRequestDto() {
+        return UpdateMealTypeRequestDto.builder()
+                .name("Lunch")
+                .scheduledTime(LocalTime.of(12, 30, 0))
+                .observation("50 g proteína | 60 g carbo | 10 g gordura | 530 kcal");
+    }
+
+    public static UpdateStandardOptionRequestDto.UpdateStandardOptionRequestDtoBuilder buildUpdateStandardOptionRequestDto() {
+        return UpdateStandardOptionRequestDto.builder()
+                .description("Arroz integral -- 100g | Frango grelhado -- 150g | Brócolis -- 80g");
     }
 }

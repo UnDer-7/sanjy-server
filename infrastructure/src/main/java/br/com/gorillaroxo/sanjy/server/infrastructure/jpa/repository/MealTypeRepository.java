@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface MealTypeRepository extends CrudRepository<MealTypeEntity, Long> {
 
     boolean existsByIdAndDietPlanIsActiveIsTrue(Long id);
+
+    boolean existsByDietPlanIdAndNameAndIdNot(Long dietPlanId, String name, Long id);
 }
