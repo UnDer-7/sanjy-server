@@ -1,7 +1,9 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.mapper;
 
+import br.com.gorillaroxo.sanjy.server.core.domain.PatchableStandardOptionDomain;
 import br.com.gorillaroxo.sanjy.server.core.domain.StandardOptionDomain;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateStandardOptionRequestDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.UpdateStandardOptionRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.StandardOptionResponseDto;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.StandardOptionEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.utils.InfrastructureConstants;
@@ -33,6 +35,8 @@ public interface StandardOptionMapper {
     List<StandardOptionDomain> toDomainListFromStandardOptionEntity(List<StandardOptionEntity> entity);
 
     List<StandardOptionDomain> toDomainListFromStandardOptionDomain(List<CreateStandardOptionRequestDto> dto);
+
+    PatchableStandardOptionDomain toDomain(UpdateStandardOptionRequestDto request, Long id);
 
     // Entities
     @Mapping(target = "mealType", ignore = true)

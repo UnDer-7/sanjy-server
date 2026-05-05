@@ -1,0 +1,111 @@
+meta {
+  name: patchStandardOption
+  type: http
+  seq: 1
+}
+
+patch {
+  url: {{SERVER_URL}}/v1/standard-option/101
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "description": "Update description for testing"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+example {
+  name: success
+  
+  request: {
+    url: {{SERVER_URL}}/v1/standard-option/1
+    method: PATCH
+    mode: json
+    body:json: {
+      {
+        "description": "Update description for testing"
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      content-length: 184
+      date: Wed, 29 Apr 2026 03:01:06 GMT
+      keep-alive: timeout=60
+      connection: keep-alive
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "id": 1,
+          "optionNumber": 1,
+          "description": "Update description for testing",
+          "mealTypeId": 1,
+          "metadata": {
+            "createdAt": "2026-04-02T02:46:37.817461Z",
+            "updatedAt": "2026-04-02T02:46:37.817461Z"
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: fail | Standard Option Not Found
+  
+  request: {
+    url: {{SERVER_URL}}/v1/standard-option/101
+    method: PATCH
+    mode: json
+    body:json: {
+      {
+        "description": "Update description for testing"
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      transfer-encoding: chunked
+      date: Wed, 29 Apr 2026 03:01:48 GMT
+      keep-alive: timeout=60
+      connection: keep-alive
+    }
+  
+    status: {
+      code: 422
+      text: Unprocessable Entity
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "code": "008",
+          "timestamp": "2026-04-29T03:01:48.665720124Z",
+          "message": "Standard Option was not found",
+          "customMessage": "Could not find standard option with id 101",
+          "httpStatusCode": 422
+        }
+      '''
+    }
+  }
+}

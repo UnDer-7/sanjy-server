@@ -1,7 +1,9 @@
 package br.com.gorillaroxo.sanjy.server.infrastructure.mapper;
 
 import br.com.gorillaroxo.sanjy.server.core.domain.MealTypeDomain;
+import br.com.gorillaroxo.sanjy.server.core.domain.PatchableMealTypeDomain;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.CreateMealTypesRequestDto;
+import br.com.gorillaroxo.sanjy.server.entrypoint.dto.request.UpdateMealTypeRequestDto;
 import br.com.gorillaroxo.sanjy.server.entrypoint.dto.respose.MealTypeResponseDto;
 import br.com.gorillaroxo.sanjy.server.infrastructure.jpa.entity.MealTypeEntity;
 import br.com.gorillaroxo.sanjy.server.infrastructure.utils.InfrastructureConstants;
@@ -35,6 +37,8 @@ public interface MealTypeMapper {
     List<MealTypeDomain> toDomainListFromMealTypeEntity(List<MealTypeEntity> dto);
 
     List<MealTypeDomain> toDomainListFromCreateMealTypesRequestDto(List<CreateMealTypesRequestDto> dto);
+
+    PatchableMealTypeDomain toDomain(UpdateMealTypeRequestDto request, Long id);
 
     // Entities
     @Mapping(target = "dietPlan", ignore = true)

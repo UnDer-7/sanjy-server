@@ -1,0 +1,150 @@
+meta {
+  name: patchMealType
+  type: http
+  seq: 1
+}
+
+patch {
+  url: {{SERVER_URL}}/v1/meal-type/1
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Pre-workout snack - UPDATED",
+    "scheduledTime": "23:59:59",
+    "observation": "ggwp"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+example {
+  name: success
+  
+  request: {
+    url: {{SERVER_URL}}/v1/meal-type/2
+    method: PATCH
+    mode: json
+    body:json: {
+      {
+        "name": "Pre-workout snack - UPDATED",
+        "scheduledTime": "23:59:59",
+        "observation": "ggwp"
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      content-length: 857
+      date: Wed, 29 Apr 2026 02:52:53 GMT
+      keep-alive: timeout=60
+      connection: keep-alive
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "id": 2,
+          "name": "Pre-workout snack - UPDATED",
+          "scheduledTime": "23:59:59",
+          "observation": "ggwp",
+          "dietPlanId": 1,
+          "standardOptions": [
+            {
+              "id": 4,
+              "optionNumber": 1,
+              "description": "Banana -- 1 unit (90g) | Whey protein isolate -- 30g | Oats -- 20g",
+              "mealTypeId": 2,
+              "metadata": {
+                "createdAt": "2026-04-02T02:46:37.819881Z",
+                "updatedAt": "2026-04-02T02:46:37.819881Z"
+              }
+            },
+            {
+              "id": 5,
+              "optionNumber": 2,
+              "description": "Sweet potato -- 150g | Chicken breast -- 80g",
+              "mealTypeId": 2,
+              "metadata": {
+                "createdAt": "2026-04-02T02:46:37.819881Z",
+                "updatedAt": "2026-04-02T02:46:37.819881Z"
+              }
+            },
+            {
+              "id": 6,
+              "optionNumber": 3,
+              "description": "White rice -- 40g (cooked) | Egg whites -- 4 units (120g)",
+              "mealTypeId": 2,
+              "metadata": {
+                "createdAt": "2026-04-02T02:46:37.819881Z",
+                "updatedAt": "2026-04-02T02:46:37.819881Z"
+              }
+            }
+          ],
+          "metadata": {
+            "createdAt": "2026-04-02T02:46:36.661643Z",
+            "updatedAt": "2026-04-02T02:46:36.661643Z"
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: fail | Meal Type Not Found
+  
+  request: {
+    url: {{SERVER_URL}}/v1/meal-type/99
+    method: PATCH
+    mode: json
+    body:json: {
+      {
+        "name": "Pre-workout snack - UPDATED",
+        "scheduledTime": "23:59:59",
+        "observation": "ggwp"
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      content-type: application/json
+      transfer-encoding: chunked
+      date: Wed, 29 Apr 2026 02:53:51 GMT
+      keep-alive: timeout=60
+      connection: keep-alive
+    }
+  
+    status: {
+      code: 422
+      text: Unprocessable Entity
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "code": "007",
+          "timestamp": "2026-04-29T02:53:51.638415829Z",
+          "message": "Meal Type was not found",
+          "customMessage": "Could not find meal type with id 99",
+          "httpStatusCode": 422
+        }
+      '''
+    }
+  }
+}
